@@ -1,0 +1,5 @@
+footer{
+    background-image: linear-gradient(#2c3e5057 0,#2c3e508f 150%), url(../../assets/background_rcloud.png);
+    background-repeat: no-repeat;
+    background-size: cover;
+}
