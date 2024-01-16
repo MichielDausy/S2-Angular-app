@@ -1,8 +1,8 @@
 <div class="w-full bg-gray-200 my-4">
     <div class="grid grid-cols-12 gap-12 grid-rows-3 h-24">
-        <div class="row-start-2">
-            <div *ngFor="let ano of trainAnomalies; index as i;" class="grid grid-cols-12 gap-12">
-                <div class="h-8 bg-slate-800 w-1 col-start-{{i}}">{{i}}</div>
+        <div class="row-start-2 col-span-10">
+            <div *ngFor="let ano of trainAnomalies; index as i;" class="flex flex-nowrap">
+                <div class="h-8 bg-slate-800 w-1 mx-2">{{i}}</div>
             </div>
         </div>
         <div class="col-span-10 border-b-4 border-slate-800 row-start-3">
