@@ -1,8 +1,8 @@
 export interface Anomaly{
     id: number;
     timestamp: Date;
-    longitude: string;
-    latitude: string;
+    longitude: number;
+    latitude: number;
     photo: string;
     isFixed : boolean;
     isFalse: boolean;

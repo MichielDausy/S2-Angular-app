@@ -5,6 +5,9 @@ import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { FooterComponent } from './footer/footer.component';
 import { NavbarComponent } from './navbar/navbar.component';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { MatTooltipModule } from '@angular/material/tooltip';
+import { FormControl } from '@angular/forms';
 
 @NgModule({
   declarations: [
@@ -14,7 +17,10 @@ import { NavbarComponent } from './navbar/navbar.component';
     BrowserModule,
     AppRoutingModule,
     FooterComponent,
-    NavbarComponent
+    NavbarComponent, 
+    BrowserAnimationsModule,
+    MatTooltipModule,
+    FormControl
   ],
   providers: [],
   bootstrap: [AppComponent]
