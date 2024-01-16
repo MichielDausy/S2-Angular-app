@@ -1,12 +1,12 @@
-<div class="w-full bg-gray-200 my-4">
+<div class="w-full bg-gray-200 my-4 py-2 px-2">
     <div class="grid grid-cols-12 gap-12 grid-rows-3 h-24">
-        <div class="row-start-2 col-span-10">
-            <div *ngFor="let ano of trainAnomalies; index as i;" class="flex flex-nowrap">
-                <div class="h-8 bg-slate-800 w-1 mx-2">{{i}}</div>
+        <div class="row-start-2 flex flex-nowrap col-span-10">
+            <div *ngFor="let ano of trainAnomalies; index as i;" class="mx-auto grid grid-rows-2">
+                <div class="dot bg-red-700 row-start-1 mx-auto z-0" matTooltip="help me"></div>
+                <div class="h-12 bg-slate-800 w-0.5 my-0 py-0 mx-auto row-start-2"></div>
             </div>
         </div>
-        <div class="col-span-10 border-b-4 border-slate-800 row-start-3">
-        </div>
+        <div class="h-0.5 w-full bg-slate-800 row-start-3 col-span-10"></div>
         <div class="col-span-2 mx-auto row-span-3 my-auto">
             <p class="text-base">{{train.name}}</p>
         </div>
