@@ -7,22 +7,32 @@
                 <app-anomaly-item [train]="train" [anomalies]="anomalies"></app-anomaly-item>
             </div>
         </div>
-        <div class="mt-4 h-48 bg-gray-200">
-            <p class="text-lg">Anomaly types:</p>
-            <ul class="text-base">
-                <li>
-                    <div class="flex flex-nowrap">
-                        <span class="dot bg-slate-600 my-auto mx-2"></span>
-                        <p class="my-auto">Vegetation</p>
-                    </div>
-                </li>
-                <li>
-                    <div class="flex flex-nowrap">
-                        <span class="dot bg-cyan-700 my-auto mx-2"></span>
-                        <p class="my-auto">Signs</p>
-                    </div>
-                </li>
-            </ul>
+        <div class="">
+            <div class="p-1 mt-4 h-48 bg-gray-200">
+                <p class="text-lg">Anomaly types:</p>
+                <ul class="text-base">
+                    <li>
+                        <div class="flex flex-nowrap">
+                            <span class="dot bg-slate-600 my-auto mx-2"></span>
+                            <p class="my-auto">Vegetation</p>
+                        </div>
+                    </li>
+                    <li>
+                        <div class="flex flex-nowrap">
+                            <span class="dot bg-cyan-700 my-auto mx-2"></span>
+                            <p class="my-auto">Signs</p>
+                        </div>
+                    </li>
+                </ul>
+            </div>
+            <div class="h-16 my-2 p-1">
+                <select class="m-auto w-full text-base" name="country" id="" [(ngModel)]="selectedCountry">
+                    <option class="text-base" value="belgium">Belgium</option>
+                    <option class="text-base" value="france">France</option>
+                    <option class="text-base" value="germany">Germany</option>
+                    <option class="text-base" value="netherlands">Netherlands</option>
+                </select>
+            </div>
         </div>
     </div>
 </div>
