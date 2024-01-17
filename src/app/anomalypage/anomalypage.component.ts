@@ -5,11 +5,12 @@ import { Anomaly } from '../Models/anomaly';
 import { Train } from '../Models/train';
 import { Country } from '../Models/country';
 import { FormsModule } from '@angular/forms';
+import { RouterLink } from '@angular/router';
 
 @Component({
   selector: 'app-anomalypage',
   standalone: true,
-  imports: [CommonModule, AnomalyItemComponent, FormsModule],
+  imports: [CommonModule, AnomalyItemComponent, FormsModule, RouterLink],
   templateUrl: './anomalypage.component.html',
   styleUrls: ['./anomalypage.component.css']
 })

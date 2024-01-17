@@ -1,6 +1,5 @@
-<div class="container mx-auto" style="max-width: 1200px;">
-    <a routerLink="/anomaly" class="text-blue-500 hover:text-blue-800 text-base">&lt; Go Back</a>
-    <h1 class="underline mb-8">Anomaly {{anomaly.id}}</h1>
+<div class="container mx-auto px-5" style="max-width: 1200px;">
+    <h1 class="mb-8">Anomaly {{anomaly.id}}</h1>
 
 
     <div class="grid grid-cols-2 gap-2 my-5 pl-4">
@@ -12,9 +11,12 @@
         </div>
     </div>
     <div class="grid grid-cols-2 my-5 pl-4">
-        <div><img src="https://upload.wikimedia.org/wikipedia/commons/thumb/4/4a/Railroad_Tracks_-_Merritt_Island%2C_Florida.jpg/1200px-Railroad_Tracks_-_Merritt_Island%2C_Florida.jpg?20121011174007" alt="" width="75%"></div>
+        <div><img
+                src="https://upload.wikimedia.org/wikipedia/commons/thumb/4/4a/Railroad_Tracks_-_Merritt_Island%2C_Florida.jpg/1200px-Railroad_Tracks_-_Merritt_Island%2C_Florida.jpg?20121011174007"
+                alt="" width="75%"></div>
         <div>
-            <p class="text-base">{{convertLatitudeToDegreesMinutesSeconds(anomaly.latitude) }}  {{convertLongitudeToDegreesMinutesSeconds(anomaly.longitude)}}</p>
+            <p class="text-base">{{convertLatitudeToDegreesMinutesSeconds(anomaly.latitude) }}
+                {{convertLongitudeToDegreesMinutesSeconds(anomaly.longitude)}}</p>
         </div>
     </div>
     <div class="grid grid-cols-2 gap-2 my-5 pl-4">
@@ -31,10 +33,12 @@
             </div>
         </div>
     </div>
-    
-    <div class="pl-4">
-        <button class="border-1 border-black bg-blue-600 text-white text-base w-28 h-8">
+
+    <div class="pl-4 space-x-4">
+        <a routerLink="/anomaly" class="px-2 text-blue-500 hover:text-blue-800 text-base">&lt; Go Back</a>
+        <button class="px-4 py-2 bg-[#6684be] text-white text-sm rounded-md hover:bg-[#4f74ac]">
             Submit
         </button>
+
     </div>
 </div>

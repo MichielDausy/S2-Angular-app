@@ -1,0 +1,100 @@
+<!-- All anomalies that are fixed are shown here -->
+
+<!-- <header class="flex items-center w-full sticky-top disable-touch-scroll mt-4 space-x-4"
+    style="background-color: #f0f3f9;">
+    <div class="flex items-center max-w-17rem w-25vw relative p-2 h-full"
+        style="background-image: linear-gradient(#6586c3c5 0,#6586c3c5 150%), url(../../assets/background-img.png)!important; background-repeat: no-repeat; background-size: cover;">
+
+        <img class="h-14" src="../../assets/codiTrack-logo.png" alt="CodiTrack Logo">
+        <h3 class="text-white m-0 ml-2 text-xl px-5">CodiTrack</h3>
+    </div>
+    <div class="flex md:flex-row items-center flex-grow mx-2">
+        <select class="appearance-none bg-white border border-gray-300 py-2 px-4 leading-tight text-sm rounded-md">
+            <option value="0" selected disabled>Select a country</option>
+            <option value="Belgium">Belgium</option>
+            <option value="Luxembourg">Luxembourg</option>
+            <option value="Luxembourg">France</option>
+        </select>
+    </div>
+    
+    <button class="px-3 py-2 bg-[#6684be] text-white rounded-md hover:bg-[#4f74ac] float-right mr-2 mt-1" routerLink="/history">
+        <div class="ml-auto text-xl"> <a class="" routerLink="/anomaly"><i
+            class="fas fa-backward fa-xl"></i></a></div>
+    </button>
+</header> -->
+
+
+<div class="container mx-auto">
+
+    <div class="container mx-auto grid grid-cols-12 gap-4">
+
+        <!-- Navbar (left column) -->
+        <aside class="col-span-3">
+            <div class="border border-solid border-gray-300">
+                <div class="card-header  h-3rem bg-background text-sm p-2 mb-0 border-b border-solid border-gray-200">
+                    Select railway asset
+                </div>
+                <div class="p-0  d-flex">
+                    <ul id="tracking-object-list" class="overflow-auto d-inline-block text-xl">
+                        <div *ngFor="let train of trains; let i = index"
+                            class="relative block px-3 py-3 w-full text-dark bg-white border border-gray-300"
+                            id="{{ i }}">
+                            <i class="fas fa-train px-5 font-black"></i> <small> Train {{ i + 1 }}</small>
+                        </div>
+
+                    </ul>
+                </div>
+            </div>
+            <br>
+            <!-- <div id="tracking-object-details-panel" class="toggle-bar animated card  fadeInLeft">
+                <div class="card-header  text-sm"> Select date </div>
+                <div class="card-body  p-2">
+                    <div class="input-group" id="date-range-picker">
+                        <div class="input-group-prepend"> <span class="input-group-text"><i
+                                    class="fa fa-calendar"></i></span> </div> <input type="text" class="form-control"
+                            name="datetimes">
+                    </div>
+                    <hr>
+                    <div id="day-list" class="list-group-scroll text-sm">
+                        <a id="2024-01-17" style="cursor:pointer"
+                            class="list-group-item list-group-item-action text-dark">
+                            <b>2024-01-17</b>
+                        </a>
+
+                        <a id="2024-01-16" style="cursor:pointer"
+                            class="list-group-item list-group-item-action text-dark">
+                            <b>2024-01-16</b>
+                        </a>
+
+                        <a id="2024-01-15" style="cursor:pointer"
+                            class="list-group-item list-group-item-action text-dark">
+                            <b>2024-01-15</b>
+                        </a>
+
+                        <a id="2024-01-14" style="cursor:pointer"
+                            class="list-group-item list-group-item-action text-dark">
+                            <b>2024-01-14</b>
+                        </a>
+
+
+                    </div>
+                </div>
+            </div> -->
+        </aside>
+
+        <!-- history right column -->
+        <div class="col-span-9">
+            <div class="grid grid-cols-6 gap-4">
+                <div class="col-span-6">
+                    <div *ngFor="let train of trains">
+                        <app-anomaly-item [train]="train" [anomalies]="anomalies"></app-anomaly-item>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    
+
+    
