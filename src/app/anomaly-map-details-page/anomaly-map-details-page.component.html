@@ -1,0 +1,40 @@
+<div class="container mx-auto" style="max-width: 1200px;">
+    <a routerLink="/mapanomaly" class="text-blue-500 hover:text-blue-800 text-base">&lt; Go Back</a>
+    <h1 class="underline mb-8">Anomaly {{anomaly.id}}</h1>
+
+
+    <div class="grid grid-cols-2 gap-2 my-5 pl-4">
+        <div>
+            <p class="underline text-lg">Image</p>
+        </div>
+        <div>
+            <p class="underline text-lg">Location</p>
+        </div>
+    </div>
+    <div class="grid grid-cols-2 my-5 pl-4">
+        <div><img src="https://upload.wikimedia.org/wikipedia/commons/thumb/4/4a/Railroad_Tracks_-_Merritt_Island%2C_Florida.jpg/1200px-Railroad_Tracks_-_Merritt_Island%2C_Florida.jpg?20121011174007" alt="" width="75%"></div>
+        <div>
+            <app-map [width]="'600'" [height]="'400px'" [anomalies]="[anomaly]" [zoom]="12" [center]="[anomaly.latitude,anomaly.longitude]"></app-map>
+        </div>
+    </div>
+    <div class="grid grid-cols-2 gap-2 my-5 pl-4">
+        <div>
+            <div class="grid grid-cols-2 gap-2">
+                <div class="my-auto flex flex-nowrap">
+                    <input type="checkbox" name="markfalse" class="h-5 w-5 my-auto">
+                    <label for="markfalse" class="text-base my-auto mx-2">False Anomaly</label>
+                </div>
+                <div class="my-auto flex flex-nowrap">
+                    <input type="checkbox" name="markfixed" class="h-5 w-5 my-auto">
+                    <label for="markfixed" class="text-base my-auto mx-2">Fixed</label>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <div class="pl-4">
+        <button class="border-1 border-black bg-blue-600 text-white text-base w-28 h-8">
+            Submit
+        </button>
+    </div>
+</div>

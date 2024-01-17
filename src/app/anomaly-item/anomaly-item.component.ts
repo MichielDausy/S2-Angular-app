@@ -4,6 +4,7 @@ import { Train } from '../Models/train';
 import { Anomaly } from '../Models/anomaly';
 import {TooltipModule} from 'primeng/tooltip';
 import { RouterLink } from '@angular/router';
+import { Traintrack } from '../Models/traintrack';
 
 @Component({
   selector: 'app-anomaly-item',
@@ -17,6 +18,10 @@ import { RouterLink } from '@angular/router';
 
 
 export class AnomalyItemComponent implements OnInit{
+
+  @Input() train : Train = {id: 0, name: ""};
+  @Input() anomalies : Anomaly[] = [];
+  @Input() tracks: Traintrack[] = [];
 
 
   convertLatitudeToDegreesMinutesSeconds(latitude: number): string {
@@ -37,6 +42,16 @@ export class AnomalyItemComponent implements OnInit{
     return `${lonDegrees}°${lonMinutes}'${lonSeconds.toFixed(2)}"${lonDirection}`;
   }
 
+  getTrackNameForAnomalies(): string {
+    if (this.trainAnomalies.length > 0) {
+        const trackId = this.trainAnomalies[0].trainTrackId;
+        const track = this.tracks.find(t => t.id === trackId);
+        return track ? track.name : 'Unknown Track';
+    } else {
+        return 'No Anomalies';
+    }
+}
+
   navigateToDetails(anomalyId: number) {
     console.log(anomalyId);
   }
@@ -47,6 +62,5 @@ export class AnomalyItemComponent implements OnInit{
     this.trainAnomalies = this.anomalies.filter(a => a.trainId == this.train.id);
  }
 
-  @Input() train : Train = {id: 0, name: ""};
-  @Input() anomalies : Anomaly[] = [];
+  
 }

@@ -7,7 +7,7 @@ import { FooterComponent } from './footer/footer.component';
 import { NavbarComponent } from './navbar/navbar.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { MatTooltipModule } from '@angular/material/tooltip';
-import { FormControl } from '@angular/forms';
+import { MapComponent } from './map/map.component';
 
 @NgModule({
   declarations: [
@@ -19,8 +19,7 @@ import { FormControl } from '@angular/forms';
     FooterComponent,
     NavbarComponent, 
     BrowserAnimationsModule,
-    MatTooltipModule,
-    FormControl
+    MatTooltipModule
   ],
   providers: [],
   bootstrap: [AppComponent]

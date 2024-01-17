@@ -9,16 +9,16 @@ import {CheckboxModule} from 'primeng/checkbox';
 import { Train } from '../Models/train';
 import { Country } from '../Models/country';
 import { data } from '../Models/mockdata';
+import { MapComponent } from '../map/map.component';
 
 @Component({
-  selector: 'app-anomaly-details',
+  selector: 'app-anomaly-map-details-page',
   standalone: true,
-  imports: [CommonModule, RouterLink, CheckboxModule],
-  templateUrl: './anomaly-details.component.html',
-  styleUrls: ['./anomaly-details.component.css']
+  imports: [CommonModule, RouterLink, CheckboxModule, MapComponent],
+  templateUrl: './anomaly-map-details-page.component.html',
+  styleUrl: './anomaly-map-details-page.component.css'
 })
-export class AnomalyDetailsComponent implements OnInit{
-
+export class AnomalyMapDetailsPageComponent implements OnInit{
   constructor(private router: ActivatedRoute){   
   }
   anomaly : Anomaly = {
@@ -45,7 +45,6 @@ export class AnomalyDetailsComponent implements OnInit{
   anomalyId: number = 0;
 
   ngOnInit(): void {
-    //get id from route url
     this.anomalyId = this.router.snapshot.params['id'];
     this.anomaly = this.getAnomalyById(this.anomalyId);
     this.sign = this.getSignbyId(this.anomaly.signId);
@@ -79,10 +78,11 @@ export class AnomalyDetailsComponent implements OnInit{
     return this.anomalies.find(a => a.id == id) as Anomaly;
   }
 
+
   signs = data.signs;
-    trains = data.trains;
-    tracks = data.tracks;
-    anomalies = data.anomalies;
-    countries = data.countries;
-    anomalyTypes = data.anomalyTypes;
+  trains = data.trains;
+  tracks = data.tracks;
+  anomalies = data.anomalies;
+  countries = data.countries;
+  anomalyTypes = data.anomalyTypes;  
 }

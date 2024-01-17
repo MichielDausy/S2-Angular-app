@@ -1,0 +1,47 @@
+<div class="container mx-auto" style="width: 1200px;">
+    <div class="grid grid-cols-7 gap-7">
+        <div class="col-span-6">
+            <h1 class="underline">Anomalies</h1>
+        </div>
+        <div class="col-start-7 w-full" (click)="changeMode()">
+            <button class="bg-gray-200 text-lg w-1/2" >list</button>
+            <button class="bg-black text-white text-lg w-1/2">map</button>
+        </div>
+    </div>
+    <div class="relative mt-5">
+
+
+        <app-map class="" [anomalies]="getAnomaliesByCountry(selectedCountry)"/>
+
+
+        <div class="bg-gray-100 bg-opacity-75 w-32 h-12 absolute top-6 right-3 z-10 rounded p-1 border">
+            <div class="flex items-center h-full">
+                <select class="w-full text-base" name="country" id="" [(ngModel)]="selectedCountry">
+                    <option class="text-base" value="all">All</option>
+                    <option class="text-base" value="belgium">Belgium</option>
+                    <option class="text-base" value="france">France</option>
+                    <option class="text-base" value="germany">Germany</option>
+                    <option class="text-base" value="netherlands">Netherlands</option>
+                </select>
+            </div>
+        </div>
+        
+        <div class="bg-gray-100 bg-opacity-75 w-36 h-44 absolute bottom-6 right-3 z-10 rounded p-1 border">
+            <p class="text-lg">Anomaly types:</p>
+            <ul class="text-base">
+                <li>
+                    <div class="flex flex-nowrap">
+                        <span class="dot bg-slate-600 my-auto mx-2"></span>
+                        <p class="my-auto">Vegetation</p>
+                    </div>
+                </li>
+                <li>
+                    <div class="flex flex-nowrap">
+                        <span class="dot bg-cyan-700 my-auto mx-2"></span>
+                        <p class="my-auto">Signs</p>
+                    </div>
+                </li>
+            </ul>
+        </div>
+    </div>
+</div>
