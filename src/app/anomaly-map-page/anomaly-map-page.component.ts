@@ -26,6 +26,8 @@ export class AnomalyMapPageComponent{
   }
 
   selectedCountry : string = "all";
+  selectedTypes: string = "all";
+
   countryAnomalies= [{
     id: 1,
     timestamp: new Date(),
@@ -45,16 +47,37 @@ export class AnomalyMapPageComponent{
      const country = this.countries.find(c => c.name.toLowerCase() === countryName.toLowerCase());
      return country?.id;
   }
+  getTypesId(typeName: string): number | undefined {
+    console.log("Types:" ,this.anomalyTypes);
+    const country = this.anomalyTypes.find(c => c.name.toLowerCase() === typeName.toLowerCase());
+    return country?.id;
+ }
 
-  getAnomaliesByCountry(countryName: string): Anomaly[] {
-    if (countryName === "all") {
+
+  getAnomaliesByCountry(countryName: string, typeName: string): Anomaly[] {
+    if (countryName === "all" && typeName=== "all") {
       return this.anomalies;
     }
     else{
       const countryId = this.getCountryId(countryName);
-      return this.anomalies.filter(a => a.countryId === countryId);
+      const typeId = this.getTypesId(typeName);
+      return this.anomalies.filter(a => 
+        (countryName === "all" || a.countryId === countryId) &&
+        (typeName === "all" || a.anomalyTypeId === typeId)
+      );
     }
   }
+
+  // getAnomaliesByCountry(countryName: string): Anomaly[] {
+  //   if (countryName === "all") {
+  //     return this.anomalies;
+  //   }
+  //   else{
+  //     const countryId = this.getCountryId(countryName);
+  //     return this.anomalies.filter(a => a.countryId === countryId);
+  //   }
+  // }
+
 
     signs = data.signs;
     trains = data.trains;
