@@ -29,7 +29,7 @@ export class AnomalypageComponent{
       this.router.navigate(['/mapanomaly']);
    }
 
-   selectedCountry : string = "belgium";
+   selectedCountry : string = "all";
    countryAnomalies= [{
       id: 1,
       timestamp: new Date(),
@@ -51,8 +51,13 @@ export class AnomalypageComponent{
    }
 
    getAnomaliesByTrainAndCountry(trainId: number, countryName: string): Anomaly[] {
-      const countryId = this.getCountryId(countryName);
-      return this.anomalies.filter(a => a.trainId === trainId && a.countryId === countryId);
+      if (countryName === "all"){
+         return this.anomalies.filter(a => a.trainId === trainId);
+      }
+      else{
+         const countryId = this.getCountryId(countryName);
+         return this.anomalies.filter(a => a.trainId === trainId && a.countryId === countryId);
+      }
    }
 
    signs = data.signs;

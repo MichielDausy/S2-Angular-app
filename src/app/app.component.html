@@ -1,5 +1,5 @@
 <div class="flex flex-col space-y-4 min-h-screen text-black bg-white text-4xl">
-    <app-navbar></app-navbar>
+    <app-navbar *ngIf="isNavbarVisible"></app-navbar>
     <main class="flex-1 no-mt">
         <router-outlet></router-outlet>
     </main>
