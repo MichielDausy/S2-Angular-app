@@ -1,8 +1,9 @@
-import { Component, Input, OnChanges, OnInit, SimpleChanges } from '@angular/core';
+import { AfterViewInit, Component, Input, OnChanges, OnInit, SimpleChanges } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Anomaly } from '../Models/anomaly';
 import * as L from 'leaflet';
 import { Router } from '@angular/router';
+import { AnomalypageComponent } from '../anomalypage/anomalypage.component';
 
 @Component({
   selector: 'app-map',
@@ -11,7 +12,7 @@ import { Router } from '@angular/router';
   templateUrl: './map.component.html',
   styleUrls: ['./map.component.css']
 })
-export class MapComponent implements OnInit, OnChanges {
+export class MapComponent implements AfterViewInit, OnChanges {
 
   constructor(private router: Router) { }
 
@@ -20,16 +21,21 @@ export class MapComponent implements OnInit, OnChanges {
   @Input() height = "600px";
   @Input() width = "1200px";
   @Input() center = [50.85045,4.34878] as L.LatLngExpression;
+  @Input() updatePending = false;
 
   private map: L.Map = {} as L.Map;
   private centroid: L.LatLngExpression = this.center; 
+  private markers: L.FeatureGroup = {} as L.FeatureGroup;
 
   ngOnChanges(changes: SimpleChanges): void {
     if (changes['anomalies'] && !changes['anomalies'].firstChange) {
-      this.updateMarkers();
+      console.log('ngOnChanges called');
+      if (this.updatePending) {
+        this.updateMarkers();
+        this.updatePending = false;
+      }
     }
   }
-
   private initMap(): void {
     this.map = L.map('map', {
       center: this.centroid,
@@ -49,14 +55,15 @@ export class MapComponent implements OnInit, OnChanges {
   }
 
   updateMarkers(): void {
-    this.map.eachLayer(layer => {
-      if (layer instanceof L.Marker) {
-        this.map.removeLayer(layer);
-      }
-    });
+    this.map.removeLayer(this.markers);
+    this.markers = new L.FeatureGroup();
+
+    console.log("update markers")
 
     this.anomalies.forEach(anomaly => {
+      console.log(anomaly)
       const marker = L.marker([anomaly.latitude, anomaly.longitude]);
+    
 
       marker.on('click', () => {
         console.log("click")
@@ -88,11 +95,12 @@ export class MapComponent implements OnInit, OnChanges {
          html: `<span style="${style}" />`
        }));
 
-     marker.addTo(this.map);
+     marker.addTo(this.markers);
    });
+   this.markers.addTo(this.map);
   }
 
-  ngOnInit(): void {
+  ngAfterViewInit(): void {
     this.initMap();
   }
 
