@@ -1,12 +1,22 @@
-<div class="container mx-auto px-4 md:px-0" style="width: 100%;">
-    <h1>Anomalies</h1>
-
-    <div class="grid grid-cols-1 md:grid-cols-7 gap-7">
+<div class="container mx-auto" style="width: 1200px;">
+    <div class="grid grid-cols-7 gap-7">
         <div class="col-span-6">
-            <div *ngFor="let train of trains">
-                <app-anomaly-item [train]="train" [anomalies]="anomalies"></app-anomaly-item>
-            </div>
+            <h1 class="underline">Anomalies</h1>
         </div>
+        <div class="col-start-7 w-full" (click)="changeMode()">
+            <button class="bg-black text-white text-lg w-1/2" >list</button>
+            <button class="bg-gray-200 text-lg w-1/2">map</button>
+        </div>
+    </div>
+
+    <div>
+        <div class="grid grid-cols-7 gap-7">
+            <div class="col-span-6">
+                <div *ngFor="let train of trains">
+                    <ng-container *ngIf="getAnomaliesByTrainAndCountry(train.id, selectedCountry).length > 0">
+                        <app-anomaly-item [train]="train" [anomalies]="getAnomaliesByTrainAndCountry(train.id, selectedCountry)" [tracks]="tracks"></app-anomaly-item>
+                    </ng-container>
+                </div>
         <div class="md:flex md:flex-col md:items-center md:mt-4 md:w-full md:p-4">
             <div class="p-1 md:mt-4 h-48 bg-gray-200">
                 <p class="text-lg">Anomaly types:</p>
@@ -25,13 +35,14 @@
                     </li>
                 </ul>
             </div>
-            <div class="h-16 my-2 p-1">
-                <select class="m-auto w-full text-base" name="country" id="" [(ngModel)]="selectedCountry">
-                    <option class="text-base" value="belgium">Belgium</option>
-                    <option class="text-base" value="france">France</option>
-                    <option class="text-base" value="germany">Germany</option>
-                    <option class="text-base" value="netherlands">Netherlands</option>
-                </select>
+                <div class="h-16 my-2 p-1">
+                    <select class="m-auto w-full text-base" name="country" id="" [(ngModel)]="selectedCountry">
+                        <option class="text-base" value="belgium">Belgium</option>
+                        <option class="text-base" value="france">France</option>
+                        <option class="text-base" value="germany">Germany</option>
+                        <option class="text-base" value="netherlands">Netherlands</option>
+                    </select>
+                </div>
             </div>
         </div>
     </div>
