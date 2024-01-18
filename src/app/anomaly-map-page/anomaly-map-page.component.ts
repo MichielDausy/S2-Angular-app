@@ -48,7 +48,6 @@ export class AnomalyMapPageComponent{
      return country?.id;
   }
   getTypesId(typeName: string): number | undefined {
-    console.log("Types:" ,this.anomalyTypes);
     const country = this.anomalyTypes.find(c => c.name.toLowerCase() === typeName.toLowerCase());
     return country?.id;
  }

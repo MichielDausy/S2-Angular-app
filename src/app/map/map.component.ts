@@ -28,14 +28,15 @@ export class MapComponent implements AfterViewInit, OnChanges {
   private markers: L.FeatureGroup = {} as L.FeatureGroup;
 
   ngOnChanges(changes: SimpleChanges): void {
-    if (changes['anomalies'] && !changes['anomalies'].firstChange) {
-      console.log('ngOnChanges called');
-      if (this.updatePending) {
-        this.updateMarkers();
-        this.updatePending = false;
-      }
+    const previousAnomalies = JSON.stringify(changes['anomalies'].previousValue);
+    const currentAnomalies = JSON.stringify(changes['anomalies'].currentValue);
+  
+    if (previousAnomalies !== currentAnomalies) {
+      console.log("Anomalies have changed");
+      this.updateMarkers();
     }
   }
+  
   private initMap(): void {
     this.map = L.map('map', {
       center: this.centroid,
