@@ -8,11 +8,12 @@ import { FormsModule } from '@angular/forms';
 import { MapComponent } from '../map/map.component';
 import { Router } from '@angular/router';
 import { data } from '../Models/mockdata';
+import { RouterLink } from '@angular/router';
 
 @Component({
   selector: 'app-anomalypage',
   standalone: true,
-  imports: [CommonModule, AnomalyItemComponent, FormsModule, MapComponent],
+  imports: [CommonModule, AnomalyItemComponent, FormsModule, RouterLink, MapComponent],
   templateUrl: './anomalypage.component.html',
   styleUrls: ['./anomalypage.component.css']
 })

@@ -2,7 +2,7 @@
     <div class="grid grid-cols-12 gap-12 grid-rows-3 h-24">
         <div class="row-start-2 flex flex-nowrap col-span-10">
             <div *ngFor="let ano of trainAnomalies; index as i;" class="mx-auto grid grid-rows-2" pTooltip="{{convertLatitudeToDegreesMinutesSeconds(trainAnomalies[i].latitude) }}  {{convertLongitudeToDegreesMinutesSeconds(trainAnomalies[i].longitude)}}" tooltipPosition="top">
-                <div class="dot bg-red-700 row-start-1 mx-auto z-0" routerLink="/details/{{trainAnomalies[i].id}}" routerLinkActive="router-link-active"  ></div>
+                <div class="dot bg-red-700 row-start-1 mx-auto z-0 cursor-pointer" routerLink="/details/{{trainAnomalies[i].id}}" routerLinkActive="router-link-active"  ></div>
                 <div class="h-12 bg-slate-800 w-0.5 my-0 py-0 mx-auto row-start-2"></div>
             </div>
         </div>
