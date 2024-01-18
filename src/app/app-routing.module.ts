@@ -6,6 +6,7 @@ import { AnomalyDetailsComponent } from './anomaly-details/anomaly-details.compo
 import { AnomalyMapDetailsPageComponent } from './anomaly-map-details-page/anomaly-map-details-page.component';
 import { AnomalyMapPageComponent } from './anomaly-map-page/anomaly-map-page.component';
 import { HistoryComponent } from './history/history.component';
+import { MenuComponent } from './menu/menu.component';
 
 const routes: Routes = [
   { path: '', component: HomepageComponent },
@@ -13,7 +14,9 @@ const routes: Routes = [
   {path:'mapanomaly', component: AnomalyMapPageComponent},
   {path: 'mapdetails/:id', component: AnomalyMapDetailsPageComponent},
   {path:'details/:id', component: AnomalyDetailsComponent},
-  {path:'history', component: HistoryComponent}
+  {path:'history', component: HistoryComponent},
+  {path:'menu', component: MenuComponent}
+
 
 ];
 
