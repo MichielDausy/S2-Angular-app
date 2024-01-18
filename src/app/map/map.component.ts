@@ -1,4 +1,4 @@
-import { Component, Input, OnChanges, OnInit, SimpleChanges } from '@angular/core';
+import { AfterViewInit, Component, Input, OnChanges, OnInit, SimpleChanges } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Anomaly } from '../Models/anomaly';
 import * as L from 'leaflet';
@@ -11,7 +11,7 @@ import { Router } from '@angular/router';
   templateUrl: './map.component.html',
   styleUrls: ['./map.component.css']
 })
-export class MapComponent implements OnInit, OnChanges {
+export class MapComponent implements AfterViewInit, OnChanges {
 
   constructor(private router: Router) { }
 
@@ -23,13 +23,13 @@ export class MapComponent implements OnInit, OnChanges {
 
   private map: L.Map = {} as L.Map;
   private centroid: L.LatLngExpression = this.center; 
+  private markers: L.FeatureGroup = {} as L.FeatureGroup;
 
   ngOnChanges(changes: SimpleChanges): void {
-    if (changes['anomalies'] && !changes['anomalies'].firstChange) {
+    if(changes['anomalies']) {
       this.updateMarkers();
     }
   }
-
   private initMap(): void {
     this.map = L.map('map', {
       center: this.centroid,
@@ -49,11 +49,8 @@ export class MapComponent implements OnInit, OnChanges {
   }
 
   updateMarkers(): void {
-    this.map.eachLayer(layer => {
-      if (layer instanceof L.Marker) {
-        this.map.removeLayer(layer);
-      }
-    });
+    this.map.removeLayer(this.markers);
+    this.markers = new L.FeatureGroup();
 
     this.anomalies.forEach(anomaly => {
       const marker = L.marker([anomaly.latitude, anomaly.longitude]);
@@ -88,11 +85,12 @@ export class MapComponent implements OnInit, OnChanges {
          html: `<span style="${style}" />`
        }));
 
-     marker.addTo(this.map);
+     marker.addTo(this.markers);
    });
+   this.markers.addTo(this.map);
   }
 
-  ngOnInit(): void {
+  ngAfterViewInit(): void {
     this.initMap();
   }
 
