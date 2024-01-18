@@ -9,15 +9,18 @@
         <h3 class="text-white m-0 ml-2 text-xl px-5">CodiTrack</h3>
     </div>
     <div class="flex md:flex-row items-center flex-grow mx-2">
-        <select class="appearance-none bg-white border border-gray-300 py-2 px-4 leading-tight text-sm rounded-md">
-            <option value="0" selected disabled>Select a country</option>
+        <select class="appearance-none bg-white border border-gray-300 py-2 px-4 leading-tight text-sm rounded-md"
+        name="country" id="" [(ngModel)]="selectedCountry">
+            <option value="all">All</option>
             <option value="Belgium">Belgium</option>
             <option value="Luxembourg">Luxembourg</option>
-            <option value="Luxembourg">France</option>
+            <option value="France">France</option>
+            <option value="Netherlands">Netherlands</option>
+
         </select>
     </div>
     
-    <button class="px-3 py-2 bg-[#6684be] text-white rounded-md hover:bg-[#4f74ac] float-right mr-2 mt-1" routerLink="/anomaly">
+    <button class="px-3 py-2 bg-[#6684be] text-white rounded-md hover:bg-[#4f74ac] float-right mr-2 mt-1" routerLink="/menu">
         <div class="ml-auto text-xl"><i
             class="fas fa-backward fa-xl"></i></div>
     </button>
@@ -87,7 +90,11 @@
             <div class="grid grid-cols-6 gap-4">
                 <div class="col-span-6">
                     <div *ngFor="let train of trains">
-                        <app-anomaly-item [train]="train" [anomalies]="anomalies"></app-anomaly-item>
+                        <ng-container *ngIf="getAnomaliesByTrainAndCountry(train.id, selectedCountry).length > 0">
+                            <app-anomaly-item [train]="train"
+                                [anomalies]="getAnomaliesByTrainAndCountry(train.id, selectedCountry)"
+                                [tracks]="tracks"></app-anomaly-item>
+                        </ng-container>
                     </div>
                 </div>
             </div>

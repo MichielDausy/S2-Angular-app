@@ -19,7 +19,8 @@ import { data } from '../Models/mockdata';
 
 export class HistoryComponent {
 
-  selectedCountry : string = "";
+  selectedCountry : string = "all";
+  
   countryAnomalies= [{
      id: 1,
      timestamp: new Date(),
@@ -35,7 +36,25 @@ export class HistoryComponent {
      signId: 1
   }] as Anomaly[];
 
+  getCountryId(countryName: string): number | undefined {
+    const country = this.countries.find(c => c.name.toLowerCase() === countryName.toLowerCase());
+    return country?.id;
+ }
+  
+  getAnomaliesByTrainAndCountry(trainId: number, countryName: string): Anomaly[] {
+    if (countryName === "all"){
+       return this.anomalies.filter(a => a.trainId === trainId);
+    }
+    else{
+       const countryId = this.getCountryId(countryName);
+       return this.anomalies.filter(a => a.trainId === trainId && a.countryId === countryId);
+    }
+ }
+
    countries = data.countries;
    trains = data.trains;
    anomalies = data.anomalies;
+   tracks = data.tracks;
+
+   
 }
