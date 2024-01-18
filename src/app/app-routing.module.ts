@@ -11,7 +11,7 @@ const routes: Routes = [
   { path: '', component: HomepageComponent },
   {path: 'anomaly', component: AnomalypageComponent},
   {path:'mapanomaly', component: AnomalyMapPageComponent},
-  {path: 'mapdetails/:id', component: AnomalyMapDetailsPageComponent}
+  {path: 'mapdetails/:id', component: AnomalyMapDetailsPageComponent},
   {path:'details/:id', component: AnomalyDetailsComponent},
   {path:'history', component: HistoryComponent}
 

@@ -17,38 +17,39 @@
                         <app-anomaly-item [train]="train" [anomalies]="getAnomaliesByTrainAndCountry(train.id, selectedCountry)" [tracks]="tracks"></app-anomaly-item>
                     </ng-container>
                 </div>
-        <div class="md:flex md:flex-col md:items-center md:mt-4 md:w-full md:p-4">
-            <div class="p-1 md:mt-4 h-48 bg-gray-200">
-                <p class="text-lg">Anomaly types:</p>
-                <ul class="text-base">
-                    <li>
-                        <div class="flex flex-nowrap">
-                            <span class="dot bg-slate-700 my-auto mx-2"></span>
-                            <p class="my-auto">Vegetation</p>
-                        </div>
-                    </li>
-                    <li>
-                        <div class="flex flex-nowrap">
-                            <span class="dot bg-cyan-600 my-auto mx-2"></span>
-                            <p class="my-auto">Signs</p>
-                        </div>
-                    </li>
-                </ul>
             </div>
-                <div class="h-16 my-2 p-1">
-                    <select class="m-auto w-full text-base" name="country" id="" [(ngModel)]="selectedCountry">
-                        <option class="text-base" value="belgium">Belgium</option>
-                        <option class="text-base" value="france">France</option>
-                        <option class="text-base" value="germany">Germany</option>
-                        <option class="text-base" value="netherlands">Netherlands</option>
-                    </select>
+            <div class="md:flex md:flex-col md:items-center md:mt-4 md:w-full md:p-4 col-start-7">
+                <div class="p-1 md:mt-4 h-48 bg-gray-200">
+                    <p class="text-lg">Anomaly types:</p>
+                    <ul class="text-base">
+                        <li>
+                            <div class="flex flex-nowrap">
+                                <span class="dot bg-slate-700 my-auto mx-2"></span>
+                                <p class="my-auto">Vegetation</p>
+                            </div>
+                        </li>
+                        <li>
+                            <div class="flex flex-nowrap">
+                                <span class="dot bg-cyan-600 my-auto mx-2"></span>
+                                <p class="my-auto">Signs</p>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+                    <div class="h-16 my-2 p-1">
+                        <select class="m-auto w-full text-base" name="country" id="" [(ngModel)]="selectedCountry">
+                            <option class="text-base" value="all">All</option>
+                            <option class="text-base" value="belgium">Belgium</option>
+                            <option class="text-base" value="france">France</option>
+                            <option class="text-base" value="germany">Germany</option>
+                            <option class="text-base" value="netherlands">Netherlands</option>
+                        </select>
+                    </div>
                 </div>
             </div>
         </div>
-    </div>
-    <button class="px-4 py-2 bg-[#6684be] text-white text-sm rounded-md hover:bg-[#4f74ac] float-right" routerLink="/history">
-        History
-    </button>
-
+        <button class="px-4 py-2 bg-[#6684be] text-white text-sm rounded-md hover:bg-[#4f74ac] float-right" routerLink="/history">
+            History
+        </button>   
 </div>
 
