@@ -1,11 +1,11 @@
 <div class="container mx-auto" style="width: 1200px;">
     <div class="grid grid-cols-7 gap-7">
         <div class="col-span-6">
-            <h1 class="underline">Anomalies</h1>
+            <h1>Anomalies</h1>
         </div>
         <div class="col-start-7 w-full" (click)="changeMode()">
-            <button class="bg-black text-white text-lg w-1/2" >list</button>
-            <button class="bg-gray-200 text-lg w-1/2">map</button>
+            <button class="px-4 py-2 bg-[#6684be] text-white text-sm rounded float-left w-1/2">List</button>
+            <button class="px-4 py-2 bg-gray-200 text-black text-sm rounded float-right w-1/2">Map</button>
         </div>
     </div>
 
@@ -14,42 +14,44 @@
             <div class="col-span-6">
                 <div *ngFor="let train of trains">
                     <ng-container *ngIf="getAnomaliesByTrainAndCountry(train.id, selectedCountry).length > 0">
-                        <app-anomaly-item [train]="train" [anomalies]="getAnomaliesByTrainAndCountry(train.id, selectedCountry)" [tracks]="tracks"></app-anomaly-item>
+                        <app-anomaly-item [train]="train"
+                            [anomalies]="getAnomaliesByTrainAndCountry(train.id, selectedCountry)"
+                            [tracks]="tracks"></app-anomaly-item>
                     </ng-container>
                 </div>
             </div>
-            <div class="md:flex md:flex-col md:items-center md:mt-4 md:w-full md:p-4 col-start-7">
-                <div class="p-1 md:mt-4 h-48 bg-gray-200">
-                    <p class="text-lg">Anomaly types:</p>
-                    <ul class="text-base">
-                        <li>
-                            <div class="flex flex-nowrap">
-                                <span class="dot bg-slate-700 my-auto mx-2"></span>
-                                <p class="my-auto">Vegetation</p>
-                            </div>
+            <div class="md:flex md:flex-col md:items-center md:w-full md:p-4 col-start-7">
+                <div class=" my-2 p-1 text-base">
+                    <p class="">Filter </p>
+                    <select
+                        class="appearance-none bg-white border border-gray-300 py-2 px-4 leading-tight text-sm rounded-md focus:outline-none"
+                        name="country" id="" [(ngModel)]="selectedCountry">
+                        <option value="all">All</option>
+                        <option value="belgium">Belgium</option>
+                        <option value="france">France</option>
+                        <option value="germany">Germany</option>
+                        <option value="netherlands">Netherlands</option>
+                    </select>
+                </div>
+                <div class="p-4 md:mt-4 h-48 bg-gray-200 rounded-lg shadow-md">
+                    <p class="text-lg mb-2">Types:</p>
+                    <ul class="text-base space-y-2">
+                        <li class="flex items-center">
+                            <span class="dot bg-slate-700 h-4 w-4 rounded-full mr-2"></span>
+                            <p>Vegetation</p>
                         </li>
-                        <li>
-                            <div class="flex flex-nowrap">
-                                <span class="dot bg-cyan-600 my-auto mx-2"></span>
-                                <p class="my-auto">Signs</p>
-                            </div>
+                        <li class="flex items-center">
+                            <span class="dot bg-cyan-600 h-4 w-4 rounded-full mr-2"></span>
+                            <p>Signs</p>
                         </li>
                     </ul>
                 </div>
-                    <div class="h-16 my-2 p-1">
-                        <select class="m-auto w-full text-base" name="country" id="" [(ngModel)]="selectedCountry">
-                            <option class="text-base" value="all">All</option>
-                            <option class="text-base" value="belgium">Belgium</option>
-                            <option class="text-base" value="france">France</option>
-                            <option class="text-base" value="germany">Germany</option>
-                            <option class="text-base" value="netherlands">Netherlands</option>
-                        </select>
-                    </div>
-                </div>
+
+
+
+
             </div>
         </div>
-        <button class="px-4 py-2 bg-[#6684be] text-white text-sm rounded-md hover:bg-[#4f74ac] float-right" routerLink="/history">
-            History
-        </button>   
-</div>
+    </div>
 
+</div>
