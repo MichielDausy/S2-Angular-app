@@ -8,7 +8,6 @@ import { NavbarComponent } from './navbar/navbar.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { MapComponent } from './map/map.component';
-import { HttpClientModule } from '@angular/common/http';
 
 
 @NgModule({
@@ -21,8 +20,7 @@ import { HttpClientModule } from '@angular/common/http';
     FooterComponent,
     NavbarComponent, 
     BrowserAnimationsModule,
-    MatTooltipModule,
-    HttpClientModule
+    MatTooltipModule
   ],
   providers: [],
   bootstrap: [AppComponent]
