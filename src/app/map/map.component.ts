@@ -21,7 +21,7 @@ export class MapComponent implements AfterViewInit, OnChanges {
   @Input() height = "600px";
   @Input() width = "1200px";
   @Input() center = [50.85045,4.34878] as L.LatLngExpression;
-  @Input() updatePending = false;
+  @Input() isDetails = false;
 
   private map: L.Map = {} as L.Map;
   private centroid: L.LatLngExpression = this.center; 
@@ -30,6 +30,16 @@ export class MapComponent implements AfterViewInit, OnChanges {
   ngOnChanges(changes: SimpleChanges): void {
     const previousAnomalies = JSON.stringify(changes['anomalies'].previousValue);
     const currentAnomalies = JSON.stringify(changes['anomalies'].currentValue);
+
+    if(this.isDetails){
+      const previousCentroid = JSON.stringify(changes['center'].previousValue);
+      const currentCentroid = JSON.stringify(changes['center'].currentValue);
+
+      if(previousCentroid !== currentCentroid) {
+        this.map.setView(this.center, this.zoom);
+        console.log("center: " + this.center);
+      }
+    }
   
     if (previousAnomalies !== currentAnomalies) {
       console.log("Anomalies have changed");
@@ -38,10 +48,18 @@ export class MapComponent implements AfterViewInit, OnChanges {
   }
   
   private initMap(): void {
-    this.map = L.map('map', {
-      center: this.centroid,
-      zoom: this.zoom
-    });
+    if(this.anomalies.length > 1){
+      this.map = L.map('map', {
+        center: this.centroid,
+        zoom: this.zoom
+      });
+    }
+    else{
+      this.map = L.map('map', {
+        center: [this.anomalies[0].latitude, this.anomalies[0].longitude] as L.LatLngExpression,
+        zoom: this.zoom
+      });
+    }
 
     const tiles = L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
       maxZoom: 18,
@@ -52,6 +70,8 @@ export class MapComponent implements AfterViewInit, OnChanges {
     this.updateMarkers();
 
     tiles.addTo(this.map);
+
+    console.log("center: " + this.center)
   
   }
 
@@ -68,7 +88,7 @@ export class MapComponent implements AfterViewInit, OnChanges {
 
       marker.on('click', () => {
         console.log("click")
-        this.router.navigate(['/mapdetails', anomaly.id]);
+        this.router.navigate(['/anomaly/map/details', anomaly.id]);
       });
 
       let color = 'black';

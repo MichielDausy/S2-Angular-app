@@ -3,5 +3,5 @@
     <main class="flex-1 no-mt">
         <router-outlet></router-outlet>
     </main>
-    <app-footer></app-footer>
+    <app-footer *ngIf="isFooterVisible"></app-footer>
 </div>
