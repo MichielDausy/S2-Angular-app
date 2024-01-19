@@ -12,6 +12,7 @@ export class Service {
   private _url: string = "";
 
   constructor(private http: HttpClient) { }
+  
 
   getAnomalies(): Observable<Anomaly[]> {
     return this.http.get<Anomaly[]>(this._url);
