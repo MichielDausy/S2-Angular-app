@@ -10,10 +10,10 @@ import { MenuComponent } from './menu/menu.component';
 
 const routes: Routes = [
   { path: '', component: HomepageComponent },
-  {path: 'anomaly', component: AnomalypageComponent},
-  {path:'mapanomaly', component: AnomalyMapPageComponent},
-  {path: 'mapdetails/:id', component: AnomalyMapDetailsPageComponent},
-  {path:'details/:id', component: AnomalyDetailsComponent},
+  {path: 'anomaly/list', component: AnomalypageComponent},
+  {path:'anomaly/map', component: AnomalyMapPageComponent},
+  {path: 'anomaly/map/details/:id', component: AnomalyMapDetailsPageComponent},
+  {path:'anomaly/list/details/:id', component: AnomalyDetailsComponent},
   {path:'history', component: HistoryComponent},
   {path:'menu', component: MenuComponent}
 

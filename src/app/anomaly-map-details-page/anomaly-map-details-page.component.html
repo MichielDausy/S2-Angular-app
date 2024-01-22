@@ -1,40 +1,56 @@
-<div class="container mx-auto" style="max-width: 1200px;">
-    <a routerLink="/mapanomaly" class="text-blue-500 hover:text-blue-800 text-base">&lt; Go Back</a>
-    <h1 class="underline mb-8">Anomaly {{anomaly.id}}</h1>
-
-
-    <div class="grid grid-cols-2 gap-2 my-5 pl-4">
-        <div>
-            <p class="underline text-lg">Image</p>
+<div>
+    <div class="grid grid-cols-7 h-12">
+        <div class="col-span-1 bg-[#6586c3c5] py-3 overlay pl-4 flex flex-nowrap">
+            <img src="../../assets/codiTrack-logo.png" width="15%" height="auto" alt="" class="my-auto">
+            <p class="text-white my-auto text-3xl">Coditrack</p>
         </div>
-        <div>
-            <p class="underline text-lg">Location</p>
-        </div>
-    </div>
-    <div class="grid grid-cols-2 my-5 pl-4">
-        <div><img src="https://upload.wikimedia.org/wikipedia/commons/thumb/4/4a/Railroad_Tracks_-_Merritt_Island%2C_Florida.jpg/1200px-Railroad_Tracks_-_Merritt_Island%2C_Florida.jpg?20121011174007" alt="" width="75%"></div>
-        <div>
-            <app-map [width]="'600'" [height]="'400px'" [anomalies]="[anomaly]" [zoom]="12" [center]="[anomaly.latitude,anomaly.longitude]"></app-map>
-        </div>
-    </div>
-    <div class="grid grid-cols-2 gap-2 my-5 pl-4">
-        <div>
-            <div class="grid grid-cols-2 gap-2">
-                <div class="my-auto flex flex-nowrap">
-                    <input type="checkbox" name="markfalse" class="h-5 w-5 my-auto">
-                    <label for="markfalse" class="text-base my-auto mx-2">False Anomaly</label>
-                </div>
-                <div class="my-auto flex flex-nowrap">
-                    <input type="checkbox" name="markfixed" class="h-5 w-5 my-auto">
-                    <label for="markfixed" class="text-base my-auto mx-2">Fixed</label>
-                </div>
+        <div class="col-span-6 bg-gray-100 pl-3 py-4 h-16 flex flex-nowrap my-auto">
+            <div class="my-auto absolute right-3 top-3" >
+                <button class="px-3 py-2 bg-[#6684be] text-white rounded-md hover:bg-[#4f74ac] float-right" routerLink="/anomaly/map">
+                    <div class="ml-auto text-xl"><i
+                        class="fas fa-backward fa-xl"></i></div>
+                </button>
             </div>
         </div>
     </div>
+
+    <div class="container mx-auto" style="max-width: 1200px;">
+        <h1 class="underline my-16">Anomaly {{anomaly.id}}</h1>
     
-    <div class="pl-4">
-        <button class="border-1 border-black bg-blue-600 text-white text-base w-28 h-8">
-            Submit
-        </button>
+    
+        <div class="grid grid-cols-2 gap-2 my-5 pl-4">
+            <div>
+                <p class="underline text-lg">Image</p>
+            </div>
+            <div>
+                <p class="underline text-lg">Location</p>
+            </div>
+        </div>
+        <div class="grid grid-cols-2 my-5 pl-4">
+            <div><img src="https://upload.wikimedia.org/wikipedia/commons/thumb/4/4a/Railroad_Tracks_-_Merritt_Island%2C_Florida.jpg/1200px-Railroad_Tracks_-_Merritt_Island%2C_Florida.jpg?20121011174007" alt="" width="75%"></div>
+            <div>
+                <app-map [width]="'600px'" [height]="'400px'" [anomalies]="[anomaly]" [zoom]="16" [center]="center"></app-map>
+            </div>
+        </div>
+        <div class="grid grid-cols-2 gap-2 my-5 pl-4">
+            <div>
+                <div class="grid grid-cols-2 gap-2">
+                    <div class="my-auto flex flex-nowrap">
+                        <input type="checkbox" name="markfalse" class="h-5 w-5 my-auto">
+                        <label for="markfalse" class="text-base my-auto mx-2">False Anomaly</label>
+                    </div>
+                    <div class="my-auto flex flex-nowrap">
+                        <input type="checkbox" name="markfixed" class="h-5 w-5 my-auto">
+                        <label for="markfixed" class="text-base my-auto mx-2">Fixed</label>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="pl-4">
+            <button class="border-1 border-black bg-blue-600 text-white text-base w-28 h-8">
+                Submit
+            </button>
+        </div>
     </div>
 </div>

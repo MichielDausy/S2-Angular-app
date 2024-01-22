@@ -19,8 +19,9 @@ import { MapComponent } from '../map/map.component';
   styleUrl: './anomaly-map-details-page.component.css'
 })
 export class AnomalyMapDetailsPageComponent implements OnInit{
-  constructor(private router: ActivatedRoute){   
-  }
+  constructor(private router: ActivatedRoute){   }
+
+  center = [0,0] as L.LatLngExpression;
   anomaly : Anomaly = {
     id: 0,
     timestamp: new Date(),
@@ -48,6 +49,8 @@ export class AnomalyMapDetailsPageComponent implements OnInit{
     this.anomalyId = this.router.snapshot.params['id'];
     this.anomaly = this.getAnomalyById(this.anomalyId);
     this.sign = this.getSignbyId(this.anomaly.signId);
+    this.center = [this.anomaly.latitude, this.anomaly.longitude] as L.LatLngExpression;
+    
   }
 
 

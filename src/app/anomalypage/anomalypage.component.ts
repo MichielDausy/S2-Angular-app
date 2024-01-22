@@ -26,7 +26,7 @@ export class AnomalypageComponent{
    displayList = false;
 
    changeMode() {
-      this.router.navigate(['/mapanomaly']);
+      this.router.navigate(['/anomaly/map']);
    }
 
    selectedCountry : string = "all";

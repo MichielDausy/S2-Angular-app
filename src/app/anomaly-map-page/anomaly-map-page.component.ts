@@ -6,11 +6,12 @@ import { FormsModule } from '@angular/forms';
 import { MapComponent } from '../map/map.component';
 import { Router } from '@angular/router';
 import { data } from '../Models/mockdata';
+import { RouterLink } from '@angular/router';
 
 @Component({
   selector: 'app-anomaly-map-page',
   standalone: true,
-  imports: [CommonModule, AnomalyItemComponent, FormsModule, MapComponent],
+  imports: [CommonModule, AnomalyItemComponent, FormsModule, MapComponent, RouterLink],
   templateUrl: './anomaly-map-page.component.html',
   styleUrl: './anomaly-map-page.component.css'
 })
@@ -20,9 +21,11 @@ export class AnomalyMapPageComponent{
 
 
   displayList = false;
+  center = [50.85045,4.34878] as L.LatLngExpression;
+
 
   changeMode() {
-     this.router.navigate(['/anomaly']);
+     this.router.navigate(['/anomaly/list']);
   }
 
   selectedCountry : string = "all";

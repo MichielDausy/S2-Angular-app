@@ -37,19 +37,19 @@ export const data = {
     tracks: [
         {
            id: 1,
-           name: "Track 1"
+           name: "B-87"
         },
         {
            id: 2,
-           name: "Track 2"
+           name: "A-33"
         },
         {
            id: 3,
-           name: "Track 3"
+           name: "A-54"
         },
         {
            id: 4,
-           name: "Track 4"
+           name: "B-10"
         }
      ] as Train[],    
     
