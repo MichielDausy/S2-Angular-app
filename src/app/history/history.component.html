@@ -1,7 +1,7 @@
 <!-- All anomalies that are fixed are shown here -->
 
 <header class="flex items-center w-full sticky-top disable-touch-scroll space-x-4"
-    style="background-color: #f0f3f9; width: 100%;"> <!-- Set the width to the desired value -->
+    style="background-color: #f0f3f9; width: 100%;">
     <div class="flex items-center max-w-17rem w-25vw relative p-2 h-full"
         style="background-image: linear-gradient(#6586c3c5 0,#6586c3c5 150%), url(../../assets/background-img.png)!important; background-repeat: no-repeat; background-size: cover; width: 25%;">
 
@@ -19,7 +19,7 @@
         </select>
     </div>
 
-    <button class="px-3 py-2 bg-[#6684be] text-white rounded-md hover:bg-[#4f74ac] float-right mr-2 mt-1"
+    <button class="px-3 py-2 bg-[#6684be] text-white rounded-md hover:bg-[#4f74ac] float-right my-auto"
         routerLink="/menu">
         <div class="ml-auto text-xl"><i class="fas fa-backward fa-xl"></i></div>
     </button>
@@ -36,9 +36,9 @@
                     Select railway asset
                 </div>
                 <div class="p-0  d-flex">
-                    <ul  class="overflow-auto d-inline-block text-xl">
+                    <ul class="overflow-auto d-inline-block text-xl">
                         <div *ngFor="let train of trains; let i = index" style="cursor:pointer"
-                            class="relative block px-3 py-3 w-full text-dark bg-white border border-gray-300"
+                            class="relative block px-1 py-1 w-full text-dark bg-white border border-gray-300"
                             id="{{ i }}" (click)="onTrainClick(i)"
                             [style.backgroundColor]="selectedTrain === i ? '#4f74ac' : '#FFFFFF'"
                             [style.color]="selectedTrain === i ? '#FFFFFF' : '#000000'">
@@ -49,8 +49,7 @@
                 </div>
             </div>
             <br>
-            <div class="toggle-bar border border-black border-opacity-25"
-                *ngIf="selectedTrain !== null">
+            <div class="toggle-bar border border-black border-opacity-25" *ngIf="selectedTrain !== null">
                 <div class="card-header bg-opacity-3 h-3rem text-sm p-2 mb-0 border-b border-solid border-gray-200"
                     style="background-color: #f0f3f9;"> Select date </div>
                 <div class="p-2">
@@ -73,7 +72,7 @@
                             <div
                                 *ngIf="selectedFilter === 'thisWeek' || selectedFilter === 'previousWeek' || selectedFilter === ''">
                                 <a id="{{ day }}" style="cursor:pointer"
-                                    class="relative block px-1 py-1 w-full text-dark bg-white border border-gray-300"
+                                    class="relative block px-2 py-2 w-full text-dark bg-white border border-gray-300"
                                     [style.backgroundColor]="selectedDay === day ? '#4f74ac' : '#FFFFFF'"
                                     [style.color]="selectedDay === day ? '#FFFFFF' : '#000000'"
                                     (click)="selectDay(day)">
