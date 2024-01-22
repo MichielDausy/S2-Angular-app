@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { Anomaly } from '../Models/anomaly';
 import { CommonModule } from '@angular/common';
 import { AnomalyItemComponent } from '../anomaly-item/anomaly-item.component';
@@ -7,6 +7,12 @@ import { MapComponent } from '../map/map.component';
 import { Router } from '@angular/router';
 import { data } from '../Models/mockdata';
 import { RouterLink } from '@angular/router';
+import { Service } from '../Service/service';
+import { Sign } from '../Models/sign';
+import { Train } from '../Models/train';
+import { Traintrack } from '../Models/traintrack';
+import { Country } from '../Models/country';
+import { Anomalytype } from '../Models/anomalytype';
 
 @Component({
   selector: 'app-anomaly-map-page',
@@ -15,13 +21,42 @@ import { RouterLink } from '@angular/router';
   templateUrl: './anomaly-map-page.component.html',
   styleUrl: './anomaly-map-page.component.css'
 })
-export class AnomalyMapPageComponent{
+export class AnomalyMapPageComponent implements OnInit{
+  signs: Sign[] = [];
+  trains: Train[] = [];
+  tracks: Traintrack[] = [];
+  anomalies: Anomaly[] = [];
+  countries: Country[] = [];
+  anomalyTypes: Anomalytype[] = [];
 
-  constructor(private router: Router) { }
+  constructor(private router: Router, private service: Service) { }
 
 
   displayList = false;
   center = [50.85045,4.34878] as L.LatLngExpression;
+
+
+  
+  ngOnInit(): void {
+    this.service.getSigns().subscribe(signs => {
+      this.signs = signs;
+    });
+    this.service.getTrains().subscribe(trains => {
+      this.trains = trains;
+    });
+    this.service.getTrainTracks().subscribe(tracks => {
+      this.tracks = tracks;
+    });
+    this.service.getAnomalies().subscribe(anomalies => {
+      this.anomalies = anomalies;
+    });
+    this.service.getCountries().subscribe(countries => {
+      this.countries = countries;
+    });
+    this.service.getAnomalyTypes().subscribe(anomalyTypes => {
+      this.anomalyTypes = anomalyTypes;
+    });
+  }
 
 
   changeMode() {
@@ -69,22 +104,4 @@ export class AnomalyMapPageComponent{
       );
     }
   }
-
-  // getAnomaliesByCountry(countryName: string): Anomaly[] {
-  //   if (countryName === "all") {
-  //     return this.anomalies;
-  //   }
-  //   else{
-  //     const countryId = this.getCountryId(countryName);
-  //     return this.anomalies.filter(a => a.countryId === countryId);
-  //   }
-  // }
-
-
-    signs = data.signs;
-    trains = data.trains;
-    tracks = data.tracks;
-    anomalies = data.anomalies;
-    countries = data.countries;
-    anomalyTypes = data.anomalyTypes;
 }

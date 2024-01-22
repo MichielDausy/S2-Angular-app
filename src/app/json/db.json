@@ -1,0 +1,259 @@
+{
+  "signs": [
+    {
+      "id": 1,
+      "name": "Sign 1",
+      "photo": "photo1"
+    },
+    {
+      "id": 2,
+      "name": "Sign 2",
+      "photo": "photo2"
+    },
+    {
+      "id": 3,
+      "name": "Sign 3",
+      "photo": "photo3"
+    },
+    {
+      "id": 4,
+      "name": "Sign 4",
+      "photo": "photo4"
+    },
+    {
+      "id": 5,
+      "name": "Sign 5",
+      "photo": "photo5"
+    }
+  ],
+  "trainTracks": [
+    {
+      "id": 1,
+      "name": "B-87"
+    },
+    {
+      "id": 2,
+      "name": "A-33"
+    },
+    {
+      "id": 3,
+      "name": "A-54"
+    },
+    {
+      "id": 4,
+      "name": "B-10"
+    }
+  ],
+  "countries": [
+    {
+      "id": 1,
+      "name": "Belgium"
+    },
+    {
+      "id": 2,
+      "name": "France"
+    },
+    {
+      "id": 3,
+      "name": "Germany"
+    },
+    {
+      "id": 4,
+      "name": "Netherlands"
+    }
+  ],
+  "trains": [
+    {
+      "id": 1,
+      "name": "Train 1"
+    },
+    {
+      "id": 2,
+      "name": "Train 2"
+    },
+    {
+      "id": 3,
+      "name": "Train 3"
+    },
+    {
+      "id": 4,
+      "name": "Train 4"
+    },
+    {
+      "id": 5,
+      "name": "Train 5"
+    },
+    {
+      "id": 6,
+      "name": "Train 6"
+    },
+    {
+      "id": 7,
+      "name": "Train 7"
+    },
+    {
+      "id": 8,
+      "name": "Train 8"
+    },
+    {
+      "id": 9,
+      "name": "Train 9"
+    },
+    {
+      "id": 10,
+      "name": "Train 10"
+    }
+  ],
+  "anomalies": [
+    {
+      "id": 1,
+      "timestamp": "2024-01-22T00:00:00.000Z",
+      "longitude": 4.43851,
+      "latitude": 51.1921,
+      "photo": "photo1",
+      "isFixed": true,
+      "isFalse": true,
+      "trainId": 1,
+      "trainTrackId": 1,
+      "countryId": 1,
+      "anomalyTypeId": 1,
+      "signId": 1
+    },
+    {
+      "id": 2,
+      "timestamp": "2024-01-22T00:00:00.000Z",
+      "longitude": 4.52126,
+      "latitude": 51.00397,
+      "photo": "photo2",
+      "isFixed": false,
+      "isFalse": false,
+      "trainId": 1,
+      "trainTrackId": 2,
+      "countryId": 1,
+      "anomalyTypeId": 2,
+      "signId": 2
+    },
+    {
+      "id": 3,
+      "timestamp": "2024-01-22T00:00:00.000Z",
+      "longitude": 4.69302,
+      "latitude": 51.08272,
+      "photo": "photo3",
+      "isFixed": true,
+      "isFalse": true,
+      "trainId": 3,
+      "trainTrackId": 2,
+      "countryId": 1,
+      "anomalyTypeId": 2,
+      "signId": 3
+    },
+    {
+      "id": 4,
+      "timestamp": "2024-01-22T00:00:00.000Z",
+      "longitude": 3.10367,
+      "latitude": 50.65272,
+      "photo": "photo4",
+      "isFixed": false,
+      "isFalse": false,
+      "trainId": 4,
+      "trainTrackId": 4,
+      "countryId": 2,
+      "anomalyTypeId": 1,
+      "signId": 4
+    },
+    {
+      "id": 5,
+      "timestamp": "2024-01-22T00:00:00.000Z",
+      "longitude": 4.3407,
+      "latitude": 51.50889,
+      "photo": "photo5",
+      "isFixed": false,
+      "isFalse": false,
+      "trainId": 2,
+      "trainTrackId": 5,
+      "countryId": 4,
+      "anomalyTypeId": 1,
+      "signId": 5
+    },
+    {
+      "id": 6,
+      "timestamp": "2024-01-22T00:00:00.000Z",
+      "longitude": 4.3407,
+      "latitude": 51.50889,
+      "photo": "photo5",
+      "isFixed": false,
+      "isFalse": false,
+      "trainId": 5,
+      "trainTrackId": 4,
+      "countryId": 4,
+      "anomalyTypeId": 1,
+      "signId": 5
+    },
+    {
+      "id": 7,
+      "timestamp": "2024-01-22T00:00:00.000Z",
+      "longitude": 4.3407,
+      "latitude": 51.50889,
+      "photo": "photo5",
+      "isFixed": false,
+      "isFalse": false,
+      "trainId": 5,
+      "trainTrackId": 4,
+      "countryId": 4,
+      "anomalyTypeId": 1,
+      "signId": 5
+    },
+    {
+      "id": 8,
+      "timestamp": "2024-01-22T00:00:00.000Z",
+      "longitude": 4.3407,
+      "latitude": 51.50889,
+      "photo": "photo5",
+      "isFixed": false,
+      "isFalse": false,
+      "trainId": 5,
+      "trainTrackId": 4,
+      "countryId": 4,
+      "anomalyTypeId": 1,
+      "signId": 5
+    },
+    {
+      "id": 9,
+      "timestamp": "2024-01-22T00:00:00.000Z",
+      "longitude": 4.3407,
+      "latitude": 51.50889,
+      "photo": "photo5",
+      "isFixed": false,
+      "isFalse": false,
+      "trainId": 8,
+      "trainTrackId": 4,
+      "countryId": 4,
+      "anomalyTypeId": 1,
+      "signId": 5
+    },
+    {
+      "id": 10,
+      "timestamp": "2024-01-22T00:00:00.000Z",
+      "longitude": 4.3407,
+      "latitude": 51.50889,
+      "photo": "photo5",
+      "isFixed": false,
+      "isFalse": false,
+      "trainId": 10,
+      "trainTrackId": 4,
+      "countryId": 4,
+      "anomalyTypeId": 1,
+      "signId": 5
+    }
+  ],
+  "anomalyTypes": [
+    {
+      "id": 1,
+      "name": "Vegetation"
+    },
+    {
+      "id": 2,
+      "name": "Signs"
+    }
+  ]
+}
