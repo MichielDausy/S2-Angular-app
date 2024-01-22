@@ -10,6 +10,9 @@ import { Train } from '../Models/train';
 import { Country } from '../Models/country';
 import { data } from '../Models/mockdata';
 import { MapComponent } from '../map/map.component';
+import { Anomalytype } from '../Models/anomalytype';
+import { Traintrack } from '../Models/traintrack';
+import { Service } from '../Service/service';
 
 @Component({
   selector: 'app-anomaly-map-details-page',
@@ -19,7 +22,8 @@ import { MapComponent } from '../map/map.component';
   styleUrl: './anomaly-map-details-page.component.css'
 })
 export class AnomalyMapDetailsPageComponent implements OnInit{
-  constructor(private router: ActivatedRoute){   }
+  
+  constructor(private router: ActivatedRoute, private service: Service){   }
 
   center = [0,0] as L.LatLngExpression;
   anomaly : Anomaly = {
@@ -47,10 +51,10 @@ export class AnomalyMapDetailsPageComponent implements OnInit{
 
   ngOnInit(): void {
     this.anomalyId = this.router.snapshot.params['id'];
-    this.anomaly = this.getAnomalyById(this.anomalyId);
-    this.sign = this.getSignbyId(this.anomaly.signId);
-    this.center = [this.anomaly.latitude, this.anomaly.longitude] as L.LatLngExpression;
-    
+    this.service.getAnomalyById(this.anomalyId).subscribe(anomaly => {
+      this.anomaly = anomaly;
+      this.center = [this.anomaly.latitude, this.anomaly.longitude] as L.LatLngExpression;
+    });
   }
 
 
@@ -72,20 +76,19 @@ export class AnomalyMapDetailsPageComponent implements OnInit{
     return `${lonDegrees}°${lonMinutes}'${lonSeconds.toFixed(2)}"${lonDirection}`;
   }
 
-  getSignbyId(id: number): Sign {
-    return this.signs.find(s => s.id == id) as Sign;
+  markAnomalyAsFixedById(id: number): void {
+    if(confirm("Are you sure this anomaly is fixed?")) {
+      this.service.markAnomalyAsFixedById(id).subscribe(anomaly => {
+        this.anomaly = anomaly;
+      });
+    }
   }
 
-
-  getAnomalyById(id: number): Anomaly {
-    return this.anomalies.find(a => a.id == id) as Anomaly;
-  }
-
-
-  signs = data.signs;
-  trains = data.trains;
-  tracks = data.tracks;
-  anomalies = data.anomalies;
-  countries = data.countries;
-  anomalyTypes = data.anomalyTypes;  
+  markAnomalyAsFalseById(id: number): void {
+    if(confirm("Are you sure this anomaly is false?")) {
+      this.service.markAnomalyAsFalseById(id).subscribe(anomaly => {
+        this.anomaly = anomaly;
+      });
+    }
+  } 
 }
