@@ -47,12 +47,8 @@ export class Service {
     return this.http.get<Country[]>(this._url+"countries");
   }
 
-  markAnomalyAsFixedById(id: number): Observable<Anomaly> {
-    return this.http.patch<Anomaly>(this._url+"anomalies/"+id, {isFixed: true});
-  }
-
-  markAnomalyAsFalseById(id: number): Observable<Anomaly> {
-    return this.http.patch<Anomaly>(this._url+"anomalies/"+id, {isFalse: true});
+  changeAnomalyStatusById(id: number, isFixed: boolean, isFalse: boolean): Observable<Anomaly> {
+    return this.http.patch<Anomaly>(this._url+"anomalies/"+id, {isFixed: isFixed, isFalse: isFalse});
   }
 
 }

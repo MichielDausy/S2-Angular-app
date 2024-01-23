@@ -112,7 +112,7 @@
       "latitude": 51.1921,
       "photo": "photo1",
       "isFixed": true,
-      "isFalse": true,
+      "isFalse": false,
       "trainId": 1,
       "trainTrackId": 1,
       "countryId": 1,
