@@ -9,18 +9,22 @@ import {CheckboxModule} from 'primeng/checkbox';
 import { Train } from '../Models/train';
 import { Country } from '../Models/country';
 import { data } from '../Models/mockdata';
+import { Service } from '../Service/service';
+import { FormsModule } from '@angular/forms';
+import { MapComponent } from '../map/map.component';
 
 @Component({
   selector: 'app-anomaly-details',
   standalone: true,
-  imports: [CommonModule, RouterLink, CheckboxModule],
+  imports: [CommonModule, RouterLink, CheckboxModule, FormsModule, MapComponent],
   templateUrl: './anomaly-details.component.html',
   styleUrls: ['./anomaly-details.component.css']
 })
 export class AnomalyDetailsComponent implements OnInit{
 
-  constructor(private router: ActivatedRoute){   
-  }
+  constructor(private router: ActivatedRoute, private service: Service){   }
+
+  center = [0,0] as L.LatLngExpression;
   anomaly : Anomaly = {
     id: 0,
     timestamp: new Date(),
@@ -36,19 +40,29 @@ export class AnomalyDetailsComponent implements OnInit{
     signId: 0
   };
 
-  sign : Sign = {
-    id: 0,
-    name: "",
-    photo: ""
-  };
-
   anomalyId: number = 0;
+  isFixed: boolean = false;
+  isFalse: boolean = false;
 
   ngOnInit(): void {
-    //get id from route url
     this.anomalyId = this.router.snapshot.params['id'];
-    this.anomaly = this.getAnomalyById(this.anomalyId);
-    this.sign = this.getSignbyId(this.anomaly.signId);
+    //API CODE DON'T REMOVE PLEASE
+    // this.service.getAnomalyById(this.anomalyId).subscribe(anomaly => {
+    //   this.anomaly = anomaly;
+    //   this.center = [this.anomaly.latitude, this.anomaly.longitude] as L.LatLngExpression;
+    //   this.isFalse = this.anomaly.isFalse;
+    //   this.isFixed = this.anomaly.isFixed;
+    //   console.log("anomaly loaded: " + (this.anomaly as Anomaly));
+    //   console.log("fixed: " + this.isFixed);
+    //   console.log("false: " + this.isFalse);
+    // });
+    
+    this.anomaly = data.anomalies.find(a => a.id == this.anomalyId) || {} as Anomaly;
+    this.center = [this.anomaly.latitude, this.anomaly.longitude] as L.LatLngExpression;
+    this.isFalse = this.anomaly.isFalse;
+    this.isFixed = this.anomaly.isFixed;
+
+
   }
 
 
@@ -70,19 +84,11 @@ export class AnomalyDetailsComponent implements OnInit{
     return `${lonDegrees}°${lonMinutes}'${lonSeconds.toFixed(2)}"${lonDirection}`;
   }
 
-  getSignbyId(id: number): Sign {
-    return this.signs.find(s => s.id == id) as Sign;
+  submitChanges(id: number): void {
+    if(confirm("Are you sure you want to submit changes?")) {
+      this.service.changeAnomalyStatusById(id,this.isFixed, this.isFalse).subscribe(anomaly => {
+        this.anomaly = anomaly;
+      });
+    }
   }
-
-
-  getAnomalyById(id: number): Anomaly {
-    return this.anomalies.find(a => a.id == id) as Anomaly;
-  }
-
-  signs = data.signs;
-    trains = data.trains;
-    tracks = data.tracks;
-    anomalies = data.anomalies;
-    countries = data.countries;
-    anomalyTypes = data.anomalyTypes;
 }

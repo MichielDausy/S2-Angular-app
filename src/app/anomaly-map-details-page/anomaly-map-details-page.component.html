@@ -15,8 +15,7 @@
     </div>
 
     <div class="container mx-auto" style="max-width: 1200px;">
-        <h1 class="underline my-16">Anomaly {{anomaly.id}}</h1>
-        
+        <h1 class="font-semibold my-16 text-2xl">Anomaly {{anomaly.id}}</h1>
     
         <div class="grid grid-cols-2 gap-2 my-5 pl-4">
             <div>
@@ -29,7 +28,11 @@
         <div class="grid grid-cols-2 gap-8 my-5 pl-4">
             <div class="h-[400px] w-[600px]"><img src="https://upload.wikimedia.org/wikipedia/commons/thumb/4/4a/Railroad_Tracks_-_Merritt_Island%2C_Florida.jpg/1200px-Railroad_Tracks_-_Merritt_Island%2C_Florida.jpg?20121011174007" alt="" class="object-cover"></div>
             <div *ngIf="anomaly && anomaly.id !== 0" class="relative">
-                <!-- Map component -->
+
+                <div class="absolute left-0 bottom-0 h-5 w-44 bg-gray-200 z-10 flex flex-nowrap">
+                    <p class="text-sm mr-2">{{convertLatitudeToDegreesMinutesSeconds(anomaly.latitude)}}</p>
+                    <p class="text-sm"> {{convertLongitudeToDegreesMinutesSeconds(anomaly.longitude)}}</p>
+                </div>
                 <app-map [width]="'600px'" [height]="'400px'" [anomalies]="[anomaly]" [zoom]="16" [center]="center"></app-map>
               
                 <!-- Legend -->
@@ -53,11 +56,11 @@
                 <div>
                     <div class="grid grid-cols-2 gap-2">
                         <div class="my-auto flex flex-nowrap">
-                            <input type="checkbox" name="markfalse" class="h-5 w-5 my-auto" [(ngModel)]="isFalse">
+                            <input type="checkbox" id="markfalse" name="markfalse" class="h-5 w-5 my-auto" [(ngModel)]="isFalse">
                             <label for="markfalse" class="text-base my-auto mx-2">False Anomaly</label>
                         </div>
                         <div class="my-auto flex flex-nowrap">
-                            <input type="checkbox" name="markfixed" class="h-5 w-5 my-auto" [(ngModel)]="isFixed">
+                            <input type="checkbox" id="markfixed" name="markfixed" class="h-5 w-5 my-auto" [(ngModel)]="isFixed">
                             <label for="markfixed" class="text-base my-auto mx-2">Fixed</label>
                         </div>
                     </div>
