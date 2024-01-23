@@ -57,11 +57,22 @@ export class AnomalyItemComponent implements OnInit{
     console.log(anomalyId);
   }
 
-  
 
   ngOnInit(): void {
-    this.trainAnomalies = this.anomalies.filter(a => a.trainId == this.train.id);
+    this.trainAnomalies = this.anomalies;
  }
+// ngOnInit(): void {
+//   console.log('All Anomalies:', this.anomalies);
 
-  
+//   const trainTrack = this.tracks.find(track => track.id === this.train.id);
+
+//   if (trainTrack) {
+//     console.log('Train ID:', this.train.id);
+//     console.log('Train Track ID:', trainTrack.id);
+
+//     this.trainAnomalies = this.anomalies.filter(a => a.trainTrackId === trainTrack.id);
+//   } else {
+//     console.error('Train track not found for train ID: ', this.train.id);
+//   }
+// }  
 }

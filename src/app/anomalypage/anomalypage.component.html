@@ -136,7 +136,7 @@
     <div>
         <div class="grid grid-cols-7 gap-7">
             <div class="col-span-6">
-                <div *ngFor="let train of trains">
+                <div *ngFor="let train of tracks">
                     <ng-container *ngIf="getAnomaliesByTrainAndCountry(train.id, selectedCountry).length > 0">
                       <app-anomaly-item [train]="train"
                         [anomalies]="getAnomaliesByTrainAndCountry(train.id, selectedCountry)"

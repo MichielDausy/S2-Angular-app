@@ -46,7 +46,7 @@
         </div>
     </header>
     <div class="mx-auto" *ngIf="anomalies && anomalies.length > 0">
-        <div class="relative mt-5 overflow-hidden">
+        <div class="relative overflow-hidden">
             <app-map class="" [anomalies]="getAnomaliesByCountry(selectedCountry, selectedTypes)" [height]="'92.5vh'"
                 [width]="'100%'" [center]="center" [isDetails]="false" />
             <div class="md:mt-4 absolute bottom-6 left-3 z-10 rounded p-1">
@@ -54,7 +54,7 @@
 
             </div>
             <div class="md:mt-4 h-44 bg-gray-100 bg-opacity-75 w-36 absolute bottom-6 right-3 z-10 rounded p-1 border">
-                <p class="text-lg mb-2">Types:</p>
+                <p class="text-lg mb-2">Types</p>
                 <ul class="text-base space-y-2">
                     <li class="flex items-center">
                         <span class="dot bg-slate-700 h-4 w-4 rounded-full mr-2"></span>
