@@ -48,20 +48,20 @@ export class AnomalyMapDetailsPageComponent implements OnInit{
   ngOnInit(): void {
     this.anomalyId = this.router.snapshot.params['id'];
     //API CODE DON'T REMOVE PLEASE
-    // this.service.getAnomalyById(this.anomalyId).subscribe(anomaly => {
-    //   this.anomaly = anomaly;
-    //   this.center = [this.anomaly.latitude, this.anomaly.longitude] as L.LatLngExpression;
-    //   this.isFalse = this.anomaly.isFalse;
-    //   this.isFixed = this.anomaly.isFixed;
-    //   console.log("anomaly loaded: " + (this.anomaly as Anomaly));
-    //   console.log("fixed: " + this.isFixed);
-    //   console.log("false: " + this.isFalse);
-    // });
+    this.service.getAnomalyById(this.anomalyId).subscribe(anomaly => {
+      this.anomaly = anomaly;
+      this.center = [this.anomaly.latitude, this.anomaly.longitude] as L.LatLngExpression;
+      this.isFalse = this.anomaly.isFalse;
+      this.isFixed = this.anomaly.isFixed;
+      console.log("anomaly loaded: " + (this.anomaly as Anomaly));
+      console.log("fixed: " + this.isFixed);
+      console.log("false: " + this.isFalse);
+    });
     
-    this.anomaly = data.anomalies.find(a => a.id == this.anomalyId) || {} as Anomaly;
-    this.center = [this.anomaly.latitude, this.anomaly.longitude] as L.LatLngExpression;
-    this.isFalse = this.anomaly.isFalse;
-    this.isFixed = this.anomaly.isFixed;
+    // this.anomaly = data.anomalies.find(a => a.id == this.anomalyId) || {} as Anomaly;
+    // this.center = [this.anomaly.latitude, this.anomaly.longitude] as L.LatLngExpression;
+    // this.isFalse = this.anomaly.isFalse;
+    // this.isFixed = this.anomaly.isFixed;
 
   }
 
@@ -86,7 +86,7 @@ export class AnomalyMapDetailsPageComponent implements OnInit{
 
   submitChanges(id: number): void {
     if(confirm("Are you sure you want to submit changes?")) {
-      this.service.changeAnomalyStatusById(id,this.isFixed, this.isFalse).subscribe(anomaly => {
+      this.service.markAnomaly(id,this.isFixed, this.isFalse).subscribe(anomaly => {
         this.anomaly = anomaly;
       });
     }

@@ -16,7 +16,7 @@
 
     <div class="container mx-auto" style="max-width: 1200px;">
         <h1 class="underline my-16">Anomaly {{anomaly.id}}</h1>
-    
+        
     
         <div class="grid grid-cols-2 gap-2 my-5 pl-4">
             <div>
@@ -28,9 +28,25 @@
         </div>
         <div class="grid grid-cols-2 gap-8 my-5 pl-4">
             <div class="h-[400px] w-[600px]"><img src="https://upload.wikimedia.org/wikipedia/commons/thumb/4/4a/Railroad_Tracks_-_Merritt_Island%2C_Florida.jpg/1200px-Railroad_Tracks_-_Merritt_Island%2C_Florida.jpg?20121011174007" alt="" class="object-cover"></div>
-            <div *ngIf="anomaly && anomaly.id !== 0">
+            <div *ngIf="anomaly && anomaly.id !== 0" class="relative">
+                <!-- Map component -->
                 <app-map [width]="'600px'" [height]="'400px'" [anomalies]="[anomaly]" [zoom]="16" [center]="center"></app-map>
-            </div>
+              
+                <!-- Legend -->
+                <div class="md:mt-4 h-44 bg-gray-100 bg-opacity-75 absolute bottom-5 -right-5 z-20 rounded p-1 border">
+                  <p class="text-lg mb-2">Types:</p>
+                  <ul class="text-base space-y-2">
+                    <li class="flex items-center">
+                      <span class="dot bg-[#3274A3] h-4 w-4 rounded-full mr-2"></span>
+                      <p>Vegetation</p>
+                    </li>
+                    <li class="flex items-center">
+                      <span class="dot bg-[#6B6B6B] h-4 w-4 rounded-full mr-2"></span>
+                      <p>Signs</p>
+                    </li>
+                  </ul>
+                </div>
+              </div>
         </div>
         <div class="grid grid-cols-2 gap-2 my-5 pl-4">
             <div>
