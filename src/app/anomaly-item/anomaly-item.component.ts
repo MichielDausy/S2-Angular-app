@@ -15,8 +15,6 @@ import { Traintrack } from '../Models/traintrack';
 })
 
 
-
-
 export class AnomalyItemComponent implements OnInit{
 
   @Input() train : Train = {id: 0, name: ""};
