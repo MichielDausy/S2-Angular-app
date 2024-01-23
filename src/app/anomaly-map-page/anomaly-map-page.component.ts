@@ -38,24 +38,33 @@ export class AnomalyMapPageComponent implements OnInit{
 
   
   ngOnInit(): void {
-    this.service.getSigns().subscribe(signs => {
-      this.signs = signs;
-    });
-    this.service.getTrains().subscribe(trains => {
-      this.trains = trains;
-    });
-    this.service.getTrainTracks().subscribe(tracks => {
-      this.tracks = tracks;
-    });
-    this.service.getAnomalies().subscribe(anomalies => {
-      this.anomalies = anomalies;
-    });
-    this.service.getCountries().subscribe(countries => {
-      this.countries = countries;
-    });
-    this.service.getAnomalyTypes().subscribe(anomalyTypes => {
-      this.anomalyTypes = anomalyTypes;
-    });
+
+    //API CODE DON'T REMOVE PLEASE
+    // this.service.getSigns().subscribe(signs => {
+    //   this.signs = signs;
+    // });
+    // this.service.getTrains().subscribe(trains => {
+    //   this.trains = trains;
+    // });
+    // this.service.getTrainTracks().subscribe(tracks => {
+    //   this.tracks = tracks;
+    // });
+    // this.service.getAnomalies().subscribe(anomalies => {
+    //   this.anomalies = anomalies;
+    // });
+    // this.service.getCountries().subscribe(countries => {
+    //   this.countries = countries;
+    // });
+    // this.service.getAnomalyTypes().subscribe(anomalyTypes => {
+    //   this.anomalyTypes = anomalyTypes;
+    // });
+
+    this.signs = data.signs;
+    this.trains = data.trains;
+    this.tracks = data.tracks;
+    this.anomalies = data.anomalies;
+    this.countries = data.countries;
+    this.anomalyTypes = data.anomalyTypes;
   }
 
 

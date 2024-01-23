@@ -4,7 +4,6 @@ import { Anomaly } from '../Models/anomaly';
 import { OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { RouterLink } from '@angular/router';
-import { Sign } from '../Models/sign';
 import {CheckboxModule} from 'primeng/checkbox';
 import { Train } from '../Models/train';
 import { Country } from '../Models/country';
@@ -13,11 +12,12 @@ import { MapComponent } from '../map/map.component';
 import { Anomalytype } from '../Models/anomalytype';
 import { Traintrack } from '../Models/traintrack';
 import { Service } from '../Service/service';
+import { FormsModule } from '@angular/forms';
 
 @Component({
   selector: 'app-anomaly-map-details-page',
   standalone: true,
-  imports: [CommonModule, RouterLink, CheckboxModule, MapComponent],
+  imports: [CommonModule, RouterLink, CheckboxModule, MapComponent, FormsModule],
   templateUrl: './anomaly-map-details-page.component.html',
   styleUrl: './anomaly-map-details-page.component.css'
 })
@@ -41,20 +41,28 @@ export class AnomalyMapDetailsPageComponent implements OnInit{
     signId: 0
   };
 
-  sign : Sign = {
-    id: 0,
-    name: "",
-    photo: ""
-  };
-
   anomalyId: number = 0;
+  isFixed: boolean = false;
+  isFalse: boolean = false;
 
   ngOnInit(): void {
     this.anomalyId = this.router.snapshot.params['id'];
-    this.service.getAnomalyById(this.anomalyId).subscribe(anomaly => {
-      this.anomaly = anomaly;
-      this.center = [this.anomaly.latitude, this.anomaly.longitude] as L.LatLngExpression;
-    });
+    //API CODE DON'T REMOVE PLEASE
+    // this.service.getAnomalyById(this.anomalyId).subscribe(anomaly => {
+    //   this.anomaly = anomaly;
+    //   this.center = [this.anomaly.latitude, this.anomaly.longitude] as L.LatLngExpression;
+    //   this.isFalse = this.anomaly.isFalse;
+    //   this.isFixed = this.anomaly.isFixed;
+    //   console.log("anomaly loaded: " + (this.anomaly as Anomaly));
+    //   console.log("fixed: " + this.isFixed);
+    //   console.log("false: " + this.isFalse);
+    // });
+    
+    this.anomaly = data.anomalies.find(a => a.id == this.anomalyId) || {} as Anomaly;
+    this.center = [this.anomaly.latitude, this.anomaly.longitude] as L.LatLngExpression;
+    this.isFalse = this.anomaly.isFalse;
+    this.isFixed = this.anomaly.isFixed;
+
   }
 
 
@@ -76,19 +84,11 @@ export class AnomalyMapDetailsPageComponent implements OnInit{
     return `${lonDegrees}°${lonMinutes}'${lonSeconds.toFixed(2)}"${lonDirection}`;
   }
 
-  markAnomalyAsFixedById(id: number): void {
-    if(confirm("Are you sure this anomaly is fixed?")) {
-      this.service.markAnomalyAsFixedById(id).subscribe(anomaly => {
+  submitChanges(id: number): void {
+    if(confirm("Are you sure you want to submit changes?")) {
+      this.service.changeAnomalyStatusById(id,this.isFixed, this.isFalse).subscribe(anomaly => {
         this.anomaly = anomaly;
       });
     }
   }
-
-  markAnomalyAsFalseById(id: number): void {
-    if(confirm("Are you sure this anomaly is false?")) {
-      this.service.markAnomalyAsFalseById(id).subscribe(anomaly => {
-        this.anomaly = anomaly;
-      });
-    }
-  } 
 }
