@@ -136,19 +136,15 @@
     <div>
         <div class="grid grid-cols-7 gap-7">
             <div class="col-span-6">
-                <!-- <div *ngFor="let train of trains" class="p-1">
-                    <ng-container *ngIf="filteredAnomalies.length > 0">
-                        <app-anomaly-item [train]="train" [anomalies]="filteredAnomalies"
-                            [tracks]="tracks"></app-anomaly-item>
-                    </ng-container>
-                </div> -->
                 <div *ngFor="let train of trains">
-                    <ng-container *ngIf="getAnomaliesByTrainAndCountry(train.id, selectedCountry, selectedTypes).length > 0">
-                        <app-anomaly-item [train]="train"
-                            [anomalies]="getAnomaliesByTrainAndCountry(train.id, selectedCountry, selectedTypes)"
-                            [tracks]="tracks"></app-anomaly-item>
+                    <ng-container *ngIf="getAnomaliesByTrainAndCountry(train.id, selectedCountry).length > 0">
+                      <app-anomaly-item [train]="train"
+                        [anomalies]="getAnomaliesByTrainAndCountry(train.id, selectedCountry)"
+                        [tracks]="tracks"></app-anomaly-item>
                     </ng-container>
-                </div>
+                  </div>
+                  
+        
             </div>
             <div class="md:flex md:flex-col md:items-center md:w-full md:p-4 col-start-7">
                 <div class="p-4 md:mt-4 h-48 bg-gray-200 bg-opacity-75 shadow-md">

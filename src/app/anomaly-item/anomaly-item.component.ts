@@ -15,8 +15,6 @@ import { Traintrack } from '../Models/traintrack';
 })
 
 
-
-
 export class AnomalyItemComponent implements OnInit{
 
   @Input() train : Train = {id: 0, name: ""};
@@ -46,6 +44,7 @@ export class AnomalyItemComponent implements OnInit{
     if (this.trainAnomalies.length > 0) {
         const trackId = this.trainAnomalies[0].trainTrackId;
         const track = this.tracks.find(t => t.id === trackId);
+        // console.log("Track id")
         return track ? track.name : 'Unknown Track';
     } else {
         return 'No Anomalies';
