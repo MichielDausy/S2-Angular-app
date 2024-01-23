@@ -2,26 +2,29 @@ import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { AnomalyItemComponent } from '../anomaly-item/anomaly-item.component';
 import { Anomaly } from '../Models/anomaly';
-import { Train } from '../Models/train';
-import { Country } from '../Models/country';
 import { FormsModule } from '@angular/forms';
 import { MapComponent } from '../map/map.component';
 import { Router } from '@angular/router';
 import { data } from '../Models/mockdata';
 import { RouterLink } from '@angular/router';
+import { Service } from '../Service/service';
 
 @Component({
   selector: 'app-anomalypage',
   standalone: true,
-  imports: [CommonModule, AnomalyItemComponent, FormsModule, RouterLink, MapComponent],
+  imports: [CommonModule, AnomalyItemComponent, FormsModule, MapComponent, RouterLink],
   templateUrl: './anomalypage.component.html',
   styleUrls: ['./anomalypage.component.css']
 })
 
 
 export class AnomalypageComponent{
+  filteredAnomalies: Anomaly[] = [];
 
-   constructor(private router: Router) { }
+   selectedCountry : string = "all";
+   selectedTypes: string = "all";
+
+   constructor(private router: Router, private service: Service) { }
 
    displayList = false;
 
@@ -29,7 +32,6 @@ export class AnomalypageComponent{
       this.router.navigate(['/anomaly/map']);
    }
 
-   selectedCountry : string = "all";
    countryAnomalies= [{
       id: 1,
       timestamp: new Date(),
@@ -45,21 +47,32 @@ export class AnomalypageComponent{
       signId: 1
    }] as Anomaly[];
 
-   getCountryId(countryName: string): number | undefined {
-      const country = this.countries.find(c => c.name.toLowerCase() === countryName.toLowerCase());
-      return country?.id;
-   }
 
-   getAnomaliesByTrainAndCountry(trainId: number, countryName: string): Anomaly[] {
-      if (countryName === "all"){
-         return this.anomalies.filter(a => a.trainId === trainId);
-      }
-      else{
-         const countryId = this.getCountryId(countryName);
-         return this.anomalies.filter(a => a.trainId === trainId && a.countryId === countryId);
-      }
-   }
 
+  getCountryId(countryName: string): number | undefined {
+    const country = this.countries.find(c => c.name.toLowerCase() === countryName.toLowerCase());
+    console.log(country);
+    return country?.id;
+ }
+ getTypesId(typeName: string): number | undefined {
+  const country = this.anomalyTypes.find(c => c.name.toLowerCase() === typeName.toLowerCase());
+      console.log(country);
+  return country?.id;
+}
+
+getAnomaliesByTrainAndCountry(trainId: number , countryName: string, typeName: string): Anomaly[] {
+  if (countryName === "all" && typeName=== "all") {
+    return this.anomalies;
+  }
+  else{
+    const countryId = this.getCountryId(countryName);
+    const typeId = this.getTypesId(typeName);
+    return this.anomalies.filter(a => 
+      (countryName === "all" || a.countryId === countryId) &&
+      (typeName === "all" || a.anomalyTypeId === typeId)
+    );
+  }
+}
    signs = data.signs;
    trains = data.trains;
    tracks = data.tracks;
