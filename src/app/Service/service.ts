@@ -47,7 +47,7 @@ export class Service {
     return this.http.get<Country[]>(this._url+"countries/all");
   }
 
-  markAnomaly(id: number, isFixed: boolean, isFalse: boolean): Observable<Anomaly> {
+  changeAnomalyStatusById(id: number, isFixed: boolean, isFalse: boolean): Observable<Anomaly> {
     return this.http.put<Anomaly>(`${this._url}anomalies/mark`, { id, isFixed, isFalse });
   }
 }
