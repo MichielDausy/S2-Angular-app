@@ -5,7 +5,7 @@
     <div class="flex items-center max-w-17rem w-25vw relative p-2 h-full"
         style="background-image: linear-gradient(#6586c3c5 0,#6586c3c5 150%), url(../../assets/background-img.png)!important; background-repeat: no-repeat; background-size: cover; width: 25%;">
 
-        <img class="h-14" src="../../assets/codiTrack-logo.png" alt="CodiTrack Logo">
+        <img class="h-14 m-2" src="../../assets/codiTrack-logo.png" alt="CodiTrack Logo">
         <h3 class="text-white m-0 ml-2 text-xl px-5">CodiTrack</h3>
     </div>
     <div class="flex md:flex-row items-center flex-grow mx-2" style="width: 75%;">
@@ -27,9 +27,9 @@
 
 <div class="container mx-auto">
 
-    <div class="container mx-auto grid grid-cols-12 gap-4">
+    <div class="container mx-auto grid grid-cols-12">
 
-        <aside class="col-span-3">
+        <aside class="col-span-3 grid grid-cols-2">
             <div class="border border-solid border-gray-300">
                 <div class="card-header bg-opacity-3 h-3rem text-sm p-2 mb-0 border-b border-solid border-gray-200"
                     style="background-color: #f0f3f9;">
@@ -38,39 +38,41 @@
                 <div class="p-0  d-flex">
                     <ul class="overflow-auto d-inline-block text-xl">
                         <div *ngFor="let train of trains; let i = index" style="cursor:pointer"
-                            class="relative block px-1 py-1 w-full text-dark bg-white border border-gray-300"
-                            id="{{ i }}" (click)="onTrainClick(i)"
-                            [style.backgroundColor]="selectedTrain === i ? '#4f74ac' : '#FFFFFF'"
-                            [style.color]="selectedTrain === i ? '#FFFFFF' : '#000000'">
+                            class="relative block px-3 py-3 w-full text-dark bg-white border border-gray-300"
+                            id="{{ train.id }}" (click)="onTrainClick(train.id)"
+                            [style.backgroundColor]="selectedTrain === train.id ? '#4f74ac' : '#FFFFFF'"
+                            [style.color]="selectedTrain === train.id ? '#FFFFFF' : '#000000'">
                             <i class="fas fa-train px-5 font-black"></i> <small> Train {{ i + 1 }}</small>
                         </div>
 
                     </ul>
                 </div>
             </div>
-            <br>
-            <div class="toggle-bar border border-black border-opacity-25" *ngIf="selectedTrain !== null">
-                <div class="card-header bg-opacity-3 h-3rem text-sm p-2 mb-0 border-b border-solid border-gray-200"
+            <div class="toggle-bar border border-black border-opacity-25 w-full"
+                *ngIf="selectedTrain !== -1">
+                <div class="card-header bg-opacity-3 h-3rem text-sm p-2 mb-0 border-b border-solid border-gray-200 mx-auto"
                     style="background-color: #f0f3f9;"> Select date </div>
                 <div class="p-2">
-                    <div class="input-group" id="date-range-picker">
-                        <i class="fa fa-calendar p-2  fa-xs "></i>
+                    <div class="input-group">
                         <select
-                            class="appearance-none bg-white border border-gray-300 py-2 px-4 leading-tight text-sm rounded-md"
+                            class="appearance-none bg-white border border-gray-300 py-2 px-4 leading-tight text-sm rounded-md my-auto"
                             id="filter-select" [(ngModel)]="selectedFilter">
                             <option value="" disabled>Select Date</option>
                             <option value="thisWeek">This week</option>
                             <option value="previousWeek">Previous week</option>
                             <option value="customRange">Custom range</option>
                         </select>
-
+                        
+                    </div>
+                    <div *ngIf="selectedFilter === 'customRange'" class="h-20 w-40 mx-auto">
+                        <p-calendar [(ngModel)]="rangeDates" [readonlyInput]="true" selectionMode="range" class="h-full w-auto text-base border border-1 rounded mx-auto">date</p-calendar>
                     </div>
                     <hr>
                     <div id="day-list" class="list-group-scroll text-sm">
                         <ng-container
-                            *ngFor="let day of selectedFilter === 'thisWeek' ? getCurrentWeek() : selectedFilter === 'previousWeek' ? getPreviousWeek() : []">
+                            *ngFor="let day of selectedFilter === 'thisWeek' ? getCurrentWeek() : selectedFilter === 'previousWeek' ? getPreviousWeek() : selectedFilter === 'customRange' ? getCustomRange() : []">
                             <div
-                                *ngIf="selectedFilter === 'thisWeek' || selectedFilter === 'previousWeek' || selectedFilter === ''">
+                                *ngIf="selectedFilter === 'thisWeek' || selectedFilter === 'previousWeek' || selectedFilter === 'customRange' || selectedFilter === ''">
                                 <a id="{{ day }}" style="cursor:pointer"
                                     class="relative block px-2 py-2 w-full text-dark bg-white border border-gray-300"
                                     [style.backgroundColor]="selectedDay === day ? '#4f74ac' : '#FFFFFF'"
@@ -80,26 +82,21 @@
                                 </a>
                             </div>
                         </ng-container>
-
-
                     </div>
                 </div>
             </div>
         </aside>
 
 
-        <div class="col-span-9">
+        <div class="col-span-9" >
             <div class="grid grid-cols-6 gap-4">
                 <div class="col-span-6">
-                    <div *ngFor="let train of trains">
-                        <ng-container *ngIf="getAnomaliesByTrainAndCountry(train.id, selectedCountry).length > 0">
-                            <app-anomaly-item [train]="train"
-                                [anomalies]="getAnomaliesByTrainAndCountry(train.id, selectedCountry)"
-                                [tracks]="tracks"></app-anomaly-item>
-                        </ng-container>
-                    </div>
+                    <ng-container *ngIf="getAllAnomaliesByCountryAndDay(selectedTrain, selectedCountry, selectedDay || '').length > 0">
+                        <app-anomaly-item [train]="getTrainById(selectedTrain)"
+                            [anomalies]="getAllAnomaliesByCountryAndDay(selectedTrain, selectedCountry, selectedDay || '')"
+                            [tracks]="tracks"></app-anomaly-item>
+                    </ng-container>
                 </div>
             </div>
         </div>
-
     </div>

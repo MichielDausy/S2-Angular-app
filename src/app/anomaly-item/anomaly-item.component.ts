@@ -20,6 +20,8 @@ export class AnomalyItemComponent implements OnInit{
   @Input() train : Train = {id: 0, name: ""};
   @Input() anomalies : Anomaly[] = [];
   @Input() tracks: Traintrack[] = [];
+  @Input() selectedTrain: number = -1;
+  trainAnomalies: Anomaly[] = [];
 
 
   convertLatitudeToDegreesMinutesSeconds(latitude: number): string {
@@ -41,21 +43,21 @@ export class AnomalyItemComponent implements OnInit{
   }
 
   getTrackNameForAnomalies(): string {
-    if (this.trainAnomalies.length > 0) {
-        const trackId = this.trainAnomalies[0].trainTrackId;
-        const track = this.tracks.find(t => t.id === trackId);
-        // console.log("Track id")
-        return track ? track.name : 'Unknown Track';
+    if (this.selectedTrain !== -1) {
+      const trackId = this.anomalies.find(a => a.trainId === this.selectedTrain)?.trainTrackId;
+      const track = this.tracks.find(t => t.id === trackId);
+      console.log("track: " + track);
+      return track ? track.name : 'Unknown Track';
     } else {
-        return 'No Anomalies';
+      return 'No Anomalies';
     }
-}
+  }
 
   navigateToDetails(anomalyId: number) {
     console.log(anomalyId);
   }
 
-  trainAnomalies: Anomaly[] = [];
+  
 
   ngOnInit(): void {
     this.trainAnomalies = this.anomalies.filter(a => a.trainId == this.train.id);
