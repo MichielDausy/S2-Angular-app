@@ -20,28 +20,35 @@
     
         <div class="grid grid-cols-2 gap-2 my-5 pl-4">
             <div>
-                <p class="underline text-lg">Image</p>
+                <p class="text-lg">Image</p>
             </div>
             <div>
-                <p class="underline text-lg">Location</p>
+                <p class="text-lg">Location</p>
             </div>
         </div>
-        <div class="grid grid-cols-2 my-5 pl-4">
-            <div><img src="https://upload.wikimedia.org/wikipedia/commons/thumb/4/4a/Railroad_Tracks_-_Merritt_Island%2C_Florida.jpg/1200px-Railroad_Tracks_-_Merritt_Island%2C_Florida.jpg?20121011174007" alt="" width="75%"></div>
+        <div class="grid grid-cols-2 gap-8 my-5 pl-4">
+            <div class="h-[400px] w-[600px]"><img src="https://upload.wikimedia.org/wikipedia/commons/thumb/4/4a/Railroad_Tracks_-_Merritt_Island%2C_Florida.jpg/1200px-Railroad_Tracks_-_Merritt_Island%2C_Florida.jpg?20121011174007" alt="" class="object-cover"></div>
             <div *ngIf="anomaly && anomaly.id !== 0">
                 <app-map [width]="'600px'" [height]="'400px'" [anomalies]="[anomaly]" [zoom]="16" [center]="center"></app-map>
             </div>
         </div>
         <div class="grid grid-cols-2 gap-2 my-5 pl-4">
             <div>
-                <div class="">
-                    <button (click)="markAnomalyAsFixedById(anomaly.id)" class="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 mr-4 rounded">
-                        Fixed
-                      </button>
-                    <button (click)="markAnomalyAsFalseById(anomaly.id)" class="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 mx-4 rounded">
-                        False
-                      </button>
+                <div>
+                    <div class="grid grid-cols-2 gap-2">
+                        <div class="my-auto flex flex-nowrap">
+                            <input type="checkbox" name="markfalse" class="h-5 w-5 my-auto" [(ngModel)]="isFalse">
+                            <label for="markfalse" class="text-base my-auto mx-2">False Anomaly</label>
+                        </div>
+                        <div class="my-auto flex flex-nowrap">
+                            <input type="checkbox" name="markfixed" class="h-5 w-5 my-auto" [(ngModel)]="isFixed">
+                            <label for="markfixed" class="text-base my-auto mx-2">Fixed</label>
+                        </div>
+                    </div>
                 </div>
+                <button (click)="submitChanges(anomaly.id)" class="px-4 py-2 mt-8 bg-[#6684be] text-white text-sm rounded-md hover:bg-[#4f74ac]">
+                    Submit
+                </button>
             </div>
         </div>
     </div>

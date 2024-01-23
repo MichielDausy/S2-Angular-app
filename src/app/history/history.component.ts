@@ -5,11 +5,13 @@ import { Anomaly } from '../Models/anomaly';
 import { FormsModule } from '@angular/forms';
 import { Router, RouterLink } from '@angular/router';
 import { data } from '../Models/mockdata';
+import {CalendarModule} from 'primeng/calendar';
+import { Train } from '../Models/train';
 
 @Component({
    selector: 'app-history',
    standalone: true,
-   imports: [CommonModule, AnomalyItemComponent, FormsModule, RouterLink],
+   imports: [CommonModule, AnomalyItemComponent, FormsModule, RouterLink, CalendarModule],
    templateUrl: './history.component.html',
    styleUrl: './history.component.css'
 })
@@ -18,8 +20,9 @@ import { data } from '../Models/mockdata';
 export class HistoryComponent {
    selectedCountry: string = "all";
    selectedFilter: string = '';
-   selectedTrain: number | null = null;
+   selectedTrain: number = -1;
    selectedDay: string | null = null;
+   rangeDates: Date[] = [new Date(), new Date()];
 
 
    selectDay(day: string) {
@@ -27,8 +30,12 @@ export class HistoryComponent {
    }
 
    onTrainClick(trainIndex: number) {
+      this.selectedDay = null;
+      this.selectedFilter = '';
+      this.rangeDates = [new Date(), new Date()];
+
       if (this.selectedTrain === trainIndex) {
-         this.selectedTrain = null;
+         this.selectedTrain = -1;
       } else {
          this.selectedTrain = trainIndex;
       }
@@ -63,44 +70,57 @@ export class HistoryComponent {
       return dates;
    }
 
-
-
-
-
-   countryAnomalies = [{
-      id: 1,
-      timestamp: new Date(),
-      longitude: 0,
-      latitude: 0,
-      photo: "photo1",
-      isFixed: false,
-      isFalse: false,
-      trainId: 1,
-      trainTrackId: 1,
-      countryId: 1,
-      anomalyTypeId: 1,
-      signId: 1
-   }] as Anomaly[];
+   getCustomRange(): string[] {
+      const start = this.rangeDates[0];
+      const end = this.rangeDates[1];
+      const dates = [];
+  
+      for (let i = start.getDate(); i <= end.getDate()+1; i++) {
+          const date = new Date(start.getFullYear(), start.getMonth(), i);
+          dates.push(date.toISOString().split('T')[0]);
+      }
+  
+      return dates;
+  }
 
    getCountryId(countryName: string): number | undefined {
       const country = this.countries.find(c => c.name.toLowerCase() === countryName.toLowerCase());
       return country?.id;
    }
 
-   getAnomaliesByTrainAndCountry(trainId: number, countryName: string): Anomaly[] {
-      if (countryName === "all") {
-         return this.anomalies.filter(a => a.trainId === trainId);
-      }
-      else {
-         const countryId = this.getCountryId(countryName);
-         return this.anomalies.filter(a => a.trainId === trainId && a.countryId === countryId);
-      }
+   getTrainById(trainId: number): Train {
+      const train = this.trains.find(t => t.id === trainId);
+      return train as Train;
    }
+   
+   getAllAnomaliesByCountryAndDay(selectedTrainId: number, selectedCountry: string, selectedDay: string): Anomaly[] {
+      const filteredAnomalies: Anomaly[] = [];
+   
+      const trainAnomalies = this.anomalies.filter(anomaly => anomaly.trainId === selectedTrainId);
+   
+      const countryId = selectedCountry === 'all' ? undefined : this.getCountryId(selectedCountry);
+      const countryAnomalies = trainAnomalies.filter(anomaly => {
+         return countryId === undefined || anomaly.countryId === countryId;
+      });
+   
+      if (selectedDay) {
+         const selectedDate = new Date(selectedDay);
+         const filteredAnomaliesByDay = countryAnomalies.filter(anomaly => {
+            const anomalyDate = new Date(anomaly.timestamp);
+            return anomalyDate.toISOString().split('T')[0] === selectedDate.toISOString().split('T')[0];
+         });
+         filteredAnomalies.push(...filteredAnomaliesByDay);
+      } else {
+         filteredAnomalies.push(...countryAnomalies);
+      }
+   
+      console.log("train: " + selectedTrainId + ", country: " + selectedCountry + ", day: " + selectedDay);
+      return filteredAnomalies;
+   }
+
 
    countries = data.countries;
    trains = data.trains;
    anomalies = data.anomalies;
    tracks = data.tracks;
-
-
 }

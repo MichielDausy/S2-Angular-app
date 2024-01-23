@@ -105,8 +105,8 @@ export class MapComponent implements AfterViewInit, OnChanges {
 
       const style = `
        background-color: ${color};
-       height: 15px;
-       width: 15px;
+       height: 30px;
+       width: 30px;
        border-radius: 50%;
        display: inline-block;
        `;
