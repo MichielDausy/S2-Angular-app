@@ -86,9 +86,9 @@ export class AnomalyMapDetailsPageComponent implements OnInit{
 
   submitChanges(id: number): void {
     if(confirm("Are you sure you want to submit changes?")) {
-      // this.service.markAnomaly(id,this.isFixed, this.isFalse).subscribe(anomaly => {
-      //   this.anomaly = anomaly;
-      // });
+      this.service.markAnomaly(id,this.isFixed, this.isFalse).subscribe(anomaly => {
+        this.anomaly = anomaly;
+      });
     }
   }
 }
