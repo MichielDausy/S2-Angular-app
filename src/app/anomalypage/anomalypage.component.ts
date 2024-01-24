@@ -1,4 +1,4 @@
-import { Component, OnInit , OnChanges, SimpleChanges, Input, DoCheck} from '@angular/core';
+import { Component, OnInit, OnChanges, SimpleChanges, Input, DoCheck } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { AnomalyItemComponent } from '../anomaly-item/anomaly-item.component';
 import { Anomaly } from '../Models/anomaly';
@@ -22,95 +22,96 @@ import { count } from 'rxjs';
 export class AnomalypageComponent {
   filteredAnomalies: Anomaly[] = [];
 
-   selectedCountry : string = "all";
-   selectedTypes: string = "all";
+  selectedCountry: string = "all";
+  selectedTypes: string = "all";
 
-   constructor(private router: Router, private service: Service) { }
+  constructor(private router: Router, private service: Service) { }
 
-   displayList = false;
+  displayList = false;
 
-   changeMode() {
-      this.router.navigate(['/anomaly/map']);
-   }
+  changeMode() {
+    this.router.navigate(['/anomaly/map']);
+  }
 
-   countryAnomalies= [{
-      id: 1,
-      timestamp: new Date(),
-      longitude: 0,
-      latitude: 0,
-      photo: "photo1",
-      isFixed: false,
-      isFalse: false,
-      trainId: 1,
-      trainTrackId: 1,
-      countryId: 1,
-      anomalyTypeId: 1,
-      signId: 1
-   }] as Anomaly[];
-
-
-
-//   getCountryId(countryName: string): number | undefined {
-//     const country = this.countries.find(c => c.name.toLowerCase() === countryName.toLowerCase());
-//     console.log(country);
-//     return country?.id;
-//  }
-//  getTypesId(typeName: string): number | undefined {
-//   const country = this.anomalyTypes.find(c => c.name.toLowerCase() === typeName.toLowerCase());
-//       console.log(country);
-//   return country?.id;
-// }
-
-// getAnomaliesByTrainAndCountry(trainId: number , countryName: string, typeName: string): Anomaly[] {
-//   if (countryName === "all" && typeName=== "all") {
-//     return this.anomalies;
-//   }
-//   else{
-//     const countryId = this.getCountryId(countryName);
-//     const typeId = this.getTypesId(typeName);
-//     return this.anomalies.filter(a => 
-//       (countryName === "all" || a.countryId === countryId) &&
-//       (typeName === "all" || a.anomalyTypeId === typeId)
-//     );
-//   }
-// }
+  countryAnomalies = [{
+    id: 1,
+    timestamp: new Date(),
+    longitude: 0,
+    latitude: 0,
+    photo: "photo1",
+    isFixed: false,
+    isFalse: false,
+    trainId: 1,
+    trainTrackId: 1,
+    countryId: 1,
+    anomalyTypeId: 1,
+    signId: 1
+  }] as Anomaly[];
 
 
 
- 
- getCountryId(countryName: string): number | undefined {
-   const country = this.countries.find(c => c.name.toLowerCase() === countryName.toLowerCase());
-   return country?.id;
- }
+  //   getCountryId(countryName: string): number | undefined {
+  //     const country = this.countries.find(c => c.name.toLowerCase() === countryName.toLowerCase());
+  //     console.log(country);
+  //     return country?.id;
+  //  }
+  //  getTypesId(typeName: string): number | undefined {
+  //   const country = this.anomalyTypes.find(c => c.name.toLowerCase() === typeName.toLowerCase());
+  //       console.log(country);
+  //   return country?.id;
+  // }
 
- getAnomalyTypesId(typeName: string): number | undefined {
+  // getAnomaliesByTrainAndCountry(trainId: number , countryName: string, typeName: string): Anomaly[] {
+  //   if (countryName === "all" && typeName=== "all") {
+  //     return this.anomalies;
+  //   }
+  //   else{
+  //     const countryId = this.getCountryId(countryName);
+  //     const typeId = this.getTypesId(typeName);
+  //     return this.anomalies.filter(a => 
+  //       (countryName === "all" || a.countryId === countryId) &&
+  //       (typeName === "all" || a.anomalyTypeId === typeId)
+  //     );
+  //   }
+  // }
+
+
+
+
+  getCountryId(countryName: string): number | undefined {
+    const country = this.countries.find(c => c.name.toLowerCase() === countryName.toLowerCase());
+    return country?.id;
+  }
+
+  getAnomalyTypesId(typeName: string): number | undefined {
     const type = this.anomalyTypes.find(c => c.name.toLowerCase() === typeName.toLowerCase());
     return type?.id;
   }
 
- getAnomaliesByTrainAndCountry(trainId: number, countryName: string, anoType: string): Anomaly[] {
-  if(anoType === "all" && countryName === "all"){
-    return this.anomalies.filter(a => a.trainId == trainId);
+  getAnomaliesByTrainAndCountry(trainId: number, countryName: string, anoType: string): Anomaly[] {
+    if (anoType === "all" && countryName === "all") {
+      return this.anomalies.filter(a => a.trainId == trainId && !a.isFixed);
+    }
+    else if (anoType === "all" && countryName !== "all") {
+      const countryId = this.getCountryId(countryName);
+      return this.anomalies.filter(a => a.trainId == trainId && a.countryId == countryId && !a.isFixed);
+    }
+    else if (anoType !== "all" && countryName === "all") {
+      const typeId = this.getAnomalyTypesId(anoType);
+      return this.anomalies.filter(a => a.trainId == trainId && a.anomalyTypeId == typeId && !a.isFixed);
+    } else {
+      const countryId = this.getCountryId(countryName);
+      const typeId = this.getAnomalyTypesId(anoType);
+      return this.anomalies.filter(a => a.trainId == trainId && a.countryId == countryId && a.anomalyTypeId == typeId && !a.isFixed);
+    }
   }
-  else if (anoType === "all" && countryName !== "all"){
-    const countryId = this.getCountryId(countryName);
-    return this.anomalies.filter(a => a.trainId == trainId && a.countryId == countryId);
-  }
-  else if (anoType !== "all" && countryName === "all"){
-    const typeId = this.getAnomalyTypesId(anoType);
-    return this.anomalies.filter(a => a.trainId == trainId && a.anomalyTypeId == typeId);
-  }else{
-    const countryId = this.getCountryId(countryName);
-    const typeId = this.getAnomalyTypesId(anoType);
-    return this.anomalies.filter(a => a.trainId == trainId && a.countryId == countryId && a.anomalyTypeId == typeId);
-  }
- }
 
 
-   signs = data.signs;
-   trains = data.trains;
-   tracks = data.tracks;
-   anomalies = data.anomalies;
-   countries = data.countries;
-   anomalyTypes = data.anomalyTypes;
+
+  signs = data.signs;
+  trains = data.trains;
+  tracks = data.tracks;
+  anomalies = data.anomalies;
+  countries = data.countries;
+  anomalyTypes = data.anomalyTypes;
 }
