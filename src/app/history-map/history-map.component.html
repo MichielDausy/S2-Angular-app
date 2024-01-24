@@ -43,7 +43,7 @@
             <div class="card-header bg-opacity-3 h-3rem text-sm p-2 mb-0 border-b border-solid border-gray-200 mx-auto"
                 style="background-color: #f0f3f9;"> Select date </div>
             <div class="p-2">
-                <div class="input-group">
+                <div class="mb-2">
                     <select
                         class="appearance-none bg-white border border-gray-300 py-2 px-4 leading-tight text-sm rounded-md my-auto"
                         id="filter-select" [(ngModel)]="selectedFilter">
@@ -83,7 +83,7 @@
         <div class="mx-auto" *ngIf="anomalies && anomalies.length > 0">
             <div class="relative overflow-hidden">
                 <app-map class="" [anomalies]="filteredAnomalies !== null ? filteredAnomalies : fixedAnomalies"
-                    [height]="'92.5vh'" [width]="'100%'" [center]="center" [isDetails]="false" />
+                    [height]="'90vh'" [width]="'100%'" [center]="center" [isDetails]="false" />
                 <div class="md:mt-4 absolute bottom-6 left-3 z-10 rounded p-1">
                     <img src="../../assets/RoT_icon_blue.png" alt="" class="h-12 w-auto">
 
