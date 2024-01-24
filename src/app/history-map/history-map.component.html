@@ -1,4 +1,3 @@
-<!-- All anomalies that are fixed are shown here -->
 <header class="flex items-center w-full sticky-top disable-touch-scroll space-x-4"
     style="background-color: #f0f3f9; width: 100%;">
     <div class="flex items-center max-w-17rem w-25vw relative p-2 h-full"
@@ -7,23 +6,11 @@
         <h3 class="text-white m-0 ml-2 text-xl px-5">CodiTrack</h3>
     </div>
     <div class="col-span-6 bg-gray-100 pl-3 py-3 flex flex-nowrap my-auto">
-        <div class="bg-gray-100 bg-opacity-75 w-32 h-12 rounded p-1 my-auto">
-            <!-- <div class="flex items-center h-full"> -->
-                <!-- <select
-                    class="appearance-none bg-white border border-gray-300 py-2 px-4 leading-tight text-sm rounded-md"
-                    name="country" id="" [(ngModel)]="selectedCountry">
-                    <option class="text-base" value="all">All locations</option>
-                    <option class="text-base" value="belgium">Belgium</option>
-                    <option class="text-base" value="Luxembourg">Luxembourg</option>
-                    <option class="text-base" value="france">France</option>
-                    <option class="text-base" value="netherlands">Netherlands</option>
-                </select> -->
-            <!-- </div> -->
-        </div>
+
         <div class="my-auto absolute right-3 top-3 flex flex-nowrap">
             <div (click)="changeMode()" class="my-auto mx-8">
-                <button class="px-4 py-2 bg-[#6684be] text-white text-sm rounded float-left w-1/2">List</button>
-                <button class="px-4 py-2 bg-gray-200 text-black text-sm rounded float-right w-1/2">Map</button>
+                <button class="px-4 py-2  bg-gray-200 text-black text-sm rounded float-left w-1/2">List</button>
+                <button class="px-4 py-2  bg-[#6684be] text-white text-sm rounded float-right w-1/2">Map</button>
             </div>
 
             <button class="px-3 py-2 bg-[#6684be] text-white rounded-md hover:bg-[#4f74ac] float-right my-auto"
@@ -31,6 +18,7 @@
                 <div class="ml-auto text-xl"><i class="fas fa-backward fa-xl"></i></div>
             </button>
         </div>
+
     </div>
 </header>
 
@@ -54,8 +42,7 @@
                     </ul>
                 </div>
             </div>
-            <div class="toggle-bar border border-black border-opacity-25"
-                *ngIf="selectedTrain !== -1">
+            <div class="toggle-bar border border-black border-opacity-25" *ngIf="selectedTrain !== -1">
                 <div class="card-header bg-opacity-3 h-3rem text-sm p-2 mb-0 border-b border-solid border-gray-200 mx-auto"
                     style="background-color: #f0f3f9;"> Select date </div>
                 <div class="p-2">
@@ -68,10 +55,11 @@
                             <option value="previousWeek">Previous week</option>
                             <option value="customRange">Custom range</option>
                         </select>
-                        
+
                     </div>
                     <div *ngIf="selectedFilter === 'customRange'" class="h-20 w-45 ">
-                        <p-calendar [(ngModel)]="rangeDates" [readonlyInput]="true" selectionMode="range" class="h-full w-auto text-base border border-1 rounded mx-auto">date</p-calendar>
+                        <p-calendar [(ngModel)]="rangeDates" [readonlyInput]="true" selectionMode="range"
+                            class="h-full w-auto text-base border border-1 rounded mx-auto">date</p-calendar>
                     </div>
                     <hr>
                     <div id="day-list" class="list-group-scroll text-sm">
@@ -94,14 +82,36 @@
         </aside>
 
 
-        <div class="col-span-8" >
-            <div class="grid grid-cols-6 gap-4">
-                <div class="col-span-6 px-7">
-                    <ng-container *ngIf="getAllAnomaliesByCountryAndDay(selectedTrain, selectedCountry, selectedDay || '').length > 0">
-                        <app-anomaly-item [train]="getTrainById(selectedTrain)"
-                            [anomalies]="getAllAnomaliesByCountryAndDay(selectedTrain, selectedCountry, selectedDay || '')"
-                            [tracks]="tracks"></app-anomaly-item>
-                    </ng-container>
+        <div class="col-span-8">
+            <div class="grid grid-cols-6">
+                <div class="col-span-6">
+
+                    <div class="mx-auto" *ngIf="anomalies && anomalies.length > 0">
+                        <div class="relative overflow-hidden">
+                            <app-map class=""
+                                [anomalies]="anomalies"
+                                [height]="'92.5vh'" [width]="'100%'" [center]="center" [isDetails]="false" />
+                            <div class="md:mt-4 absolute bottom-6 left-3 z-10 rounded p-1">
+                                <img src="../../assets/RoT_icon_blue.png" alt="" class="h-12 w-auto">
+
+                            </div>
+                            <div
+                                class="md:mt-4 h-44 bg-gray-100 bg-opacity-75 w-36 absolute bottom-6 right-3 z-10 rounded p-1 border">
+                                <p class="text-lg mb-2">Types</p>
+                                <ul class="text-base space-y-2">
+                                    <li class="flex items-center">
+                                        <span class="dot bg-slate-700 h-4 w-4 rounded-full mr-2"></span>
+                                        <p>Vegetation</p>
+                                    </li>
+                                    <li class="flex items-center">
+                                        <span class="dot bg-cyan-600 h-4 w-4 rounded-full mr-2"></span>
+                                        <p>Signs</p>
+                                    </li>
+                                </ul>
+                            </div>
+
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
