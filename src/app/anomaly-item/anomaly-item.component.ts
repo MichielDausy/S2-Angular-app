@@ -5,6 +5,8 @@ import { Anomaly } from '../Models/anomaly';
 import {TooltipModule} from 'primeng/tooltip';
 import { RouterLink } from '@angular/router';
 import { Traintrack } from '../Models/traintrack';
+import { Anomalytype } from '../Models/anomalytype';
+import { data } from '../Models/mockdata';
 
 @Component({
   selector: 'app-anomaly-item',
@@ -21,7 +23,10 @@ export class AnomalyItemComponent implements OnInit{
   @Input() anomalies : Anomaly[] = [];
   @Input() tracks: Traintrack[] = [];
   @Input() selectedTrain: number = -1;
+  @Input() type: string = "all";
+  anomalyTypes: Anomalytype[] = [];
   trainAnomalies: Anomaly[] = [];
+  $index: any;
 
 
   convertLatitudeToDegreesMinutesSeconds(latitude: number): string {
@@ -53,13 +58,46 @@ export class AnomalyItemComponent implements OnInit{
     }
   }
 
+  getAnomalyTypesId(typeName: string): number | undefined {
+    const type = this.anomalyTypes.find(c => c.name.toLowerCase() === typeName.toLowerCase());
+    return type?.id;
+  }
+  getAnomalyTypeById(typeId: number): Anomalytype | undefined {
+    const type = this.anomalyTypes.find(c => c.id === typeId);
+    return type;
+  }
+
+  getColor(item: Anomaly): string{
+    const colors = ["","#334155", "#0891b2"];
+    const color = colors[item.anomalyTypeId];
+    return color;
+  }
+
   navigateToDetails(anomalyId: number) {
     console.log(anomalyId);
   }
 
+  checkType(anomaly: Anomaly): boolean {
+    if(this.type === "all"){
+      return true;
+    }
+    else
+    {
+      return anomaly.anomalyTypeId === this.getAnomalyTypesId(this.type);
+    }
+  }
+
+  
 
   ngOnInit(): void {
     this.trainAnomalies = this.anomalies;
+    if(this.type === "all"){
+      this.trainAnomalies = this.anomalies.filter(a => a.trainId == this.train.id);
+    }
+    else
+    {
+      this.trainAnomalies = this.anomalies.filter(a => a.trainId == this.train.id && a.anomalyTypeId == this.getAnomalyTypesId(this.type));
+    }
  }
 // ngOnInit(): void {
 //   console.log('All Anomalies:', this.anomalies);
