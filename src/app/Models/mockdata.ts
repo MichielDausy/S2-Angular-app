@@ -103,7 +103,7 @@ export const data = {
          trainId: 1,
          trainTrackId: 1,
          countryId: 1,
-         anomalyTypeId: 1,
+         anomalyTypeId: 2,
          signId: 1
       },
       {
@@ -169,8 +169,8 @@ export const data = {
             yesterday.setDate(yesterday.getDate() - 1);
             return yesterday;
          })(),
-         longitude: 4.43851,
-         latitude: 51.19210,
+         longitude: 4.52126,
+         latitude: 51.00397,
          photo: "photo1",
          isFixed: true,
          isFalse: false,
@@ -215,7 +215,7 @@ export const data = {
       {
          id: 9,
          timestamp: new Date(),
-         longitude: 4.43851,
+         longitude: 5.43851,
          latitude: 51.19210,
          photo: "photo1",
          isFixed: true,
