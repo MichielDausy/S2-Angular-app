@@ -6,7 +6,6 @@
         <h3 class="text-white m-0 ml-2 text-xl px-5">CodiTrack</h3>
     </div>
     <div class="col-span-6 bg-gray-100 pl-3 py-3 flex flex-nowrap my-auto">
-
         <div class="my-auto absolute right-3 top-3 flex flex-nowrap">
             <div (click)="changeMode()" class="my-auto mx-8">
                 <button class="px-4 py-2  bg-gray-200 text-black text-sm rounded float-left w-1/2">List</button>
@@ -18,102 +17,92 @@
                 <div class="ml-auto text-xl"><i class="fas fa-backward fa-xl"></i></div>
             </button>
         </div>
-
     </div>
 </header>
 
-<div class="container m-0">
-    <div class="container mx-0 grid grid-cols-12">
-        <aside class="col-span-4 grid grid-cols-2">
-            <div class="border border-solid border-gray-300">
-                <div class="card-header bg-opacity-3 h-3rem text-sm p-2 mb-0 border-b border-solid border-gray-200"
-                    style="background-color: #f0f3f9;">
-                    Select railway asset
+<div class="flex">
+    <aside class="w-1/4 grid grid-cols-2">
+        <div class="border border-solid border-gray-300">
+            <div class="card-header bg-opacity-3 h-3rem text-sm p-2 mb-0 border-b border-solid border-gray-200"
+                style="background-color: #f0f3f9;">
+                Select railway asset
+            </div>
+            <div class="p-0  d-flex">
+                <ul class="overflow-auto d-inline-block text-xl">
+                    <div *ngFor="let train of trains; let i = index" style="cursor:pointer"
+                        class="relative block px-3 py-3 w-full text-dark bg-white border border-gray-300"
+                        id="{{ train.id }}" (click)="onTrainClick(train.id)"
+                        [style.backgroundColor]="selectedTrain === train.id ? '#4f74ac' : '#FFFFFF'"
+                        [style.color]="selectedTrain === train.id ? '#FFFFFF' : '#000000'">
+                        <i class="fas fa-train px-5 font-black"></i> <small> {{train.name}}</small>
+                    </div>
+                </ul>
+            </div>
+        </div>
+        <div class="toggle-bar border border-black border-opacity-25" *ngIf="selectedTrain !== -1">
+            <div class="card-header bg-opacity-3 h-3rem text-sm p-2 mb-0 border-b border-solid border-gray-200 mx-auto"
+                style="background-color: #f0f3f9;"> Select date </div>
+            <div class="p-2">
+                <div class="mb-2">
+                    <select
+                        class="appearance-none bg-white border border-gray-300 py-2 px-4 leading-tight text-sm rounded-md my-auto"
+                        id="filter-select" [(ngModel)]="selectedFilter">
+                        <option value="" disabled>Select Date</option>
+                        <option value="thisWeek">This week</option>
+                        <option value="previousWeek">Previous week</option>
+                        <option value="customRange">Custom range</option>
+                    </select>
+
                 </div>
-                <div class="p-0  d-flex">
-                    <ul class="overflow-auto d-inline-block text-xl">
-                        <div *ngFor="let train of trains; let i = index" style="cursor:pointer"
-                            class="relative block px-3 py-3 w-full text-dark bg-white border border-gray-300"
-                            id="{{ train.id }}" (click)="onTrainClick(train.id)"
-                            [style.backgroundColor]="selectedTrain === train.id ? '#4f74ac' : '#FFFFFF'"
-                            [style.color]="selectedTrain === train.id ? '#FFFFFF' : '#000000'">
-                            <i class="fas fa-train px-5 font-black"></i> <small> {{train.name}}</small>
+                <div *ngIf="selectedFilter === 'customRange'" class="h-20 w-45 ">
+                    <p-calendar [(ngModel)]="rangeDates" [readonlyInput]="true" selectionMode="range"
+                        class="h-full w-auto text-base border border-1 rounded mx-auto">date</p-calendar>
+                </div>
+                <hr>
+                <div id="day-list" class="list-group-scroll text-sm">
+                    <ng-container
+                        *ngFor="let day of selectedFilter === 'thisWeek' ? getCurrentWeek() : selectedFilter === 'previousWeek' ? getPreviousWeek() : selectedFilter === 'customRange' ? getCustomRange() : []">
+                        <div
+                            *ngIf="selectedFilter === 'thisWeek' || selectedFilter === 'previousWeek' || selectedFilter === 'customRange' || selectedFilter === ''">
+                            <a id="{{ day }}" style="cursor:pointer"
+                                class="relative block px-2 py-2 w-full text-dark bg-white border border-gray-300"
+                                [style.backgroundColor]="selectedDay === day ? '#4f74ac' : '#FFFFFF'"
+                                [style.color]="selectedDay === day ? '#FFFFFF' : '#000000'" (click)="selectDay(day)">
+                                <b>{{ day }}</b>
+                            </a>
                         </div>
+                    </ng-container>
+                </div>
+            </div>
+        </div>
+    </aside>
+
+
+    <div class="w-3/4">
+
+        <div class="mx-auto" *ngIf="anomalies && anomalies.length > 0">
+            <div class="relative overflow-hidden">
+                <app-map class="" [anomalies]="filteredAnomalies !== null ? filteredAnomalies : fixedAnomalies"
+                    [height]="'90vh'" [width]="'100%'" [center]="center" [isDetails]="false" />
+                <div class="md:mt-4 absolute bottom-6 left-3 z-10 rounded p-1">
+                    <img src="../../assets/RoT_icon_blue.png" alt="" class="h-12 w-auto">
+
+                </div>
+                <div
+                    class="md:mt-4 h-44 bg-gray-100 bg-opacity-75 w-36 absolute bottom-6 right-3 z-10 rounded p-1 border">
+                    <p class="text-lg mb-2">Types</p>
+                    <ul class="text-base space-y-2">
+                        <li class="flex items-center">
+                            <span class="dot bg-slate-700 h-4 w-4 rounded-full mr-2"></span>
+                            <p>Vegetation</p>
+                        </li>
+                        <li class="flex items-center">
+                            <span class="dot bg-cyan-600 h-4 w-4 rounded-full mr-2"></span>
+                            <p>Signs</p>
+                        </li>
                     </ul>
-                </div>
-            </div>
-            <div class="toggle-bar border border-black border-opacity-25" *ngIf="selectedTrain !== -1">
-                <div class="card-header bg-opacity-3 h-3rem text-sm p-2 mb-0 border-b border-solid border-gray-200 mx-auto"
-                    style="background-color: #f0f3f9;"> Select date </div>
-                <div class="p-2">
-                    <div class="input-group">
-                        <select
-                            class="appearance-none bg-white border border-gray-300 py-2 px-4 leading-tight text-sm rounded-md my-auto"
-                            id="filter-select" [(ngModel)]="selectedFilter">
-                            <option value="" disabled>Select Date</option>
-                            <option value="thisWeek">This week</option>
-                            <option value="previousWeek">Previous week</option>
-                            <option value="customRange">Custom range</option>
-                        </select>
-
-                    </div>
-                    <div *ngIf="selectedFilter === 'customRange'" class="h-20 w-45 ">
-                        <p-calendar [(ngModel)]="rangeDates" [readonlyInput]="true" selectionMode="range"
-                            class="h-full w-auto text-base border border-1 rounded mx-auto">date</p-calendar>
-                    </div>
-                    <hr>
-                    <div id="day-list" class="list-group-scroll text-sm">
-                        <ng-container
-                            *ngFor="let day of selectedFilter === 'thisWeek' ? getCurrentWeek() : selectedFilter === 'previousWeek' ? getPreviousWeek() : selectedFilter === 'customRange' ? getCustomRange() : []">
-                            <div
-                                *ngIf="selectedFilter === 'thisWeek' || selectedFilter === 'previousWeek' || selectedFilter === 'customRange' || selectedFilter === ''">
-                                <a id="{{ day }}" style="cursor:pointer"
-                                    class="relative block px-2 py-2 w-full text-dark bg-white border border-gray-300"
-                                    [style.backgroundColor]="selectedDay === day ? '#4f74ac' : '#FFFFFF'"
-                                    [style.color]="selectedDay === day ? '#FFFFFF' : '#000000'"
-                                    (click)="selectDay(day)">
-                                    <b>{{ day }}</b>
-                                </a>
-                            </div>
-                        </ng-container>
-                    </div>
-                </div>
-            </div>
-        </aside>
-
-
-        <div class="col-span-8">
-            <div class="grid grid-cols-6">
-                <div class="col-span-6">
-                    <div class="mx-auto" *ngIf="anomalies && anomalies.length > 0">
-                        <div class="relative overflow-hidden">
-                            <app-map class=""
-                            [anomalies]="filteredAnomalies !== null ? filteredAnomalies : fixedAnomalies"
-                            [height]="'92.5vh'" [width]="'100%'" [center]="center" [isDetails]="false" />
-                            <div class="md:mt-4 absolute bottom-6 left-3 z-10 rounded p-1">
-                                <img src="../../assets/RoT_icon_blue.png" alt="" class="h-12 w-auto">
-
-                            </div>
-                            <div
-                                class="md:mt-4 h-44 bg-gray-100 bg-opacity-75 w-36 absolute bottom-6 right-3 z-10 rounded p-1 border">
-                                <p class="text-lg mb-2">Types</p>
-                                <ul class="text-base space-y-2">
-                                    <li class="flex items-center">
-                                        <span class="dot bg-slate-700 h-4 w-4 rounded-full mr-2"></span>
-                                        <p>Vegetation</p>
-                                    </li>
-                                    <li class="flex items-center">
-                                        <span class="dot bg-cyan-600 h-4 w-4 rounded-full mr-2"></span>
-                                        <p>Signs</p>
-                                    </li>
-                                </ul>
-                            </div>
-
-                        </div>
-                    </div>
                 </div>
             </div>
         </div>
     </div>
-
-    
+</div>
