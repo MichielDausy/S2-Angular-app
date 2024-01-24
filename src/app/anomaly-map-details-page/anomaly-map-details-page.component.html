@@ -1,22 +1,27 @@
 <div>
-    <div class="grid grid-cols-7 h-12">
-        <div class="col-span-1 bg-[#6586c3c5] py-3 overlay pl-4 flex flex-nowrap">
-            <img src="../../assets/codiTrack-logo.png" width="15%" height="auto" alt="" class="my-auto">
-            <p class="text-white my-auto text-3xl">Coditrack</p>
-        </div>
-        <div class="col-span-6 bg-gray-100 pl-3 py-4 h-16 flex flex-nowrap my-auto">
-            <div class="my-auto absolute right-3 top-3" >
-                <button class="px-3 py-2 bg-[#6684be] text-white rounded-md hover:bg-[#4f74ac] float-right" routerLink="/anomaly/map">
-                    <div class="ml-auto text-xl"><i
-                        class="fas fa-backward fa-xl"></i></div>
-                </button>
-            </div>
-        </div>
+    <header class="flex items-center w-full sticky-top disable-touch-scroll space-x-4"
+    style="background-color: #f0f3f9; width: 100%;">
+    <div class="flex items-center max-w-17rem w-25vw relative p-2 h-full"
+        style="background-image: linear-gradient(#6586c3c5 0,#6586c3c5 150%), url(../../assets/background-img.png)!important; background-repeat: no-repeat; background-size: cover; width: 25%;">
+        <img class="h-14" src="../../assets/codiTrack-logo.png" alt="CodiTrack Logo">
+        <h3 class="text-white m-0 ml-2 text-xl px-5">CodiTrack</h3>
     </div>
+    <div class="col-span-6 bg-gray-100 pl-3 py-3 flex flex-nowrap my-auto">
 
-    <div class="container mx-auto" style="max-width: 1200px;">
-        <h1 class="font-semibold my-16 text-2xl">Anomaly {{anomaly.id}}</h1>
-    
+        <div class="my-auto absolute right-3 top-3 flex flex-nowrap">
+            <button class="px-3 py-2 bg-[#6684be] text-white rounded-md hover:bg-[#4f74ac] float-right my-auto"
+                routerLink="/anomaly/list">
+                <div class="ml-auto text-xl"><i class="fas fa-backward fa-xl"></i></div>
+            </button>
+        </div>
+
+    </div>
+</header>
+
+
+    <div class="container mx-auto" >
+        <h3 class="m-5 mx-4 font-bold text-xl">Anomaly {{anomaly.id}}</h3>
+
     
         <div class="grid grid-cols-2 gap-2 my-5 pl-4">
             <div>
@@ -26,15 +31,31 @@
                 <p class="text-lg">Location</p>
             </div>
         </div>
-        <div class="grid grid-cols-2 gap-8 my-5 pl-4">
+        <div class="grid grid-cols-2 gap-2 my-5 pl-4">
             <div class="h-[400px] w-[600px]"><img src="https://upload.wikimedia.org/wikipedia/commons/thumb/4/4a/Railroad_Tracks_-_Merritt_Island%2C_Florida.jpg/1200px-Railroad_Tracks_-_Merritt_Island%2C_Florida.jpg?20121011174007" alt="" class="object-cover"></div>
             <div *ngIf="anomaly && anomaly.id !== 0" class="relative">
+
                 <div class="absolute left-0 bottom-0 h-5 w-44 bg-gray-200 z-10 flex flex-nowrap">
                     <p class="text-sm mr-2">{{convertLatitudeToDegreesMinutesSeconds(anomaly.latitude)}}</p>
                     <p class="text-sm"> {{convertLongitudeToDegreesMinutesSeconds(anomaly.longitude)}}</p>
                 </div>
                 <app-map [width]="'600px'" [height]="'400px'" [anomalies]="[anomaly]" [zoom]="16" [center]="center"></app-map>
-            </div>
+              
+                <!-- Legend -->
+                <div class="md:mt-4 h-44 bg-gray-100 bg-opacity-75 absolute bottom-5 -right-5 z-20 rounded p-1 border">
+                  <p class="text-lg mb-2">Types:</p>
+                  <ul class="text-base space-y-2">
+                    <li class="flex items-center">
+                      <span class="dot bg-[#3274A3] h-4 w-4 rounded-full mr-2"></span>
+                      <p>Vegetation</p>
+                    </li>
+                    <li class="flex items-center">
+                      <span class="dot bg-[#6B6B6B] h-4 w-4 rounded-full mr-2"></span>
+                      <p>Signs</p>
+                    </li>
+                  </ul>
+                </div>
+              </div>
         </div>
         <div class="grid grid-cols-2 gap-2 my-5 pl-4">
             <div>

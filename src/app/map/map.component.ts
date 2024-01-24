@@ -27,6 +27,24 @@ export class MapComponent implements AfterViewInit, OnChanges {
   private centroid: L.LatLngExpression = this.center; 
   private markers: L.FeatureGroup = {} as L.FeatureGroup;
 
+  convertLatitudeToDegreesMinutesSeconds(latitude: number): string {
+    const latDirection = latitude >= 0 ? 'N' : 'S';
+    const latDegrees = Math.floor(Math.abs(latitude));
+    const latMinutes = Math.floor((Math.abs(latitude) - latDegrees) * 60);
+    const latSeconds = ((Math.abs(latitude) - latDegrees) * 60 - latMinutes) * 60;
+
+    return `${latDegrees}°${latMinutes}'${latSeconds.toFixed(2)}"${latDirection}`;
+  }
+
+  convertLongitudeToDegreesMinutesSeconds(longitude: number): string {
+    const lonDirection = longitude >= 0 ? 'E' : 'W';
+    const lonDegrees = Math.floor(Math.abs(longitude));
+    const lonMinutes = Math.floor((Math.abs(longitude) - lonDegrees) * 60);
+    const lonSeconds = ((Math.abs(longitude) - lonDegrees) * 60 - lonMinutes) * 60;
+
+    return `${lonDegrees}°${lonMinutes}'${lonSeconds.toFixed(2)}"${lonDirection}`;
+  }
+
   ngOnChanges(changes: SimpleChanges): void {
     const previousAnomalies = JSON.stringify(changes['anomalies'].previousValue);
     const currentAnomalies = JSON.stringify(changes['anomalies'].currentValue);
@@ -78,47 +96,50 @@ export class MapComponent implements AfterViewInit, OnChanges {
   updateMarkers(): void {
     this.map.removeLayer(this.markers);
     this.markers = new L.FeatureGroup();
-
-    console.log("update markers")
-
+  
+    console.log("update markers");
+  
     this.anomalies.forEach(anomaly => {
-      console.log(anomaly)
-      const marker = L.marker([anomaly.latitude, anomaly.longitude]);
-    
+      const marker = L.marker([anomaly.latitude, anomaly.longitude], {
+        icon: this.getMarkerIcon(anomaly.anomalyTypeId),
+      }).bindPopup("<b>Anomaly </b>" + anomaly.id + "<br><b>Location </b>" + this.convertLongitudeToDegreesMinutesSeconds(anomaly.longitude) +" " + this.convertLatitudeToDegreesMinutesSeconds(anomaly.latitude), { offset: [0, -35] });
 
+      marker.on('mouseover', (e) => {
+        marker.openPopup();
+      });
+      
+      marker.on('mouseout', (e) => {
+        marker.closePopup();
+      });
+  
       marker.on('click', () => {
-        console.log("click")
+        console.log("click");
         this.router.navigate(['/anomaly/map/details', anomaly.id]);
       });
-
-      let color = 'black';
-
-      switch (anomaly.anomalyTypeId) {
-       case 1:
-         color = '#485569';
-         break;
-       case 2:
-         color = '#1e748f';
-         break;
-     }
-
-
-      const style = `
-       background-color: ${color};
-       height: 30px;
-       width: 30px;
-       border-radius: 50%;
-       display: inline-block;
-       `;
-
-      marker.setIcon(L.divIcon({
-         className: 'my-div-icon',
-         html: `<span style="${style}" />`
-       }));
-
-     marker.addTo(this.markers);
-   });
-   this.markers.addTo(this.map);
+  
+      marker.addTo(this.markers);
+    });
+  
+    this.markers.addTo(this.map);
+  }
+  
+  getMarkerIcon(anomalyTypeId: number): L.Icon {
+    let iconUrl = '';
+  
+    switch (anomalyTypeId) {
+      case 1:
+        iconUrl = './assets/marker-icon-blue.png'; // Replace with the actual URL or path
+        break;
+      case 2:
+        iconUrl = './assets/marker-icon-grey.png'; // Replace with the actual URL or path
+        break;
+    }
+  
+    return new L.Icon({
+      iconUrl: iconUrl,
+      iconSize: [25, 41], // Adjust the icon size if needed
+      iconAnchor: [25 / 2, 41], // Adjust the icon anchor point if needed
+    });
   }
 
   ngAfterViewInit(): void {

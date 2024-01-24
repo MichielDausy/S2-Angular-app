@@ -16,7 +16,6 @@ import { Train } from '../Models/train';
    styleUrl: './history.component.css'
 })
 
-
 export class HistoryComponent {
    selectedCountry: string = "all";
    selectedFilter: string = '';
@@ -39,6 +38,11 @@ export class HistoryComponent {
       } else {
          this.selectedTrain = trainIndex;
       }
+   }
+   constructor(private router: Router) { }
+
+   changeMode() {
+      this.router.navigate(['/history/map']);
    }
 
    getCurrentWeek(): string[] {
@@ -113,9 +117,12 @@ export class HistoryComponent {
       } else {
          filteredAnomalies.push(...countryAnomalies);
       }
-   
+
+      const fixedAnomalies = filteredAnomalies.filter(anomaly => anomaly.isFixed);
+
       console.log("train: " + selectedTrainId + ", country: " + selectedCountry + ", day: " + selectedDay);
-      return filteredAnomalies;
+      return fixedAnomalies;
+    
    }
 
 

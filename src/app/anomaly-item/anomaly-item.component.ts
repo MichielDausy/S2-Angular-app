@@ -90,7 +90,7 @@ export class AnomalyItemComponent implements OnInit{
   
 
   ngOnInit(): void {
-    this.anomalyTypes = data.anomalyTypes;
+    this.trainAnomalies = this.anomalies;
     if(this.type === "all"){
       this.trainAnomalies = this.anomalies.filter(a => a.trainId == this.train.id);
     }
@@ -99,6 +99,18 @@ export class AnomalyItemComponent implements OnInit{
       this.trainAnomalies = this.anomalies.filter(a => a.trainId == this.train.id && a.anomalyTypeId == this.getAnomalyTypesId(this.type));
     }
  }
+// ngOnInit(): void {
+//   console.log('All Anomalies:', this.anomalies);
 
-  
+//   const trainTrack = this.tracks.find(track => track.id === this.train.id);
+
+//   if (trainTrack) {
+//     console.log('Train ID:', this.train.id);
+//     console.log('Train Track ID:', trainTrack.id);
+
+//     this.trainAnomalies = this.anomalies.filter(a => a.trainTrackId === trainTrack.id);
+//   } else {
+//     console.error('Train track not found for train ID: ', this.train.id);
+//   }
+// }  
 }
