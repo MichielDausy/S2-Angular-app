@@ -21,6 +21,7 @@
 
     <div class="container mx-auto" >
         <h3 class="m-5 mx-4 font-bold text-xl">Anomaly {{anomaly.id}}</h3>
+
     
         <div class="grid grid-cols-2 gap-2 my-5 pl-4">
             <div>
@@ -32,20 +33,40 @@
         </div>
         <div class="grid grid-cols-2 gap-2 my-5 pl-4">
             <div class="h-[400px] w-[600px]"><img src="https://upload.wikimedia.org/wikipedia/commons/thumb/4/4a/Railroad_Tracks_-_Merritt_Island%2C_Florida.jpg/1200px-Railroad_Tracks_-_Merritt_Island%2C_Florida.jpg?20121011174007" alt="" class="object-cover"></div>
-            <div *ngIf="anomaly && anomaly.id !== 0">
+            <div *ngIf="anomaly && anomaly.id !== 0" class="relative">
+
+                <div class="absolute left-0 bottom-0 h-5 w-44 bg-gray-200 z-10 flex flex-nowrap">
+                    <p class="text-sm mr-2">{{convertLatitudeToDegreesMinutesSeconds(anomaly.latitude)}}</p>
+                    <p class="text-sm"> {{convertLongitudeToDegreesMinutesSeconds(anomaly.longitude)}}</p>
+                </div>
                 <app-map [width]="'600px'" [height]="'400px'" [anomalies]="[anomaly]" [zoom]="16" [center]="center"></app-map>
-            </div>
+              
+                <!-- Legend -->
+                <div class="md:mt-4 h-44 bg-gray-100 bg-opacity-75 absolute bottom-5 -right-5 z-20 rounded p-1 border">
+                  <p class="text-lg mb-2">Types:</p>
+                  <ul class="text-base space-y-2">
+                    <li class="flex items-center">
+                      <span class="dot bg-[#3274A3] h-4 w-4 rounded-full mr-2"></span>
+                      <p>Vegetation</p>
+                    </li>
+                    <li class="flex items-center">
+                      <span class="dot bg-[#6B6B6B] h-4 w-4 rounded-full mr-2"></span>
+                      <p>Signs</p>
+                    </li>
+                  </ul>
+                </div>
+              </div>
         </div>
         <div class="grid grid-cols-2 gap-2 my-5 pl-4">
             <div>
                 <div>
                     <div class="grid grid-cols-2 gap-2">
                         <div class="my-auto flex flex-nowrap">
-                            <input type="checkbox" name="markfalse" class="h-5 w-5 my-auto" [(ngModel)]="isFalse">
+                            <input type="checkbox" id="markfalse" name="markfalse" class="h-5 w-5 my-auto" [(ngModel)]="isFalse">
                             <label for="markfalse" class="text-base my-auto mx-2">False Anomaly</label>
                         </div>
                         <div class="my-auto flex flex-nowrap">
-                            <input type="checkbox" name="markfixed" class="h-5 w-5 my-auto" [(ngModel)]="isFixed">
+                            <input type="checkbox" id="markfixed" name="markfixed" class="h-5 w-5 my-auto" [(ngModel)]="isFixed">
                             <label for="markfixed" class="text-base my-auto mx-2">Fixed</label>
                         </div>
                     </div>
