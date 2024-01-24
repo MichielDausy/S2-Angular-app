@@ -12,6 +12,7 @@ import { data } from '../Models/mockdata';
 import { Service } from '../Service/service';
 import { FormsModule } from '@angular/forms';
 import { MapComponent } from '../map/map.component';
+import { ToastrService } from 'ngx-toastr';
 
 @Component({
   selector: 'app-anomaly-details',
@@ -22,7 +23,7 @@ import { MapComponent } from '../map/map.component';
 })
 export class AnomalyDetailsComponent implements OnInit{
 
-  constructor(private router: ActivatedRoute, private service: Service){   }
+  constructor(private router: ActivatedRoute, private service: Service, private toastr: ToastrService){   }
 
   center = [0,0] as L.LatLngExpression;
   anomaly : Anomaly = {
@@ -88,6 +89,12 @@ export class AnomalyDetailsComponent implements OnInit{
     if(confirm("Are you sure you want to submit changes?")) {
       this.service.changeAnomalyStatusById(id,this.isFixed, this.isFalse).subscribe(anomaly => {
         this.anomaly = anomaly;
+        this.toastr.success('Saved changes!', 'Success');
+        this.ngOnInit();        
+      },
+      error=>{
+        this.toastr.error('An error occured, changes have not been saved', 'Error');
+        this.ngOnInit();
       });
     }
   }

@@ -25,6 +25,6 @@ export class AppComponent {
     return url.includes('/history') || url.includes('/anomaly/map') || url.includes('/anomaly/list') ;
   }
   private shouldShowFooter(url: string): boolean {
-    return url.includes('/anomaly/map') || url.includes('/anomaly/list');
+    return url.includes('/anomaly/map') || url.includes('/anomaly/list') || url.includes('/history');
   }
 }
