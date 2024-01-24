@@ -97,7 +97,7 @@
                     name="country" id="" [(ngModel)]="selectedCountry">
                     <option class="text-base" value="all">All locations</option>
                     <option class="text-base" value="belgium">Belgium</option>
-                    <option class="text-base" value="Luxembourg">Luxembourg</option>
+                    <option class="text-base" value="luxembourg">Luxembourg</option>
                     <option class="text-base" value="france">France</option>
                     <option class="text-base" value="netherlands">Netherlands</option>
                 </select>
@@ -137,14 +137,12 @@
         <div class="grid grid-cols-7 gap-7">
             <div class="col-span-6">
                 <div *ngFor="let train of trains">
-                    <ng-container *ngIf="getAnomaliesByTrainAndCountry(train.id, selectedCountry).length > 0">
+                    <ng-container *ngIf="getAnomaliesByTrainAndCountry(train.id, selectedCountry, selectedTypes).length > 0">
                       <app-anomaly-item [train]="train"
-                        [anomalies]="getAnomaliesByTrainAndCountry(train.id, selectedCountry)"
-                        [tracks]="tracks"></app-anomaly-item>
+                        [anomalies]="getAnomaliesByTrainAndCountry(train.id, selectedCountry, selectedTypes)"
+                        [tracks]="tracks" [type]="selectedTypes"></app-anomaly-item>
                     </ng-container>
                   </div>
-                  
-        
             </div>
             <div class="md:flex md:flex-col md:items-center md:w-full md:p-4 col-start-7">
                 <div class="p-4 md:mt-4 h-48 bg-gray-200 bg-opacity-75 shadow-md">
