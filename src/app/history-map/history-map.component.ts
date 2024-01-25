@@ -30,6 +30,9 @@ export class HistoryMapComponent {
    selectedDay: string | null = null;
    rangeDates: Date[] = [new Date(), new Date()];
 
+   selectedCountry : string = "all";
+   selectedTypes: string = "all";
+
    displayList = false;
    center = [50.85045, 4.34878] as L.LatLngExpression;
 
@@ -65,7 +68,30 @@ export class HistoryMapComponent {
       anomalyTypeId: 1,
       signId: 1
    }] as Anomaly[];
-  
+   
+
+   getCountryId(countryName: string): number | undefined {
+      const country = this.countries.find(c => c.name.toLowerCase() === countryName.toLowerCase());
+      return country?.id;
+   }
+   getTypesId(typeName: string): number | undefined {
+     const country = this.anomalyTypes.find(c => c.name.toLowerCase() === typeName.toLowerCase());
+     return country?.id;
+  }
+
+   getAnomaliesByCountry(countryName: string, typeName: string): Anomaly[] {
+      if (countryName === "all" && typeName=== "all") {
+        return this.anomalies;
+      }
+      else{
+        const countryId = this.getCountryId(countryName);
+        const typeId = this.getTypesId(typeName);
+        return this.anomalies.filter(a => 
+          (countryName === "all" || a.countryId === countryId) &&
+          (typeName === "all" || a.anomalyTypeId === typeId)
+        );
+      }
+    }
 
    changeMode() {
       this.router.navigate(['/history']);
