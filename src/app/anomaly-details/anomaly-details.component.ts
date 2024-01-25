@@ -38,7 +38,8 @@ export class AnomalyDetailsComponent implements OnInit{
     trainTrackId: 0,
     countryId: 0,
     anomalyTypeId: 0,
-    signId: 0
+    signId: 0,
+    count: 0
   };
 
   anomalyId: number = 0;

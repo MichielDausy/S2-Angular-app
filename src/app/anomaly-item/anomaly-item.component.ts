@@ -1,12 +1,11 @@
-import { Component, Input, OnChanges, OnInit, SimpleChanges } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Train } from '../Models/train';
 import { Anomaly } from '../Models/anomaly';
 import {TooltipModule} from 'primeng/tooltip';
 import { RouterLink } from '@angular/router';
 import { Traintrack } from '../Models/traintrack';
-import { Anomalytype } from '../Models/anomalytype';
-import { data } from '../Models/mockdata';
+import { Service } from '../Service/service';
 
 @Component({
   selector: 'app-anomaly-item',
@@ -17,35 +16,15 @@ import { data } from '../Models/mockdata';
 })
 
 
-export class AnomalyItemComponent implements OnInit, OnChanges{
+export class AnomalyItemComponent implements OnInit{
+  constructor(private service: Service) {}
 
-  @Input() train : Train = {id: 0, name: ""};
+  @Input() track : Traintrack = {id: 0, name: "", trackGeometry: []};
   @Input() anomalies : Anomaly[] = [];
-  @Input() tracks: Traintrack[] = [];
-  @Input() selectedTrain: number = -1;
-  @Input() type: string = "all";
-  anomalyTypes: Anomalytype[] = [];
-  trainAnomalies: Anomaly[] = [];
-  $index: any;
+  @Input() train: Train = {id: 0, name: ""};
+  //@Input() selectedTrain: number = -1;
+  //trackAnomalies: Anomaly[] = [];
 
-  ngOnChanges(changes: SimpleChanges): void {
-    if ('anomalies' in changes || 'type' in changes || 'selectedTrain' in changes) {
-      console.log('AnomalyItemComponent: Input properties changed, updating data.');
-      this.updateAnomalies();
-    }
-  }
-
-  private updateAnomalies() {
-    console.log('All Anomalies:', this.anomalies);
-
-    if (this.type === 'all') {
-      this.trainAnomalies = this.anomalies.filter(a => a.trainId === this.train.id);
-    } else {
-      this.trainAnomalies = this.anomalies.filter(
-        a => a.trainId === this.train.id && a.anomalyTypeId === this.getAnomalyTypesId(this.type)
-      );
-    }
-  }
 
   convertLatitudeToDegreesMinutesSeconds(latitude: number): string {
     const latDirection = latitude >= 0 ? 'N' : 'S';
@@ -65,71 +44,24 @@ export class AnomalyItemComponent implements OnInit, OnChanges{
     return `${lonDegrees}°${lonMinutes}'${lonSeconds.toFixed(2)}"${lonDirection}`;
   }
 
-  getTrackNameForAnomalies(): string {
-    if (this.selectedTrain !== -1) {
-      const trackId = this.anomalies.find(a => a.trainId === this.selectedTrain)?.trainTrackId;
-      const track = this.tracks.find(t => t.id === trackId);
-      console.log("track: " + track);
-      return track ? track.name : 'Unknown Track';
-    } else {
-      return 'No Anomalies';
-    }
-  }
-
-  getAnomalyTypesId(typeName: string): number | undefined {
-    const type = this.anomalyTypes.find(c => c.name.toLowerCase() === typeName.toLowerCase());
-    return type?.id;
-  }
-  getAnomalyTypeById(typeId: number): Anomalytype | undefined {
-    const type = this.anomalyTypes.find(c => c.id === typeId);
-    return type;
-  }
-
-  getColor(item: Anomaly): string{
-    const colors = ["","#334155", "#0891b2"];
-    const color = colors[item.anomalyTypeId];
-    return color;
-  }
-
-  navigateToDetails(anomalyId: number) {
-    console.log(anomalyId);
-  }
-
-  checkType(anomaly: Anomaly): boolean {
-    if(this.type === "all"){
-      return true;
-    }
-    else
-    {
-      return anomaly.anomalyTypeId === this.getAnomalyTypesId(this.type);
-    }
-  }
-
-  
-
   ngOnInit(): void {
-    console.log('All Anomalies:', this.anomalies);
-    this.trainAnomalies = this.anomalies;
-    if(this.type === "all"){
-      this.trainAnomalies = this.anomalies.filter(a => a.trainId == this.train.id);
-    }
-    else
-    {
-      this.trainAnomalies = this.anomalies.filter(a => a.trainId == this.train.id && a.anomalyTypeId == this.getAnomalyTypesId(this.type));
-    }
- }
-// ngOnInit(): void {
-//   console.log('All Anomalies:', this.anomalies);
+    console.log(this.track);
+    console.log(this.anomalies);
+    //this.trackAnomalies = this.tra.filter(a => a. == this.track.id);
+  }
 
-//   const trainTrack = this.tracks.find(track => track.id === this.train.id);
+  // getTrackNameForAnomalies(): string {
+  //   if (this.selectedTrain !== -1) {
+  //     const trackId = this.anomalies.find(a => a.trainId === this.selectedTrain)?.trainTrackId;
+  //     const track = this.tracks.find(t => t.id === trackId);
+  //     console.log("track: " + track);
+  //     return track ? track.name : 'Unknown Track';
+  //   } else {
+  //     return 'No Anomalies';
+  //   }
+  // }
 
-//   if (trainTrack) {
-//     console.log('Train ID:', this.train.id);
-//     console.log('Train Track ID:', trainTrack.id);
-
-//     this.trainAnomalies = this.anomalies.filter(a => a.trainTrackId === trainTrack.id);
-//   } else {
-//     console.error('Train track not found for train ID: ', this.train.id);
-//   }
-// }  
+  viewDetails(anomaly: Anomaly) {
+    this.service.changeAnomaly(anomaly);
+  }
 }

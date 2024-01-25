@@ -33,6 +33,44 @@
         </div>
     </div>
 </header>
+
+<div *ngIf="showModal" class="absolute top-0 left-0 w-full h-full flex items-center justify-center z-10" (keydown.escape)="closeModal(false)">
+    <div class="mx-auto bg-gray-200 w-96 p-4 px-8 rounded-lg border-black border border-1">
+        <p>Id: {{modalAnomaly.id}}</p>
+        <div class="mb-2">
+            <img *ngIf="modalAnomaly.photo" src="https://upload.wikimedia.org/wikipedia/commons/thumb/4/4a/Railroad_Tracks_-_Merritt_Island%2C_Florida.jpg/1200px-Railroad_Tracks_-_Merritt_Island%2C_Florida.jpg?20121011174007" alt="Anomaly Preview" class="max-w-full h-auto rounded-lg">
+        </div>
+        <p>Timestamp: {{modalAnomaly.timestamp.getDate()}} - {{(modalAnomaly.timestamp.getMonth()+1).toLocaleString('en-US', { minimumIntegerDigits: 2 })}} - {{modalAnomaly.timestamp.getFullYear()}}</p>
+
+        <div class="flex flex-nowrap justify-center">
+            <div class="flex flex-nowrap mr-5">
+                <p class="my-auto mr-2">Fixed: </p>
+                <div>
+                    <label class="relative inline-flex items-center cursor-pointer">
+                        <input type="checkbox" [(ngModel)]="modalAnomaly.isFixed" class="sr-only peer">
+                        <div class="w-11 h-6 bg-gray-400 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-blue-300 dark:peer-focus:ring-blue-800 rounded-full peer dark:bg-gray-700 peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:start-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all dark:border-gray-600 peer-checked:bg-blue-600"></div>
+                    </label>
+                </div>
+            </div>
+    
+            <div class="flex flex-nowrap">
+                <p class="my-auto mr-2">False: </p>
+                <div>
+                    <label class="relative inline-flex items-center cursor-pointer">
+                        <input type="checkbox" [(ngModel)]="modalAnomaly.isFalse" class="sr-only peer">
+                        <div class="w-11 h-6 bg-gray-400 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-blue-300 dark:peer-focus:ring-blue-800 rounded-full peer dark:bg-gray-700 peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:start-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all dark:border-gray-600 peer-checked:bg-blue-600"></div>
+                    </label>
+                </div>
+            </div>
+        </div>
+
+        <div class="flex flex-nowrap mt-2 justify-center">
+            <button class="text-base mr-2 px-2 py-1 bg-[#6684be] text-white rounded-md hover:bg-[#4f74ac] float-right my-auto" (click)="closeModal(true)">Save</button>
+            <button class="text-base mx-2 px-2 py-1 bg-[#6684be] text-white rounded-md hover:bg-[#4f74ac] float-right my-auto" (click)="closeModal(false)">Close</button>
+        </div>
+    </div>
+</div>
+
 <!-- 
 <div class="container m-0">
     <div class="container mx-auto grid grid-cols-12">
@@ -117,7 +155,7 @@
                 Select railway asset
             </div>
             <div class="p-0  d-flex">
-                <ul class="overflow-auto d-inline-block text-xl">
+                <ul class="overflow-auto h-[87vh] d-inline-block text-xl">
                     <div *ngFor="let train of trains; let i = index" style="cursor:pointer"
                         class="relative block px-3 py-3 w-full text-dark bg-white border border-gray-300"
                         id="{{ train.id }}" (click)="onTrainClick(train.id)"
@@ -167,12 +205,13 @@
     </aside>
     <div class="w-3/4">
         <div class="px-7">
-            <ng-container
-                *ngIf="getAllAnomaliesByCountryAndDay(selectedTrain, selectedCountry, selectedDay || '').length > 0">
-                <app-anomaly-item [train]="getTrainById(selectedTrain)"
-                    [anomalies]="getAllAnomaliesByCountryAndDay(selectedTrain, selectedCountry, selectedDay || '')"
-                    [tracks]="tracks"></app-anomaly-item>
-            </ng-container>
+            <div *ngFor="let track of sortedTracks">
+                <ng-container *ngIf="getAnomaliesForTrack(track.id).length > 0">
+                  <app-anomaly-item [track]="track"
+                    [anomalies]="getAnomaliesForTrack(track.id)"
+                    ></app-anomaly-item>
+                </ng-container>
+            </div>
         </div>
     </div>
 </div>

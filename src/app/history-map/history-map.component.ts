@@ -7,6 +7,8 @@ import { Router, RouterLink } from '@angular/router';
 import { data } from '../Models/mockdata';
 import { CalendarModule } from 'primeng/calendar';
 import { MapComponent } from '../map/map.component';
+import { Traintrack } from '../Models/traintrack';
+import { Service } from '../Service/service';
 
 @Component({
    selector: 'app-history-map',
@@ -17,7 +19,7 @@ import { MapComponent } from '../map/map.component';
 })
 
 export class HistoryMapComponent {
-   constructor(private router: Router) { }
+   constructor(private router: Router, private service: Service) { }
 
    // anomalies on the map
    filteredAnomalies: Anomaly[] | null = null;
@@ -32,7 +34,21 @@ export class HistoryMapComponent {
    center = [50.85045, 4.34878] as L.LatLngExpression;
 
    ngOnInit(): void {
-      this.fixedAnomalies = this.getAllFixedAnomalies();
+      this.service.getTrains().subscribe(trains => {
+         this.trains = trains;
+       });
+       this.service.getTrainTracks().subscribe(tracks => {
+         this.tracks = tracks;
+       });
+       this.service.getAnomalies().subscribe(anomalies => {
+         this.anomalies = anomalies;
+       });
+       this.service.getCountries().subscribe(countries => {
+         this.countries = countries;
+       });
+       this.service.getAnomalyTypes().subscribe(anomalyTypes => {
+         this.anomalyTypes = anomalyTypes;
+       });
    }
 
    countryAnomalies = [{
@@ -49,6 +65,7 @@ export class HistoryMapComponent {
       anomalyTypeId: 1,
       signId: 1
    }] as Anomaly[];
+  
 
    changeMode() {
       this.router.navigate(['/history']);
@@ -114,8 +131,8 @@ export class HistoryMapComponent {
    
    getCurrentWeek(): string[] {
       const currentDate = new Date();
-      // const startOfWeek = currentDate.getDate() - ((currentDate.getDay() + 6) % 7 -1);
-      const startOfWeek = currentDate.getDate() - ((currentDate.getDay() + 6) % 7);
+      const startOfWeek = currentDate.getDate() - ((currentDate.getDay() + 6) % 7 -1);
+      //const startOfWeek = currentDate.getDate() - ((currentDate.getDay() + 6) % 7);
       const endOfWeek = startOfWeek + 6;
 
       const dates = [];
@@ -129,7 +146,7 @@ export class HistoryMapComponent {
 
    getPreviousWeek(): string[] {
       const currentDate = new Date();
-      const startOfPreviousWeek = new Date(currentDate.getFullYear(), currentDate.getMonth(), currentDate.getDate() - ((currentDate.getDay() + 6) % 7) - 7);
+      const startOfPreviousWeek = new Date(currentDate.getFullYear(), currentDate.getMonth(), currentDate.getDate() - ((currentDate.getDay() + 6) % 7) - 6);
       const endOfPreviousWeek = new Date(startOfPreviousWeek.getFullYear(), startOfPreviousWeek.getMonth(), startOfPreviousWeek.getDate() + 6);
 
       const dates = [];
@@ -146,13 +163,17 @@ export class HistoryMapComponent {
       const end = this.rangeDates[1];
       const dates = [];
 
-      for (let i = start.getDate(); i <= end.getDate() + 1; i++) {
+      for (let i = start.getDate()+1; i <= end.getDate() + 1; i++) {
          const date = new Date(start.getFullYear(), start.getMonth(), i);
          dates.push(date.toISOString().split('T')[0]);
       }
 
       return dates;
    }
+
+   getAnomaliesForTrack(trackId: number): Anomaly[] {
+      return this.anomalies.filter(anomaly => anomaly.trainTrackId === trackId);
+    }
 
 
    getAllAnomaliesByTrainAndDay(selectedTrainId: number, selectedDay: string): Anomaly[] {
@@ -177,7 +198,7 @@ export class HistoryMapComponent {
 
    signs = data.signs;
    trains = data.trains;
-   tracks = data.tracks;
+   tracks = data.trainTracks;
    anomalies = data.anomalies;
    countries = data.countries;
    anomalyTypes = data.anomalyTypes;
