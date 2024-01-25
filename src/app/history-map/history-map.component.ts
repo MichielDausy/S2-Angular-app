@@ -44,8 +44,8 @@ export class HistoryMapComponent {
          this.tracks = tracks;
        });
        this.service.getAnomalies().subscribe(anomalies => {
-         this.anomalies = anomalies;
-       });
+         this.anomalies = anomalies.filter(anomaly => anomaly.isFixed === true);
+      });
        this.service.getCountries().subscribe(countries => {
          this.countries = countries;
        });
@@ -197,9 +197,7 @@ export class HistoryMapComponent {
       return dates;
    }
 
-   getAnomaliesForTrack(trackId: number): Anomaly[] {
-      return this.anomalies.filter(anomaly => anomaly.trainTrackId === trackId);
-    }
+ 
 
 
    getAllAnomaliesByTrainAndDay(selectedTrainId: number, selectedDay: string): Anomaly[] {

@@ -50,7 +50,8 @@ export class AnomalyMapPageComponent implements OnInit{
       this.tracks = tracks;
     });
     this.service.getAnomalies().subscribe(anomalies => {
-      this.anomalies = anomalies;
+      this.anomalies = anomalies.filter(anomaly => anomaly.isFixed === false);
+      
     });
     this.service.getCountries().subscribe(countries => {
       this.countries = countries;

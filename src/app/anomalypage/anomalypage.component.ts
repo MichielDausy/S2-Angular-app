@@ -130,7 +130,7 @@ export class AnomalypageComponent {
       this.sortTracksByAnomalyCount();
     });
     this.service.getAnomalies().subscribe(anomalies => {
-      this.anomalies = anomalies;
+      this.anomalies = anomalies.filter(anomaly => anomaly.isFixed === false);
       this.sortTracksByAnomalyCount();
     });
   }
