@@ -22,6 +22,7 @@ import { count } from 'rxjs';
 export class AnomalypageComponent {
   filteredAnomalies: Anomaly[] = [];
 
+  searchName: string = '';
   selectedCountry: string = "all";
   selectedTypes: string = "all";
 
@@ -48,35 +49,10 @@ export class AnomalypageComponent {
     signId: 1
   }] as Anomaly[];
 
-
-
-  //   getCountryId(countryName: string): number | undefined {
-  //     const country = this.countries.find(c => c.name.toLowerCase() === countryName.toLowerCase());
-  //     console.log(country);
-  //     return country?.id;
-  //  }
-  //  getTypesId(typeName: string): number | undefined {
-  //   const country = this.anomalyTypes.find(c => c.name.toLowerCase() === typeName.toLowerCase());
-  //       console.log(country);
-  //   return country?.id;
-  // }
-
-  // getAnomaliesByTrainAndCountry(trainId: number , countryName: string, typeName: string): Anomaly[] {
-  //   if (countryName === "all" && typeName=== "all") {
-  //     return this.anomalies;
-  //   }
-  //   else{
-  //     const countryId = this.getCountryId(countryName);
-  //     const typeId = this.getTypesId(typeName);
-  //     return this.anomalies.filter(a => 
-  //       (countryName === "all" || a.countryId === countryId) &&
-  //       (typeName === "all" || a.anomalyTypeId === typeId)
-  //     );
-  //   }
-  // }
-
-
-
+  getFilteredTracks() {
+    return this.tracks.filter(track => track.name.toLowerCase().includes(this.searchName.toLowerCase()));
+  }
+  
 
   getCountryId(countryName: string): number | undefined {
     const country = this.countries.find(c => c.name.toLowerCase() === countryName.toLowerCase());
@@ -106,6 +82,7 @@ export class AnomalypageComponent {
     }
   }
 
+  
 
   signs = data.signs;
   trains = data.trains;
