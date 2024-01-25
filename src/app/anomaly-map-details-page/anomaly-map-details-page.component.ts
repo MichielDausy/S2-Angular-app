@@ -38,7 +38,8 @@ export class AnomalyMapDetailsPageComponent implements OnInit{
     trainTrackId: 0,
     countryId: 0,
     anomalyTypeId: 0,
-    signId: 0
+    signId: 0,
+    count: 1
   };
 
   anomalyId: number = 0;
@@ -86,7 +87,7 @@ export class AnomalyMapDetailsPageComponent implements OnInit{
 
   submitChanges(id: number): void {
     if(confirm("Are you sure you want to submit changes?")) {
-      this.service.markAnomaly(id,this.isFixed, this.isFalse).subscribe(anomaly => {
+      this.service.changeAnomalyStatusById(id,this.isFixed, this.isFalse).subscribe(anomaly => {
         this.anomaly = anomaly;
       });
     }

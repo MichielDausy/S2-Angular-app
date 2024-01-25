@@ -3,15 +3,17 @@ import { CommonModule } from '@angular/common';
 import { AnomalyItemComponent } from '../anomaly-item/anomaly-item.component';
 import { Anomaly } from '../Models/anomaly';
 import { FormsModule } from '@angular/forms';
+import { MatDatepickerModule } from '@angular/material/datepicker';
+import { MatNativeDateModule } from '@angular/material/core';
+import {MatFormFieldModule} from '@angular/material/form-field';
 import { Router, RouterLink } from '@angular/router';
 import { data } from '../Models/mockdata';
-import {CalendarModule} from 'primeng/calendar';
 import { Train } from '../Models/train';
 
 @Component({
    selector: 'app-history',
    standalone: true,
-   imports: [CommonModule, AnomalyItemComponent, FormsModule, RouterLink, CalendarModule],
+   imports: [CommonModule, AnomalyItemComponent, FormsModule, RouterLink, MatDatepickerModule, MatNativeDateModule, MatFormFieldModule],
    templateUrl: './history.component.html',
    styleUrl: './history.component.css'
 })
@@ -75,10 +77,14 @@ export class HistoryComponent {
       const end = this.rangeDates[1];
       const dates = [];
   
-      for (let i = start.getDate(); i <= end.getDate()+1; i++) {
-          const date = new Date(start.getFullYear(), start.getMonth(), i);
-          dates.push(date.toISOString().split('T')[0]);
-      }
+      if (start && end) {
+         const currentDate = new Date(start);
+     
+         while (currentDate <= end) {
+           dates.push(currentDate.toISOString().split('T')[0]);
+           currentDate.setDate(currentDate.getDate() + 1);
+         }
+       }
   
       return dates;
   }

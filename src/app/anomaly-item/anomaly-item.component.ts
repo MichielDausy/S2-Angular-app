@@ -5,6 +5,7 @@ import { Anomaly } from '../Models/anomaly';
 import {TooltipModule} from 'primeng/tooltip';
 import { RouterLink } from '@angular/router';
 import { Traintrack } from '../Models/traintrack';
+import { Service } from '../Service/service';
 
 @Component({
   selector: 'app-anomaly-item',
@@ -16,12 +17,13 @@ import { Traintrack } from '../Models/traintrack';
 
 
 export class AnomalyItemComponent implements OnInit{
+  constructor(private service: Service) {}
 
-  @Input() train : Train = {id: 0, name: ""};
+  @Input() track : Traintrack = {id: 0, name: "", trackGeometry: []};
   @Input() anomalies : Anomaly[] = [];
-  @Input() tracks: Traintrack[] = [];
-  @Input() selectedTrain: number = -1;
-  trainAnomalies: Anomaly[] = [];
+  @Input() train: Train = {id: 0, name: ""};
+  //@Input() selectedTrain: number = -1;
+  //trackAnomalies: Anomaly[] = [];
 
 
   convertLatitudeToDegreesMinutesSeconds(latitude: number): string {
@@ -42,26 +44,24 @@ export class AnomalyItemComponent implements OnInit{
     return `${lonDegrees}°${lonMinutes}'${lonSeconds.toFixed(2)}"${lonDirection}`;
   }
 
-  getTrackNameForAnomalies(): string {
-    if (this.selectedTrain !== -1) {
-      const trackId = this.anomalies.find(a => a.trainId === this.selectedTrain)?.trainTrackId;
-      const track = this.tracks.find(t => t.id === trackId);
-      console.log("track: " + track);
-      return track ? track.name : 'Unknown Track';
-    } else {
-      return 'No Anomalies';
-    }
-  }
-
-  navigateToDetails(anomalyId: number) {
-    console.log(anomalyId);
-  }
-
-  
-
   ngOnInit(): void {
-    this.trainAnomalies = this.anomalies.filter(a => a.trainId == this.train.id);
- }
+    console.log(this.track);
+    console.log(this.anomalies);
+    //this.trackAnomalies = this.tra.filter(a => a. == this.track.id);
+  }
 
-  
+  // getTrackNameForAnomalies(): string {
+  //   if (this.selectedTrain !== -1) {
+  //     const trackId = this.anomalies.find(a => a.trainId === this.selectedTrain)?.trainTrackId;
+  //     const track = this.tracks.find(t => t.id === trackId);
+  //     console.log("track: " + track);
+  //     return track ? track.name : 'Unknown Track';
+  //   } else {
+  //     return 'No Anomalies';
+  //   }
+  // }
+
+  viewDetails(anomaly: Anomaly) {
+    this.service.changeAnomaly(anomaly);
+  }
 }

@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { Observable } from 'rxjs';
+import { BehaviorSubject, Observable } from 'rxjs';
 import { Anomaly } from '../Models/anomaly';
 import { Traintrack } from '../Models/traintrack';
 import { Train } from '../Models/train';
@@ -15,10 +15,15 @@ import { Sign } from '../Models/sign';
 export class Service {
 
   private _url: string = "http://localhost:8081/api/";
+  private anomalySource = new BehaviorSubject<Anomaly | null>(null);
+  currentAnomaly = this.anomalySource.asObservable();
 
   constructor(private http: HttpClient) { }
-  
 
+  changeAnomaly(anomaly: Anomaly | null) {
+    this.anomalySource.next(anomaly);
+  }
+  
   getAnomalies(): Observable<Anomaly[]> {
     return this.http.get<Anomaly[]>(this._url+"anomalies/all");
   }
@@ -28,7 +33,7 @@ export class Service {
   }
 
   getTrainTracks(): Observable<Traintrack[]> {
-    return this.http.get<Traintrack[]>(this._url+"trainTracks/all");
+    return this.http.get<Traintrack[]>(this._url+"tracks/all");
   }
 
   getTrains(): Observable<Train[]> {
@@ -49,6 +54,10 @@ export class Service {
 
   changeAnomalyStatusById(id: number, isFixed: boolean, isFalse: boolean): Observable<Anomaly> {
     return this.http.put<Anomaly>(`${this._url}anomalies/mark`, { id, isFixed, isFalse });
+  }
+
+  getAnomaliesByTrack(trackId: number): Observable<Anomaly[]> {
+    return this.http.get<Anomaly[]>(`${this._url}anomalies/byTrack?id=${trackId}`);
   }
 }
 

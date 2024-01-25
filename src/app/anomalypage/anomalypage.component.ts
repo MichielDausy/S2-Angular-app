@@ -9,6 +9,11 @@ import { data } from '../Models/mockdata';
 import { RouterLink } from '@angular/router';
 import { Service } from '../Service/service';
 import { count } from 'rxjs';
+import { Sign } from '../Models/sign';
+import { Train } from '../Models/train';
+import { Traintrack } from '../Models/traintrack';
+import { Country } from '../Models/country';
+import { Anomalytype } from '../Models/anomalytype';
 
 @Component({
   selector: 'app-anomalypage',
@@ -24,6 +29,14 @@ export class AnomalypageComponent{
 
    selectedCountry : string = "all";
    selectedTypes: string = "all";
+   signs: Sign[] = [];
+   trains: Train[] = [];
+   tracks: Traintrack[] = [];
+   anomalies: Anomaly[] = [];
+   countries: Country[] = [];
+   anomalyTypes: Anomalytype[] = [];
+   searchName: string = '';
+
 
    constructor(private router: Router, private service: Service) { }
 
@@ -45,8 +58,20 @@ export class AnomalypageComponent{
       trainTrackId: 1,
       countryId: 1,
       anomalyTypeId: 1,
-      signId: 1
+      signId: 1,
+      count: 1
    }] as Anomaly[];
+
+   sortedTracks: Traintrack[] = [];
+   private sortTracksByAnomalyCount(): void {
+    if (this.tracks.length > 0 && this.anomalies.length > 0) {
+      this.sortedTracks = this.tracks.slice().sort((trackA, trackB) => {
+        const countA = this.getAnomaliesForTrack(trackA.id).length;
+        const countB = this.getAnomaliesForTrack(trackB.id).length;
+        return countB - countA;
+      });
+    }
+  }
 
 
 
@@ -75,30 +100,56 @@ export class AnomalypageComponent{
 //   }
 // }
 
+ngOnInit(): void {
+
+  //API CODE DON'T REMOVE PLEASE
+  // this.service.getSigns().subscribe(signs => {
+  //   this.signs = signs;
+  // });
+  // this.service.getTrains().subscribe(trains => {
+  //   this.trains = trains;
+  // });
+  this.service.getTrainTracks().subscribe(tracks => {
+    this.tracks = tracks;
+    this.sortTracksByAnomalyCount();
+  });
+  this.service.getAnomalies().subscribe(anomalies => {
+    this.anomalies = anomalies;
+    this.sortTracksByAnomalyCount();
+  });
+  // this.service.getCountries().subscribe(countries => {
+  //   this.countries = countries;
+  // });
+  // this.service.getAnomalyTypes().subscribe(anomalyTypes => {
+  //   this.anomalyTypes = anomalyTypes;
+  // });
+
+  // this.signs = data.signs;
+  // this.trains = data.trains;
+  // this.tracks = data.tracks;
+  // this.anomalies = data.anomalies;
+  // this.countries = data.countries;
+  // this.anomalyTypes = data.anomalyTypes;
+}
+
 ngOnChanges(changes: SimpleChanges): void {
    console.log('ngOnChanges called', changes);
    if (changes['selectedCountry']) {
      const countryId = this.getCountryId(this.selectedCountry);
-     console.log('selectedCountry changed', countryId);
+     //console.log('selectedCountry changed', countryId);
      // Do something with countryId if needed
    }
  }
  
  getCountryId(countryName: string): number | undefined {
-   console.log('getCountryId called');
+   //console.log('getCountryId called');
    const country = this.countries.find(c => c.name.toLowerCase() === countryName.toLowerCase());
-   console.log(country);
+   //console.log(country);
    return country?.id;
  }
 
- getAnomaliesByTrainAndCountry(trainId: number, countryName: string): Anomaly[] {
-   console.log('getAnomaliesByTrainAndCountry called');
-   if (countryName === 'all') {
-     return this.anomalies.filter(a => a.trainId === trainId);
-   } else {
-     const countryId = this.getCountryId(countryName);
-     return this.anomalies.filter(a => a.trainId === trainId && a.countryId === countryId);
-   }
+ getAnomaliesForTrack(trackId: number): Anomaly[] {
+   return this.anomalies.filter(anomaly => anomaly.trainTrackId === trackId);
  }
 // ngOnChanges(changes: SimpleChanges): void {
 //    console.log('ngOnChanges called', changes);
@@ -132,12 +183,8 @@ ngOnChanges(changes: SimpleChanges): void {
  
 //    return filteredAnomalies;
 //  }
-
-
-   signs = data.signs;
-   trains = data.trains;
-   tracks = data.tracks;
-   anomalies = data.anomalies;
-   countries = data.countries;
-   anomalyTypes = data.anomalyTypes;
+onSearchNameChange(value: string) {
+    this.searchName = value;
+    this.sortedTracks = this.tracks.filter(track => track.name.toLowerCase().includes(this.searchName.toLowerCase()));
+  }
 }

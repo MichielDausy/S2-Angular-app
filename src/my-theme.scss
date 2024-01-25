@@ -1,0 +1,68 @@
+// my-theme.scss
+@use '@angular/material' as mat;
+
+// Include Angular Material core styles
+@include mat.core();
+
+// Define your custom colors
+$custom-primary: #4f74ac;
+$custom-accent: #e5e7eb;
+
+$my-primary-palette: (
+  50: #4f74ac,
+  100: #4f74ac,
+  200: #4f74ac,
+  300: #4f74ac,
+  500: #4f74ac,
+  700: #4f74ac,
+  // ... continues to 900
+  contrast:
+    (
+      50: #4f74ac,
+      100: #4f74ac,
+      200: #4f74ac,
+      300: #4f74ac,
+      500: white,
+      // ... continues to 900,,,,,,,,,,
+      700: white,
+    ),
+);
+
+$my-second-palette: (
+  50: #e5e7eb,
+  100: #e5e7eb,
+  200: #e5e7eb,
+  300: #e5e7eb,
+  500: #e5e7eb,
+  700: #e5e7eb,
+  // ... continues to 900
+  contrast:
+    (
+      50: rgba(black, 0.87),
+      100: rgba(black, 0.87),
+      200: rgba(black, 0.87),
+      300: white,
+      500: white,
+      // ... continues to 900,,,,,,,,,,
+      700: white,
+    ),
+);
+
+// Create color palettes based on your custom colors
+$custom-primary-palette: mat.define-palette($my-primary-palette, 700);
+$custom-accent-palette: mat.define-palette($my-second-palette, 500);
+
+// Create a custom theme using the palettes
+$custom-theme: mat.define-light-theme(
+  (
+    color: (
+      primary: $custom-primary-palette,
+      accent: $custom-accent-palette,
+    ),
+    typography: mat.define-typography-config(),
+    density: 0,
+  )
+);
+
+// Apply the custom theme to all Angular Material components
+@include mat.all-component-themes($custom-theme);

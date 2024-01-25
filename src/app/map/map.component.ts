@@ -4,6 +4,8 @@ import { Anomaly } from '../Models/anomaly';
 import * as L from 'leaflet';
 import { Router } from '@angular/router';
 import { AnomalypageComponent } from '../anomalypage/anomalypage.component';
+import { Traintrack } from '../Models/traintrack';
+import { GeoJsonObject, GeoJsonProperties, LineString, FeatureCollection } from 'geojson';
 
 @Component({
   selector: 'app-map',
@@ -17,6 +19,7 @@ export class MapComponent implements AfterViewInit, OnChanges {
   constructor(private router: Router) { }
 
   @Input() anomalies: Anomaly[] = [];
+  @Input() trainTracks: Traintrack[] = [];
   @Input() zoom = 9;
   @Input() height = "600px";
   @Input() width = "1200px";
@@ -26,6 +29,7 @@ export class MapComponent implements AfterViewInit, OnChanges {
   private map: L.Map = {} as L.Map;
   private centroid: L.LatLngExpression = this.center; 
   private markers: L.FeatureGroup = {} as L.FeatureGroup;
+  private trainTrackLayer: L.GeoJSON = {} as L.GeoJSON;
 
   convertLatitudeToDegreesMinutesSeconds(latitude: number): string {
     const latDirection = latitude >= 0 ? 'N' : 'S';
@@ -60,7 +64,7 @@ export class MapComponent implements AfterViewInit, OnChanges {
     }
   
     if (previousAnomalies !== currentAnomalies) {
-      console.log("Anomalies have changed");
+      //console.log("Anomalies have changed");
       this.updateMarkers();
     }
   }
@@ -86,10 +90,13 @@ export class MapComponent implements AfterViewInit, OnChanges {
     });
 
     this.updateMarkers();
+    if (this.trainTracks.length > 0) {
+      this.updateTrainTracks();
+    }
 
     tiles.addTo(this.map);
 
-    console.log("center: " + this.center)
+    //console.log("center: " + this.center)
   
   }
 
@@ -97,13 +104,11 @@ export class MapComponent implements AfterViewInit, OnChanges {
     this.map.removeLayer(this.markers);
     this.markers = new L.FeatureGroup();
   
-    console.log("update markers");
-  
     this.anomalies.forEach(anomaly => {
       const marker = L.marker([anomaly.latitude, anomaly.longitude], {
-        icon: this.getMarkerIcon(anomaly.anomalyTypeId),
-      }).bindPopup("<b>Anomaly </b>" + anomaly.id + "<br><b>Location </b>" + this.convertLongitudeToDegreesMinutesSeconds(anomaly.longitude) +" " + this.convertLatitudeToDegreesMinutesSeconds(anomaly.latitude), { offset: [0, -35] });
-
+        icon: this.getMarkerIcon(anomaly.anomalyTypeId, anomaly.count),
+      }).bindPopup("<b>Anomaly </b>" + anomaly.id + "<br><b>Location </b>" + this.convertLatitudeToDegreesMinutesSeconds(anomaly.latitude) + " " + this.convertLongitudeToDegreesMinutesSeconds(anomaly.longitude), { offset: [0, -35] });
+  
       marker.on('mouseover', (e) => {
         marker.openPopup();
       });
@@ -123,23 +128,99 @@ export class MapComponent implements AfterViewInit, OnChanges {
     this.markers.addTo(this.map);
   }
   
-  getMarkerIcon(anomalyTypeId: number): L.Icon {
+  getMarkerIcon(anomalyTypeId: number, anomalyCount: number): L.DivIcon {
     let iconUrl = '';
   
     switch (anomalyTypeId) {
       case 1:
-        iconUrl = './assets/marker-icon-blue.png'; // Replace with the actual URL or path
+        iconUrl = './assets/marker-blue.svg';
         break;
       case 2:
-        iconUrl = './assets/marker-icon-grey.png'; // Replace with the actual URL or path
+        iconUrl = './assets/marker-grey.svg';
         break;
     }
+
+    // Create a custom marker element with the SVG image and count badge
+    const iconElement = document.createElement('div');
+    iconElement.innerHTML = `
+      <img src="${iconUrl}" alt="Marker">
+      ${anomalyCount > 1 ? `<div class="count-badge">${anomalyCount > 100 ? '99+' : anomalyCount.toString()}</div>` : ''}
+    `;
+
+    // Define styles for the count badge
+    const countBadgeStyles = `
+    position: absolute;
+    bottom: 25px;
+    left: 10px;
+    background-color: red;
+    color: white;
+    border-radius: 50%;
+    padding: 2px 5px;
+    font-size: 12px;
+  `;
+
+    // Apply styles to the count badge
+    const countBadge = iconElement.querySelector('.count-badge');
+    if (countBadge) {
+      countBadge.setAttribute('style', countBadgeStyles);
+    }
   
-    return new L.Icon({
-      iconUrl: iconUrl,
-      iconSize: [25, 41], // Adjust the icon size if needed
-      iconAnchor: [25 / 2, 41], // Adjust the icon anchor point if needed
+    return L.divIcon({
+      html: iconElement.innerHTML,
+      iconSize: [25, 41],
+      iconAnchor: [25 / 2, 41],
+      className: 'leaflet-marker-icon', // Add your CSS class here if needed
     });
+  }
+
+  updateTrainTracks(): void {
+    this.map.removeLayer(this.trainTrackLayer);
+
+    const trainTrackGeoJSON: FeatureCollection<LineString, GeoJsonProperties> = {
+      type: 'FeatureCollection',
+      features: this.trainTracks.map(trainTrack => ({
+        type: 'Feature',
+        properties: {
+          name: trainTrack.name,
+          anomalyCount: this.getAnomalyCount(trainTrack.id),
+        },
+        geometry: {
+          type: 'LineString',
+          coordinates: trainTrack.trackGeometry.map(coord => [coord.longitude, coord.latitude]),
+        },
+      })),
+    };
+
+    this.trainTrackLayer = L.geoJSON(trainTrackGeoJSON, {
+      style: (feature) => ({
+        color: 'grey',
+        weight: 3, // Initial width
+      }),
+      onEachFeature: (feature, layer) => {
+        layer.on('mouseover', (e) => {
+          (layer as L.Path).setStyle({
+            color: 'green',
+            weight: 10, // Highlighted width
+          });
+          const popupContent = `<b>${feature.properties.name}</b></br><b># anomalies</b> ${feature.properties.anomalyCount}`;
+          layer.bindPopup(popupContent, { offset: [0, -2], autoPan: false }).openPopup();
+        });
+  
+        layer.on('mouseout', (e) => {
+          (layer as L.Path).setStyle({
+            color: 'grey',
+            weight: 3, // Reset to initial width
+          });
+          layer.closePopup();
+        });
+      }
+    });
+
+    this.trainTrackLayer.addTo(this.map);
+  }
+
+  getAnomalyCount(trainTrackId: number): number {
+    return this.anomalies.filter(anomaly => anomaly.trainTrackId === trainTrackId).length;
   }
 
   ngAfterViewInit(): void {
