@@ -107,8 +107,16 @@
 
                 </div>
                 <div *ngIf="selectedFilter === 'customRange'" class="h-20 w-45 ">
-                    <!-- <p-calendar [(ngModel)]="rangeDates" [readonlyInput]="true" selectionMode="range"
-                        class="h-full w-auto text-base border border-1 rounded mx-auto">date</p-calendar> -->
+                    <mat-form-field>
+                        <mat-label>Enter a date range</mat-label>
+                        <mat-datepicker-toggle matIconSuffix [for]="picker"></mat-datepicker-toggle>
+                        <mat-date-range-input [rangePicker]="picker">
+                          <input matStartDate placeholder="Start date" [(ngModel)]="rangeDates[0]">
+                          <input matEndDate placeholder="End date" [(ngModel)]="rangeDates[1]">
+                        </mat-date-range-input>
+                        <mat-date-range-picker #picker></mat-date-range-picker>
+                      </mat-form-field>
+
                 </div>
                 <hr>
                 <div id="day-list" class="list-group-scroll text-sm">
