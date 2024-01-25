@@ -1,19 +1,18 @@
 <div class="w-full bg-gray-200 my-4 py-2 px-2 bg-opacity-75 rounded overflow-hidden shadow-lg">
     <div class="grid grid-cols-12 gap-4 grid-rows-3 h-24">
         <div class="row-start-2 flex flex-nowrap col-span-10">
-            @for (item of trainAnomalies; track $index; let i = $index) {
-                @if (checkType(item)) {
-                    <div  class="mx-auto grid grid-rows-2" pTooltip="{{convertLatitudeToDegreesMinutesSeconds(trainAnomalies[i].latitude) }} {{convertLongitudeToDegreesMinutesSeconds(trainAnomalies[i].longitude)}}" tooltipPosition="top">
-                        <div [style.background-color]="getColor(item)" class="dot row-start-1 mx-auto z-0 cursor-pointer" routerLink="/anomaly/list/details/{{trainAnomalies[i].id}}" routerLinkActive="router-link-active" ></div>
-                        <div class="h-12 bg-slate-800 w-0.5 my-0 py-0 mx-auto row-start-2"></div>
-                    </div>
-                }
-            }
-            
+            <div *ngFor="let anomaly of anomalies; index as i;" class="mx-auto grid grid-rows-2" pTooltip="{{convertLatitudeToDegreesMinutesSeconds(anomaly.latitude) }} {{convertLongitudeToDegreesMinutesSeconds(anomaly.longitude)}}" tooltipPosition="top">
+                <div [ngClass]="{'bg-cyan-600' : anomaly.anomalyTypeId === 1, 'bg-slate-700': anomaly.anomalyTypeId === 2}" class="dot relative row-start-1 mx-auto z-0 cursor-pointer" routerLink="/anomaly/list/details/{{anomaly.id}}" routerLinkActive="router-link-active" (click)="viewDetails(anomaly)">
+                    <div *ngIf="anomaly.count > 1" class="absolute inline-flex items-center justify-center w-6 h-6 text-xs font-bold text-white bg-red-500 rounded-full -top-3 -end-3 dark:border-gray-900">
+                        {{ anomaly.count > 100 ? '99+' : anomaly.count }}
+                      </div>
+                </div>
+                <div class="h-7 bg-slate-800 w-0.5 my-0 py-0 mx-auto row-start-2"></div>
+            </div>
         </div>
         <div class="h-0.5 w-full bg-slate-800 row-start-3 col-span-10"></div>
         <div class="col-span-2 mx-auto row-span-3 my-auto">
-            <p class="text-base font-semibold text-gray-700">{{train.name}}</p>
+            <p class="text-base font-semibold text-gray-700">{{track.name}}</p>
         </div>
     </div>
 </div>

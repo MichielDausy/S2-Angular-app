@@ -11,4 +11,5 @@ export interface Anomaly{
     countryId: number;
     anomalyTypeId: number;
     signId: number;
+    count: number;
 }
