@@ -71,15 +71,11 @@ export class AnomalypageComponent{
         const countB = this.getAnomaliesForTrack(trackB.id).length;
         return countB - countA;
       });
+    }
+  }
 
   getFilteredTracks() {
     return this.tracks.filter(track => track.name.toLowerCase().includes(this.searchName.toLowerCase()));
-  }
-  
-
-  getCountryId(countryName: string): number | undefined {
-    const country = this.countries.find(c => c.name.toLowerCase() === countryName.toLowerCase());
-    return country?.id;
   }
 
   getAnomalyTypesId(typeName: string): number | undefined {
@@ -133,54 +129,54 @@ export class AnomalypageComponent{
 //   }
 // }
 
-ngOnInit(): void {
+  ngOnInit(): void {
 
-  //API CODE DON'T REMOVE PLEASE
-  // this.service.getSigns().subscribe(signs => {
-  //   this.signs = signs;
-  // });
-  // this.service.getTrains().subscribe(trains => {
-  //   this.trains = trains;
-  // });
-
-
-  this.service.getTrainTracks().subscribe(tracks => {
-    this.tracks = tracks;
-    this.sortTracksByAnomalyCount();
-  });
-  this.service.getAnomalies().subscribe(anomalies => {
-    this.anomalies = anomalies;
-    this.sortTracksByAnomalyCount();
-  });
+    //API CODE DON'T REMOVE PLEASE
+    // this.service.getSigns().subscribe(signs => {
+    //   this.signs = signs;
+    // });
+    // this.service.getTrains().subscribe(trains => {
+    //   this.trains = trains;
+    // });
 
 
-  // this.service.getCountries().subscribe(countries => {
-  //   this.countries = countries;
-  // });
-  // this.service.getAnomalyTypes().subscribe(anomalyTypes => {
-  //   this.anomalyTypes = anomalyTypes;
-  // });
-}
+    this.service.getTrainTracks().subscribe(tracks => {
+      this.tracks = tracks;
+      this.sortTracksByAnomalyCount();
+    });
+    this.service.getAnomalies().subscribe(anomalies => {
+      this.anomalies = anomalies;
+      this.sortTracksByAnomalyCount();
+    });
 
-ngOnChanges(changes: SimpleChanges): void {
-   console.log('ngOnChanges called', changes);
-   if (changes['selectedCountry']) {
-     const countryId = this.getCountryId(this.selectedCountry);
-     //console.log('selectedCountry changed', countryId);
-     // Do something with countryId if needed
-   }
- }
- 
- getCountryId(countryName: string): number | undefined {
-   //console.log('getCountryId called');
-   const country = this.countries.find(c => c.name.toLowerCase() === countryName.toLowerCase());
-   //console.log(country);
-   return country?.id;
- }
 
- getAnomaliesForTrack(trackId: number): Anomaly[] {
-   return this.anomalies.filter(anomaly => anomaly.trainTrackId === trackId);
- }
+    // this.service.getCountries().subscribe(countries => {
+    //   this.countries = countries;
+    // });
+    // this.service.getAnomalyTypes().subscribe(anomalyTypes => {
+    //   this.anomalyTypes = anomalyTypes;
+    // });
+  }
+
+  ngOnChanges(changes: SimpleChanges): void {
+    console.log('ngOnChanges called', changes);
+    if (changes['selectedCountry']) {
+      const countryId = this.getCountryId(this.selectedCountry);
+      //console.log('selectedCountry changed', countryId);
+      // Do something with countryId if needed
+    }
+  }
+  
+  getCountryId(countryName: string): number | undefined {
+    //console.log('getCountryId called');
+    const country = this.countries.find(c => c.name.toLowerCase() === countryName.toLowerCase());
+    //console.log(country);
+    return country?.id;
+  }
+
+  getAnomaliesForTrack(trackId: number): Anomaly[] {
+    return this.anomalies.filter(anomaly => anomaly.trainTrackId === trackId);
+  }
 // ngOnChanges(changes: SimpleChanges): void {
 //    console.log('ngOnChanges called', changes);
  
