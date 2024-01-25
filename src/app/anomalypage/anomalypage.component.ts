@@ -27,8 +27,9 @@ import { Anomalytype } from '../Models/anomalytype';
 export class AnomalypageComponent{
   filteredAnomalies: Anomaly[] = [];
 
-   selectedCountry : string = "all";
-   selectedTypes: string = "all";
+  searchName: string = '';
+  selectedCountry: string = "all";
+  selectedTypes: string = "all";
    signs: Sign[] = [];
    trains: Train[] = [];
    tracks: Traintrack[] = [];
@@ -70,9 +71,41 @@ export class AnomalypageComponent{
         const countB = this.getAnomaliesForTrack(trackB.id).length;
         return countB - countA;
       });
+
+  getFilteredTracks() {
+    return this.tracks.filter(track => track.name.toLowerCase().includes(this.searchName.toLowerCase()));
+  }
+  
+
+  getCountryId(countryName: string): number | undefined {
+    const country = this.countries.find(c => c.name.toLowerCase() === countryName.toLowerCase());
+    return country?.id;
+  }
+
+  getAnomalyTypesId(typeName: string): number | undefined {
+    const type = this.anomalyTypes.find(c => c.name.toLowerCase() === typeName.toLowerCase());
+    return type?.id;
+  }
+
+  getAnomaliesByTrainAndCountry(trainId: number, countryName: string, anoType: string): Anomaly[] {
+    if (anoType === "all" && countryName === "all") {
+      return this.anomalies.filter(a => a.trainId == trainId && !a.isFixed);
+    }
+    else if (anoType === "all" && countryName !== "all") {
+      const countryId = this.getCountryId(countryName);
+      return this.anomalies.filter(a => a.trainId == trainId && a.countryId == countryId && !a.isFixed);
+    }
+    else if (anoType !== "all" && countryName === "all") {
+      const typeId = this.getAnomalyTypesId(anoType);
+      return this.anomalies.filter(a => a.trainId == trainId && a.anomalyTypeId == typeId && !a.isFixed);
+    } else {
+      const countryId = this.getCountryId(countryName);
+      const typeId = this.getAnomalyTypesId(anoType);
+      return this.anomalies.filter(a => a.trainId == trainId && a.countryId == countryId && a.anomalyTypeId == typeId && !a.isFixed);
     }
   }
 
+  
 
 
 //   getCountryId(countryName: string): number | undefined {
