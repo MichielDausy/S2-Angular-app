@@ -13,6 +13,7 @@ import { Service } from '../Service/service';
 import { FormsModule } from '@angular/forms';
 import { MapComponent } from '../map/map.component';
 import { ToastrService } from 'ngx-toastr';
+import { Location } from '@angular/common';
 
 @Component({
   selector: 'app-anomaly-details',
@@ -23,7 +24,7 @@ import { ToastrService } from 'ngx-toastr';
 })
 export class AnomalyDetailsComponent implements OnInit{
 
-  constructor(private router: ActivatedRoute, private service: Service, private toastr: ToastrService){   }
+  constructor(private router: ActivatedRoute, private service: Service, private toastr: ToastrService, private location: Location){   }
 
   center = [0,0] as L.LatLngExpression;
   anomaly : Anomaly = {
@@ -71,7 +72,10 @@ export class AnomalyDetailsComponent implements OnInit{
 
   }
 
-
+  goBack(): void {
+    this.location.back();
+ }
+ 
   convertLatitudeToDegreesMinutesSeconds(latitude: number): string {
     const latDirection = latitude >= 0 ? 'N' : 'S';
     const latDegrees = Math.floor(Math.abs(latitude));
