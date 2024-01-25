@@ -107,11 +107,11 @@ export class AnomalypageComponent {
   }
 
 
-
   signs = data.signs;
   trains = data.trains;
   tracks = data.tracks;
   anomalies = data.anomalies;
   countries = data.countries;
   anomalyTypes = data.anomalyTypes;
+
 }
