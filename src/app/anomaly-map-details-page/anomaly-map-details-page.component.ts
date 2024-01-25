@@ -14,6 +14,7 @@ import { Traintrack } from '../Models/traintrack';
 import { Service } from '../Service/service';
 import { FormsModule } from '@angular/forms';
 import { ToastrService } from 'ngx-toastr';
+import { Location } from '@angular/common';
 
 @Component({
   selector: 'app-anomaly-map-details-page',
@@ -24,7 +25,7 @@ import { ToastrService } from 'ngx-toastr';
 })
 export class AnomalyMapDetailsPageComponent implements OnInit{
   
-  constructor(private router: ActivatedRoute, private service: Service, private toastr: ToastrService){   }
+  constructor(private router: ActivatedRoute, private service: Service, private toastr: ToastrService, private location: Location){   }
 
   center = [0,0] as L.LatLngExpression;
   anomaly : Anomaly = {
@@ -67,6 +68,9 @@ export class AnomalyMapDetailsPageComponent implements OnInit{
 
   }
 
+  goBack(): void {
+    this.location.back();
+ }
 
   convertLatitudeToDegreesMinutesSeconds(latitude: number): string {
     const latDirection = latitude >= 0 ? 'N' : 'S';

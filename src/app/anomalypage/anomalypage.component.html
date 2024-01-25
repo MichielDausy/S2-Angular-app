@@ -1,33 +1,20 @@
-<header
-  class="flex items-center w-full sticky-top disable-touch-scroll space-x-4"
-  style="background-color: #f0f3f9; width: 100%"
->
-  <div
-    class="flex items-center max-w-17rem w-25vw relative p-2 h-full"
-    style="
+<header class="flex items-center w-full sticky-top disable-touch-scroll space-x-4"
+  style="background-color: #f0f3f9; width: 100%">
+  <div class="flex items-center max-w-17rem w-25vw relative p-2 h-full" style="
       background-image: linear-gradient(#6586c3c5 0, #6586c3c5 150%),
         url(../../assets/background-img.png) !important;
       background-repeat: no-repeat;
       background-size: cover;
       width: 25%;
-    "
-  >
-    <img
-      class="h-14"
-      src="../../assets/codiTrack-logo.png"
-      alt="CodiTrack Logo"
-    />
+    ">
+    <img class="h-14" src="../../assets/codiTrack-logo.png" alt="CodiTrack Logo" />
     <h3 class="text-white m-0 ml-2 text-xl px-5">CodiTrack</h3>
   </div>
   <div class="col-span-6 bg-gray-100 pl-3 py-3 flex flex-nowrap my-auto">
     <div class="bg-gray-100 bg-opacity-75 w-32 h-12 rounded p-1 my-auto">
       <div class="flex items-center h-full">
-        <select
-          class="appearance-none bg-white border border-gray-300 py-2 px-4 leading-tight text-sm rounded-md"
-          name="country"
-          id=""
-          [(ngModel)]="selectedCountry"
-        >
+        <select class="appearance-none bg-white border border-gray-300 py-2 px-4 leading-tight text-sm rounded-md"
+          name="country" id="" [(ngModel)]="selectedCountry">
           <option class="text-base" value="all">All locations</option>
           <option class="text-base" value="belgium">Belgium</option>
           <option class="text-base" value="Luxembourg">Luxembourg</option>
@@ -38,12 +25,8 @@
     </div>
     <div class="bg-gray-100 bg-opacity-75 w-32 h-12 rounded p-1 my-auto">
       <div class="flex items-center h-full">
-        <select
-          class="appearance-none bg-white border border-gray-300 py-2 px-4 leading-tight text-sm rounded-md"
-          name="types"
-          id=""
-          [(ngModel)]="selectedTypes"
-        >
+        <select class="appearance-none bg-white border border-gray-300 py-2 px-4 leading-tight text-sm rounded-md"
+          name="types" id="" [(ngModel)]="selectedTypes">
           <option class="text-base" value="all">All types</option>
           <option class="text-base" value="vegetation">Vegetation</option>
           <option class="text-base" value="signs">Signs</option>
@@ -52,21 +35,15 @@
     </div>
     <div class="my-auto absolute right-3 top-3 flex flex-nowrap">
       <div (click)="changeMode()" class="my-auto mx-8">
-        <button
-          class="px-4 py-2 bg-[#6684be] text-white text-sm rounded float-left w-1/2"
-        >
+        <button class="px-4 py-2 bg-[#6684be] text-white text-sm rounded float-left w-1/2">
           List
         </button>
-        <button
-          class="px-4 py-2 bg-gray-200 text-black text-sm rounded float-right w-1/2"
-        >
+        <button class="px-4 py-2 bg-gray-200 text-black text-sm rounded float-right w-1/2">
           Map
         </button>
       </div>
-      <button
-        class="px-3 py-2 bg-[#6684be] text-white rounded-md hover:bg-[#4f74ac] float-right my-auto"
-        routerLink="/menu"
-      >
+      <button class="px-3 py-2 bg-[#6684be] text-white rounded-md hover:bg-[#4f74ac] float-right my-auto"
+        routerLink="/menu">
         <div class="ml-auto text-xl"><i class="fas fa-backward fa-xl"></i></div>
       </button>
     </div>
@@ -82,20 +59,12 @@
     <div class="grid grid-cols-7 gap-7">
       <div class="col-span-6">
         <div class="relative md:flex md:items-center">
-          <input
-            [(ngModel)]="searchName"
-            name="searchName"
-            type="text"
-            id="searchName"
+          <input [(ngModel)]="searchName" name="searchName" type="text" id="searchName"
             class="mb-3 rounded-lg border block flex-1 mx-auto w-1/2 md:mx-0 text-sm p-2.5 bg-gray-100 border-gray-600 placeholder-gray-700 focus:outline-none"
-            placeholder="Filter By Track Name"
-            (ngModelChange)="onSearchNameChange($event)"
-          />
+            placeholder="Filter By Track Name" (ngModelChange)="onSearchNameChange($event)" />
           @if (searchName) {
-          <p
-            class="hidden md:block text-md text-custom-grey-text cursor-pointer absolute end-0 pr-3 mb-4 p-2"
-            (click)="onSearchNameChange('')"
-          >
+          <p class="hidden md:block text-md text-custom-grey-text cursor-pointer absolute end-0 pr-3 mb-4 p-2"
+            (click)="onSearchNameChange('')">
             x
           </p>
           }
@@ -103,11 +72,11 @@
         <div class="anomaly-items-container">
           <div *ngFor="let track of sortedTracks">
             <ng-container *ngIf="getAnomaliesForTrack(track.id).length > 0">
-              <app-anomaly-item
-                [track]="track"
-                [anomalies]="getAnomaliesForTrack(track.id)"
-              ></app-anomaly-item>
+              <app-anomaly-item [track]="track" [anomalies]="getAnomaliesForTrack(track.id)"></app-anomaly-item>
             </ng-container>
+          </div>
+          <div class="text-base" *ngIf="noFilteredAnomalies">
+            No results found
           </div>
         </div>
       </div>
