@@ -27,9 +27,9 @@ import { Anomalytype } from '../Models/anomalytype';
 export class AnomalypageComponent{
   filteredAnomalies: Anomaly[] = [];
 
-  searchName: string = '';
-  selectedCountry: string = "all";
-  selectedTypes: string = "all";
+   searchName: string = '';
+   selectedCountry: string = "all";
+   selectedTypes: string = "all";
    signs: Sign[] = [];
    trains: Train[] = [];
    tracks: Traintrack[] = [];
@@ -62,8 +62,7 @@ export class AnomalypageComponent{
    }] as Anomaly[];
 
    sortedTracks: Traintrack[] = [];
-
-
+  
    private sortTracksByAnomalyCount(): void {
     if (this.tracks.length > 0 && this.anomalies.length > 0) {
       this.sortedTracks = this.tracks.slice().sort((trackA, trackB) => {
@@ -73,6 +72,7 @@ export class AnomalypageComponent{
       });
     }
   }
+
 
   getFilteredTracks() {
     return this.tracks.filter(track => track.name.toLowerCase().includes(this.searchName.toLowerCase()));
@@ -101,7 +101,7 @@ export class AnomalypageComponent{
     }
   }
 
-  
+ 
 
 
 //   getCountryId(countryName: string): number | undefined {
@@ -128,16 +128,7 @@ export class AnomalypageComponent{
 //     );
 //   }
 // }
-
   ngOnInit(): void {
-
-    //API CODE DON'T REMOVE PLEASE
-    // this.service.getSigns().subscribe(signs => {
-    //   this.signs = signs;
-    // });
-    // this.service.getTrains().subscribe(trains => {
-    //   this.trains = trains;
-    // });
 
 
     this.service.getTrainTracks().subscribe(tracks => {
@@ -148,22 +139,12 @@ export class AnomalypageComponent{
       this.anomalies = anomalies;
       this.sortTracksByAnomalyCount();
     });
-
-
-    // this.service.getCountries().subscribe(countries => {
-    //   this.countries = countries;
-    // });
-    // this.service.getAnomalyTypes().subscribe(anomalyTypes => {
-    //   this.anomalyTypes = anomalyTypes;
-    // });
   }
 
   ngOnChanges(changes: SimpleChanges): void {
     console.log('ngOnChanges called', changes);
     if (changes['selectedCountry']) {
       const countryId = this.getCountryId(this.selectedCountry);
-      //console.log('selectedCountry changed', countryId);
-      // Do something with countryId if needed
     }
   }
   
@@ -209,4 +190,9 @@ export class AnomalypageComponent{
  
 //    return filteredAnomalies;
 //  }
+
+onSearchNameChange(value: string) {
+    this.searchName = value;
+    this.sortedTracks = this.tracks.filter(track => track.name.toLowerCase().includes(this.searchName.toLowerCase()));
+  }
 }

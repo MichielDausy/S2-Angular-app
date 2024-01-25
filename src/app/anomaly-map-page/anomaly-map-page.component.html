@@ -27,7 +27,7 @@
                         name="types" id="" [(ngModel)]="selectedTypes">
                         <option class="text-base" value="all">All types</option>
                         <option class="text-base" value="vegetation">Vegetation</option>
-                        <option class="text-base" value="signs">Signs</option>
+                        <option class="text-base" value="sign">Signs</option>
                     </select>
                 </div>
             </div>
@@ -48,7 +48,7 @@
     <div class="mx-auto" *ngIf="anomalies && anomalies.length > 0">
         <div class="relative overflow-hidden">
             <app-map class="" [anomalies]="getAnomaliesByCountry(selectedCountry, selectedTypes)" [height]="'92.5vh'"
-                [width]="'100%'" [center]="center" [isDetails]="false" />
+                [width]="'100%'" [center]="center" [isDetails]="false" [trainTracks]="tracks"/>
             <div class="md:mt-4 absolute bottom-6 left-3 z-10 rounded p-1">
                 <img src="../../assets/RoT_icon_blue.png" alt="" class="h-12 w-auto">
 

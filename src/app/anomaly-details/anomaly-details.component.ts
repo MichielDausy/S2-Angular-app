@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, Input } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Anomaly } from '../Models/anomaly';
 import { OnInit } from '@angular/core';
@@ -39,7 +39,7 @@ export class AnomalyDetailsComponent implements OnInit{
     countryId: 0,
     anomalyTypeId: 0,
     signId: 0,
-    count: 0
+    count: 1
   };
 
   anomalyId: number = 0;
@@ -47,22 +47,26 @@ export class AnomalyDetailsComponent implements OnInit{
   isFalse: boolean = false;
 
   ngOnInit(): void {
-    this.anomalyId = this.router.snapshot.params['id'];
+    this.service.currentAnomaly.subscribe((anomaly) => {
+      if (anomaly != null) {
+        this.anomaly = anomaly;
+      }
+    });
     //API CODE DON'T REMOVE PLEASE
     // this.service.getAnomalyById(this.anomalyId).subscribe(anomaly => {
     //   this.anomaly = anomaly;
     //   this.center = [this.anomaly.latitude, this.anomaly.longitude] as L.LatLngExpression;
     //   this.isFalse = this.anomaly.isFalse;
     //   this.isFixed = this.anomaly.isFixed;
-    //   console.log("anomaly loaded: " + (this.anomaly as Anomaly));
-    //   console.log("fixed: " + this.isFixed);
-    //   console.log("false: " + this.isFalse);
-    // });
+      // console.log("anomaly loaded: " + (this.anomaly as Anomaly));
+      // console.log("fixed: " + this.isFixed);
+      // console.log("false: " + this.isFalse);
+    //});
     
-    this.anomaly = data.anomalies.find(a => a.id == this.anomalyId) || {} as Anomaly;
-    this.center = [this.anomaly.latitude, this.anomaly.longitude] as L.LatLngExpression;
-    this.isFalse = this.anomaly.isFalse;
-    this.isFixed = this.anomaly.isFixed;
+    // this.anomaly = data.anomalies.find(a => a.id == this.anomalyId) || {} as Anomaly;
+    // this.center = [this.anomaly.latitude, this.anomaly.longitude] as L.LatLngExpression;
+    // this.isFalse = this.anomaly.isFalse;
+    // this.isFixed = this.anomaly.isFixed;
 
 
   }

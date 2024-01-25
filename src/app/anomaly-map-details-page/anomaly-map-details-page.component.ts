@@ -40,7 +40,7 @@ export class AnomalyMapDetailsPageComponent implements OnInit{
     countryId: 0,
     anomalyTypeId: 0,
     signId: 0,
-    count: 0
+    count: 1
   };
 
   anomalyId: number = 0;
