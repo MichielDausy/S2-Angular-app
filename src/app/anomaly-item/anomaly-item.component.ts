@@ -1,4 +1,4 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, Input, OnChanges, OnInit, SimpleChanges } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Train } from '../Models/train';
 import { Anomaly } from '../Models/anomaly';
@@ -17,7 +17,7 @@ import { data } from '../Models/mockdata';
 })
 
 
-export class AnomalyItemComponent implements OnInit{
+export class AnomalyItemComponent implements OnInit, OnChanges{
 
   @Input() train : Train = {id: 0, name: ""};
   @Input() anomalies : Anomaly[] = [];
@@ -28,6 +28,24 @@ export class AnomalyItemComponent implements OnInit{
   trainAnomalies: Anomaly[] = [];
   $index: any;
 
+  ngOnChanges(changes: SimpleChanges): void {
+    if ('anomalies' in changes || 'type' in changes || 'selectedTrain' in changes) {
+      console.log('AnomalyItemComponent: Input properties changed, updating data.');
+      this.updateAnomalies();
+    }
+  }
+
+  private updateAnomalies() {
+    console.log('All Anomalies:', this.anomalies);
+
+    if (this.type === 'all') {
+      this.trainAnomalies = this.anomalies.filter(a => a.trainId === this.train.id);
+    } else {
+      this.trainAnomalies = this.anomalies.filter(
+        a => a.trainId === this.train.id && a.anomalyTypeId === this.getAnomalyTypesId(this.type)
+      );
+    }
+  }
 
   convertLatitudeToDegreesMinutesSeconds(latitude: number): string {
     const latDirection = latitude >= 0 ? 'N' : 'S';
@@ -90,6 +108,7 @@ export class AnomalyItemComponent implements OnInit{
   
 
   ngOnInit(): void {
+    console.log('All Anomalies:', this.anomalies);
     this.trainAnomalies = this.anomalies;
     if(this.type === "all"){
       this.trainAnomalies = this.anomalies.filter(a => a.trainId == this.train.id);
