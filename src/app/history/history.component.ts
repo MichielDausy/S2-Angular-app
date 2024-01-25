@@ -88,6 +88,7 @@ export class HistoryComponent implements OnInit{
  }
 
   ngOnInit(): void {
+   
    // this.service.getTrainTracks().subscribe(tracks => {
    //    this.tracks = tracks;
    //    this.sortTracksByAnomalyCount();

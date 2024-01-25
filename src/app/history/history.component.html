@@ -119,7 +119,7 @@
 
                 </div>
                 <hr>
-                <div id="day-list" class="list-group-scroll text-sm">
+                <div id="day-list" class="list-group-scroll text-sm overflow-auto h-[69vh]">
                     <ng-container
                         *ngFor="let day of selectedFilter === 'thisWeek' ? getCurrentWeek() : selectedFilter === 'previousWeek' ? getPreviousWeek() : selectedFilter === 'customRange' ? getCustomRange() : []">
                         <div
