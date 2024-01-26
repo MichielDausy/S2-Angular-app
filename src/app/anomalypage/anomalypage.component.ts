@@ -12,13 +12,14 @@ import { Train } from '../Models/train';
 import { Traintrack } from '../Models/traintrack';
 import { Country } from '../Models/country';
 import { Anomalytype } from '../Models/anomalytype';
+import { PageLoaderComponent } from "../page-loader/page-loader.component";
 
 @Component({
-  selector: 'app-anomalypage',
-  standalone: true,
-  imports: [CommonModule, AnomalyItemComponent, FormsModule, MapComponent, RouterLink],
-  templateUrl: './anomalypage.component.html',
-  styleUrls: ['./anomalypage.component.css']
+    selector: 'app-anomalypage',
+    standalone: true,
+    templateUrl: './anomalypage.component.html',
+    styleUrls: ['./anomalypage.component.css'],
+    imports: [CommonModule, AnomalyItemComponent, FormsModule, MapComponent, RouterLink, PageLoaderComponent]
 })
 
 
@@ -30,6 +31,7 @@ export class AnomalypageComponent {
   selectedTypes: string = "all";
   displayList = false;
   noFilteredAnomalies: boolean = false;
+  isLoading: boolean = false;
 
   signs: Sign[] = [];
   trains: Train[] = [];
@@ -37,6 +39,8 @@ export class AnomalypageComponent {
   anomalies: Anomaly[] = [];
   countries: Country[] = [];
   anomalyTypes: Anomalytype[] = [];
+  sortedTracks: Traintrack[] = [];
+
 
   constructor(private router: Router, private service: Service) { }
 
@@ -55,18 +59,57 @@ export class AnomalypageComponent {
     this.router.navigate(['/anomaly/map']);
   }
 
-  sortedTracks: Traintrack[] = [];
 
-  private sortTracksByAnomalyCount(): void {
-    if (this.tracks.length > 0 && this.anomalies.length > 0) {
-      this.sortedTracks = this.tracks.slice().sort((trackA, trackB) => {
+  countryAnomalies = [{
+    id: 1,
+    timestamp: new Date(),
+    longitude: 0,
+    latitude: 0,
+    photo: "photo1",
+    isFixed: false,
+    isFalse: false,
+    trainId: 1,
+    trainTrackId: 1,
+    countryId: 1,
+    anomalyTypeId: 1,
+    signId: 1,
+    count: 1
+  }] as Anomaly[];
+
+
+   ngOnInit(): void {
+    this.getData();
+  }
+
+  getData(): void {
+      this.isLoading = true;
+      this.service.getTrainTracks().subscribe(tracks => {
+      this.tracks = tracks;
+    });
+      this.service.getAnomalies().subscribe(anomalies => {
+      this.anomalies = anomalies;
+      this.sortTracksByAnomalyCount();
+      this.isLoading = false;
+    });
+  }
+  
+  private sortTracksByAnomalyCount(sortedTracks?: Traintrack[]): void {
+    if (sortedTracks === undefined) {
+      if (this.tracks.length > 0 && this.anomalies.length > 0) {
+        this.sortedTracks = this.tracks.slice().sort((trackA, trackB) => {
+          const countA = this.getAnomaliesForTrack(trackA.id).length;
+          const countB = this.getAnomaliesForTrack(trackB.id).length;
+          return countB - countA;
+        });
+      }
+    } else if (sortedTracks !== undefined){
+      this.sortedTracks = sortedTracks.slice().sort((trackA, trackB) => {
         const countA = this.getAnomaliesForTrack(trackA.id).length;
         const countB = this.getAnomaliesForTrack(trackB.id).length;
         return countB - countA;
       });
     }
   }
-
 
   getAnomalyTypesId(typeName: string): number | undefined {
     const type = this.anomalyTypes.find(c => c.name.toLowerCase() === typeName.toLowerCase());
@@ -102,25 +145,38 @@ export class AnomalypageComponent {
   //   return country?.id;
   // }
 
-  // getAnomaliesByTrainAndCountry(trainId: number , countryName: string, typeName: string): Anomaly[] {
-  //   if (countryName === "all" && typeName=== "all") {
-  //     return this.anomalies;
-  //   }
-  //   else{
-  //     const countryId = this.getCountryId(countryName);
-  //     const typeId = this.getTypesId(typeName);
-  //     return this.anomalies.filter(a => 
-  //       (countryName === "all" || a.countryId === countryId) &&
-  //       (typeName === "all" || a.anomalyTypeId === typeId)
-  //     );
-  //   }
-  // }
+//   getCountryId(countryName: string): number | undefined {
+//     const country = this.countries.find(c => c.name.toLowerCase() === countryName.toLowerCase());
+//     console.log(country);
+//     return country?.id;
+//  }
+//  getTypesId(typeName: string): number | undefined {
+//   const country = this.anomalyTypes.find(c => c.name.toLowerCase() === typeName.toLowerCase());
+//       console.log(country);
+//   return country?.id;
+// }
 
+// getAnomaliesByTrainAndCountry(trainId: number , countryName: string, typeName: string): Anomaly[] {
+//   if (countryName === "all" && typeName=== "all") {
+//     return this.anomalies;
+//   }
+//   else{
+//     const countryId = this.getCountryId(countryName);
+//     const typeId = this.getTypesId(typeName);
+//     return this.anomalies.filter(a => 
+//       (countryName === "all" || a.countryId === countryId) &&
+//       (typeName === "all" || a.anomalyTypeId === typeId)
+//     );
+//   }
+// }
 
   ngOnChanges(changes: SimpleChanges): void {
-    console.log('ngOnChanges called', changes);
+    //console.log('ngOnChanges called', changes);
     if (changes['selectedCountry']) {
       const countryId = this.getCountryId(this.selectedCountry);
+    }
+    if (changes['tracks'] || changes['anomalies']) {
+      this.sortTracksByAnomalyCount();
     }
   }
 
@@ -136,6 +192,8 @@ export class AnomalypageComponent {
   }
   // ngOnChanges(changes: SimpleChanges): void {
   //    console.log('ngOnChanges called', changes);
+noFilteredAnomalies: boolean = false; // Voeg deze regel toe aan de variabele sectie van je component
+
 
   //    const countryChange = changes['selectedCountry'];
   //    const typeChange = changes['selectedTypes'];
@@ -167,12 +225,12 @@ export class AnomalypageComponent {
   //    return filteredAnomalies;
   //  }
 
-  onSearchNameChange(value: string) {
+onSearchNameChange(value: string) {
+    this.isLoading = true;
     this.searchName = value;
-    this.sortedTracks = this.tracks.filter(track => track.name.toLowerCase().includes(this.searchName.toLowerCase()));
-
+    this.sortTracksByAnomalyCount(this.tracks.filter(track => track.name.toLowerCase().includes(this.searchName.toLowerCase())));
     // For search result -> 'No results found'
     this.noFilteredAnomalies = !this.sortedTracks.some(track => this.getAnomaliesForTrack(track.id).length > 0);
-
+    this.isLoading = false;
   }
 }

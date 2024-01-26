@@ -57,7 +57,7 @@
   </div>
   <div>
     <div class="grid grid-cols-7 gap-7">
-      <div class="col-span-6">
+      <div class="col-span-6 mt-4">
         <div class="relative md:flex md:items-center">
           <input [(ngModel)]="searchName" name="searchName" type="text" id="searchName"
             class="mb-3 rounded-lg border block flex-1 mx-auto w-1/2 md:mx-0 text-sm p-2.5 bg-gray-100 border-gray-600 placeholder-gray-700 focus:outline-none"
@@ -69,6 +69,11 @@
           </p>
           }
         </div>
+        @if (isLoading) {
+            <div class="flex items-center justify-center h-full">
+                <app-page-loader></app-page-loader>
+              </div>
+        }
         <div class="anomaly-items-container">
           <div *ngFor="let track of sortedTracks">
             <ng-container *ngIf="getAnomaliesForTrack(track.id).length > 0">
