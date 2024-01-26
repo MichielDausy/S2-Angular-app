@@ -109,37 +109,24 @@ export class AnomalypageComponent {
     return country?.id;
   }
 
-  onCountryChange(event: Event) {
-    const selectedValue = (event.target as HTMLSelectElement).value;
-    this.selectedCountry = selectedValue;
-    this.applyFilters();
-    console.log(selectedValue);
-  }
-  
-  onTypesChange(event: Event) {
-    const selectedValue = (event.target as HTMLSelectElement).value;
-    this.selectedTypes = selectedValue;
-    this.sortTracksByAnomalyCount();
-    console.log(selectedValue);
-  }
-  
-  applyFilters(): void {
-//     console.log("Countries array: ", this.countries);
-// console.log("Anomaly Types array: ", this.anomalyTypes);
-
-    this.filteredAnomalies = this.anomalies.filter(anomaly => {
-      const matchesCountry = this.selectedCountry === 'all' || anomaly.countryId === this.getCountryId(this.selectedCountry);
-      const matchesType = this.selectedTypes === 'all' || anomaly.anomalyTypeId === this.getTypesId(this.selectedTypes);
-      console.log("matchesCountry", matchesCountry);
-      console.log("matchesType", matchesType);
-      return matchesCountry && matchesType;
-    });
-    this.sortTracksByAnomalyCount();
-  }
-
   
   getAnomaliesForTrack(trackId: number): Anomaly[] {
-    return this.anomalies.filter(anomaly => anomaly.trainTrackId === trackId);
+    if(this.selectedCountry !== "all") {
+      if(this.selectedTypes !== "all") {
+        return this.anomalies.filter(anomaly => anomaly.trainTrackId === trackId && anomaly.countryId === this.getCountryId(this.selectedCountry) && anomaly.anomalyTypeId === this.getTypesId(this.selectedTypes));
+      }
+      else{
+        return this.anomalies.filter(anomaly => anomaly.trainTrackId === trackId && anomaly.countryId === this.getCountryId(this.selectedCountry));
+      }
+    }
+    else{
+      if(this.selectedTypes !== "all") {
+        return this.anomalies.filter(anomaly => anomaly.trainTrackId === trackId && anomaly.anomalyTypeId === this.getTypesId(this.selectedTypes));
+      }
+      else{
+        return this.anomalies.filter(anomaly => anomaly.trainTrackId === trackId);
+      }
+    }
   }
 
   onSearchNameChange(value: string) {

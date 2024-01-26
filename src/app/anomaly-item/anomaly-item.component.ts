@@ -23,8 +23,6 @@ export class AnomalyItemComponent implements OnInit{
   @Input() anomalies : Anomaly[] = [];
   @Input() train: Train = {id: 0, name: ""};
   @Input() selectedDay: string = "";
-  //@Input() selectedTrain: number = -1;
-  //trackAnomalies: Anomaly[] = [];
 
   
 
