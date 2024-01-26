@@ -12,6 +12,7 @@ import { Train } from '../Models/train';
 import { ToastrService } from 'ngx-toastr';
 import { Service } from '../Service/service';
 import { Traintrack } from '../Models/traintrack';
+import { Country } from '../Models/country';
 
 @Component({
    selector: 'app-history',
@@ -25,18 +26,22 @@ export class HistoryComponent implements OnInit{
    selectedCountry: string = "all";
    selectedFilter: string = '';
    selectedTrain: number = -1;
-   selectedDay: string | null = null;
+   selectedDay: string = "";
    rangeDates: Date[] = [new Date(), new Date()];
    showModal: boolean = false;
    modalAnomaly: Anomaly = {} as Anomaly;
-
+   countries: Country[] = []; 
+   trains: Train[] = [];
+   anomalies: Anomaly[] = [];
+   tracks: Traintrack[] = [];
+   
 
    selectDay(day: string) {
       this.selectedDay = day;
    }
 
    onTrainClick(trainIndex: number) {
-      this.selectedDay = null;
+      this.selectedDay = "";
       this.selectedFilter = '';
       this.rangeDates = [new Date(), new Date()];
 
@@ -75,31 +80,61 @@ export class HistoryComponent implements OnInit{
    private sortTracksByAnomalyCount(): void {
     if (this.tracks.length > 0 && this.anomalies.length > 0) {
       this.sortedTracks = this.tracks.slice().sort((trackA, trackB) => {
-        const countA = this.getAnomaliesForTrack(trackA.id).length;
-        const countB = this.getAnomaliesForTrack(trackB.id).length;
+        const countA = this.getAnomaliesForTrack(trackA.id,this.selectedTrain, this.selectedDay || "").length;
+        const countB = this.getAnomaliesForTrack(trackB.id, this.selectedTrain, this.selectedDay || "").length;
         return countB - countA;
       });
     }
   }
 
 
-  getAnomaliesForTrack(trackId: number): Anomaly[] {
-   return this.anomalies.filter(anomaly => anomaly.trainTrackId === trackId);
- }
+  getAnomaliesForTrack(trackId: number, trainId: number, date: string): Anomaly[] {
+   const filterDate = date ? new Date(date) : this.selectedDay;
+
+   if (trainId === -1) {
+      return this.anomalies.filter(anomaly => anomaly.trainTrackId === trackId);
+   } else {
+
+      if (date !== "") {
+         const filterDate = new Date(date);
+         return this.anomalies.filter(anomaly => {
+            const anomalyDate = new Date(anomaly.timestamp);
+            return (
+               anomaly.trainTrackId === trackId &&
+               anomaly.trainId == trainId &&
+               this.isSameDay(anomalyDate, filterDate)
+            );
+         });
+      } else {
+         return this.anomalies.filter(anomaly =>
+            anomaly.trainTrackId === trackId &&
+            anomaly.trainId === trainId
+         );
+      }
+   }
+}
+
+   private isSameDay(date1: Date, date2: Date): boolean {
+      return (
+         date1.getFullYear() === date2.getFullYear() &&
+         date1.getMonth() === date2.getMonth() &&
+         date1.getDate() === date2.getDate()
+      );
+   }
 
   ngOnInit(): void {
-   // this.service.getTrainTracks().subscribe(tracks => {
-   //    this.tracks = tracks;
-   //    this.sortTracksByAnomalyCount();
-   //  });
-   //  this.service.getAnomalies().subscribe(anomalies => {
-   //    this.anomalies = anomalies;
-   //    this.sortTracksByAnomalyCount();
-   //  });
-   this.tracks = data.trainTracks;
-   this.sortTracksByAnomalyCount();
-   this.anomalies = data.anomalies;
-   this.sortTracksByAnomalyCount();
+    this.service.getTrainTracks().subscribe(tracks => {
+       this.tracks = tracks;
+       this.sortTracksByAnomalyCount();
+     });
+     this.service.getAnomalies().subscribe(anomalies => {
+       this.anomalies = anomalies;
+       this.sortTracksByAnomalyCount();
+     });
+     this.service.getTrains().subscribe(trains => this.trains = trains);
+     this.service.getCountries().subscribe(countries => this.countries = countries);
+
+
   }
 
    changeMode() {
@@ -151,48 +186,4 @@ export class HistoryComponent implements OnInit{
   
       return dates;
   }
-
-   getCountryId(countryName: string): number | undefined {
-      const country = this.countries.find(c => c.name.toLowerCase() === countryName.toLowerCase());
-      return country?.id;
-   }
-
-   getTrainById(trainId: number): Train {
-      const train = this.trains.find(t => t.id === trainId);
-      return train as Train;
-   }
-   
-   getAllAnomaliesByCountryAndDay(selectedTrainId: number, selectedCountry: string, selectedDay: string): Anomaly[] {
-      const filteredAnomalies: Anomaly[] = [];
-   
-      const trainAnomalies = this.anomalies.filter(anomaly => anomaly.trainId === selectedTrainId);
-   
-      const countryId = selectedCountry === 'all' ? undefined : this.getCountryId(selectedCountry);
-      const countryAnomalies = trainAnomalies.filter(anomaly => {
-         return countryId === undefined || anomaly.countryId === countryId;
-      });
-   
-      if (selectedDay) {
-         const selectedDate = new Date(selectedDay);
-         const filteredAnomaliesByDay = countryAnomalies.filter(anomaly => {
-            const anomalyDate = new Date(anomaly.timestamp);
-            return anomalyDate.toISOString().split('T')[0] === selectedDate.toISOString().split('T')[0];
-         });
-         filteredAnomalies.push(...filteredAnomaliesByDay);
-      } else {
-         filteredAnomalies.push(...countryAnomalies);
-      }
-
-      const fixedAnomalies = filteredAnomalies.filter(anomaly => anomaly.isFixed);
-
-      console.log("train: " + selectedTrainId + ", country: " + selectedCountry + ", day: " + selectedDay);
-      return fixedAnomalies;
-    
-   }
-
-
-   countries = data.countries;
-   trains = data.trains;
-   anomalies = data.anomalies;
-   tracks = data.trainTracks;
 }

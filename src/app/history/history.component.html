@@ -107,8 +107,6 @@
 
                 </div>
                 <div *ngIf="selectedFilter === 'customRange'" class="h-20 w-45 ">
-                    <p-calendar [(ngModel)]="rangeDates" [readonlyInput]="true" selectionMode="range"
-                        class="h-full w-auto text-base border border-1 rounded mx-auto">date</p-calendar>
                 </div>
                 <hr>
                 <div id="day-list" class="list-group-scroll text-sm">
@@ -131,9 +129,9 @@
     <div class="w-3/4">
         <div class="px-7">
             <div *ngFor="let track of sortedTracks">
-                <ng-container *ngIf="getAnomaliesForTrack(track.id).length > 0">
+                <ng-container *ngIf="getAnomaliesForTrack(track.id, selectedTrain, selectedDay).length > 0">
                   <app-anomaly-item [track]="track"
-                    [anomalies]="getAnomaliesForTrack(track.id)"
+                    [anomalies]="getAnomaliesForTrack(track.id, selectedTrain, selectedDay)"
                     ></app-anomaly-item>
                 </ng-container>
             </div>
