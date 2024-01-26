@@ -18,7 +18,7 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 @Component({
    selector: 'app-history-map',
    standalone: true,
-   imports: [CommonModule, AnomalyItemComponent, FormsModule, MapComponent, RouterLink, CalendarModule, MatDatepickerModule, MatFormFieldModule, MatNativeDateModule],
+   imports: [CommonModule, AnomalyItemComponent, FormsModule, MapComponent, RouterLink, CalendarModule, MatDatepickerModule, MatNativeDateModule, MatFormFieldModule],
    templateUrl: './history-map.component.html',
    styleUrl: './history-map.component.css'
 })
@@ -32,7 +32,7 @@ export class HistoryMapComponent {
 
    selectedFilter: string = '';
    selectedTrain: number = -1;
-   selectedDay: string | null = null;
+   selectedDay: string ="";
    rangeDates: Date[] = [new Date(), new Date()];
 
    selectedCountry: string = "all";
@@ -103,7 +103,7 @@ export class HistoryMapComponent {
 
 
    onTrainClick(trainIndex: number) {
-      this.selectedDay = null;
+      this.selectedDay = "";
       this.selectedFilter = '';
       this.rangeDates = [new Date(), new Date()];
 
@@ -111,43 +111,11 @@ export class HistoryMapComponent {
          this.selectedTrain = -1;
       } else {
          this.selectedTrain = trainIndex;
-         this.onTrainDayChange(this.selectedTrain, '');
-      }
-   }
-
-   onTrainDayChange(selectedTrainId: number, selectedDay: string): void {
-      if (selectedTrainId !== -1) {
-         // Als er een trein is geselecteerd, toon alle gefixte anomalieën voor die trein
-         this.filteredAnomalies = this.getAllFixedAnomaliesByTrain(selectedTrainId);
-         console.log('filteredAnomalies voor geselecteerde trein:', this.filteredAnomalies);
-      }
-      // Controleer of er een geselecteerde datum is
-      if (selectedDay) {
-         const anomalies = this.getAllAnomaliesByTrainAndDay(selectedTrainId, selectedDay);
-
-         // Controleer of er resultaten zijn voordat je filteredAnomalies toewijst
-         if (anomalies.length > 0) {
-            this.filteredAnomalies = anomalies;
-            // console.log('filteredAnomalies:', this.filteredAnomalies);
-         } else {
-            // Geen resultaten, toon geen anomalies
-            this.filteredAnomalies = null;
-            // console.log('Geen anomalies gevonden.');
-         }
-      }
-
-      // Als er geen overeenkomende anomalieën zijn, toon geen gefixte anomalieën
-      if (!this.filteredAnomalies || this.filteredAnomalies.length === 0) {
-         this.fixedAnomalies = [];
-         // console.log('Geen overeenkomende anomalieën, toon geen gefixte anomalieën.');
-      } else {
-         this.fixedAnomalies = this.getAllFixedAnomalies();
       }
    }
 
    selectDay(day: string): void {
       this.selectedDay = day;
-      this.onTrainDayChange(this.selectedTrain, this.selectedDay);
    }
 
    getCurrentWeek(): string[] {
@@ -188,30 +156,43 @@ export class HistoryMapComponent {
          const date = new Date(start.getFullYear(), start.getMonth(), i);
          dates.push(date.toISOString().split('T')[0]);
       }
-
       return dates;
    }
 
 
 
-   getAllAnomaliesByTrainAndDay(selectedTrainId: number, selectedDay: string): Anomaly[] {
-      const trainAnomalies = this.anomalies.filter(anomaly => anomaly.trainId === selectedTrainId);
-      console.log(trainAnomalies, "trainanomalies");
-
-      if (!selectedDay) {
-         console.log("Yes geen date");
-         return trainAnomalies.length > 0 ? trainAnomalies : [];
+   getAnomaliesForTrack(trainId: number, date: string): Anomaly[] {
+      const filterDate = date ? new Date(date) : this.selectedDay;
+   
+      if (trainId === -1) {
+         return this.anomalies.filter(anomaly => anomaly.isFixed === true);
+      } else {
+   
+         if (date !== "") {
+            const filterDate = new Date(date);
+            return this.anomalies.filter(anomaly => {
+               const anomalyDate = new Date(anomaly.timestamp);
+               return (
+                  anomaly.trainId == trainId &&
+                  anomaly.isFixed === true &&
+                  this.isSameDay(anomalyDate, filterDate)
+               );
+            });
+         } else {
+            return this.anomalies.filter(anomaly =>
+               anomaly.trainId === trainId && 
+               anomaly.isFixed === true
+            );
+         }
       }
-
-      const selectedDate = new Date(selectedDay);
-      const filteredAnomaliesByDay = trainAnomalies.filter(anomaly => {
-         const anomalyDate = new Date(anomaly.timestamp);
-         return anomalyDate.toISOString().split('T')[0] === selectedDate.toISOString().split('T')[0];
-      });
-
-      const result = filteredAnomaliesByDay.filter(anomaly => anomaly.isFixed);
-      console.log('Filtered anomalies:', result);
-      return result;
    }
+   
+      private isSameDay(date1: Date, date2: Date): boolean {
+         return (
+            date1.getFullYear() === date2.getFullYear() &&
+            date1.getMonth() === date2.getMonth() &&
+            date1.getDate() === date2.getDate()
+         );
+      }
 
 }

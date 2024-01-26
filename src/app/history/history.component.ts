@@ -14,12 +14,13 @@ import { Traintrack } from '../Models/traintrack';
 import { Sign } from '../Models/sign';
 import { Country } from '../Models/country';
 import { Anomalytype } from '../Models/anomalytype';
+import { PageLoaderComponent } from '../page-loader/page-loader.component';
 
 
 @Component({
    selector: 'app-history',
    standalone: true,
-   imports: [CommonModule, AnomalyItemComponent, FormsModule, RouterLink, MatDatepickerModule, MatNativeDateModule, MatFormFieldModule],
+   imports: [CommonModule, AnomalyItemComponent, FormsModule, RouterLink, MatDatepickerModule, MatNativeDateModule, MatFormFieldModule, PageLoaderComponent],
    templateUrl: './history.component.html',
    styleUrl: './history.component.css'
 })
@@ -32,47 +33,21 @@ export class HistoryComponent implements OnInit {
    rangeDates: Date[] = [new Date(), new Date()];
    showModal: boolean = false;
    modalAnomaly: Anomaly = {} as Anomaly;
+   searchName: string = '';
   
    sortedTracks: Traintrack[] = [];
 
-   signs: Sign[] = [];
+   //signs: Sign[] = [];
    trains: Train[] = [];
    tracks: Traintrack[] = [];
    anomalies: Anomaly[] = [];
    countries: Country[] = [];
    anomalyTypes: Anomalytype[] = [];
+   
+  noFilteredAnomalies: boolean = false;
+  isLoading: boolean = false;
 
    constructor(private router: Router, private toastr: ToastrService, private service: Service) { }
-
-   ngOnInit(): void {
-
-      this.service.getTrains().subscribe(trains => {
-         this.trains = trains;
-         // Stel de standaard geselecteerde trein in op -1 om aan te geven dat er geen specifieke trein is geselecteerd
-         // this.selectedTrain = -1;
-      });
-
-      this.service.getTrainTracks().subscribe(tracks => {
-         this.tracks = tracks;
-         this.sortTracksByAnomalyCount();
-      });
-
-      this.service.getAnomalies().subscribe(anomalies => {
-         // Filter alleen de gefixte anomalieën
-         this.anomalies = anomalies.filter(anomaly => anomaly.isFixed === true);
-         this.sortTracksByAnomalyCount();
-      });
-
-      this.service.getCountries().subscribe(countries => {
-         this.countries = countries;
-      });
-
-      this.service.getAnomalyTypes().subscribe(anomalyTypes => {
-         this.anomalyTypes = anomalyTypes;
-      });
-
-      this.sortTracksByAnomalyCount();
-   }
    
    selectDay(day: string) {
       this.selectedDay = day;
@@ -111,21 +86,28 @@ export class HistoryComponent implements OnInit {
    }
 
    private sortTracksByAnomalyCount(): void {
-    if (this.tracks.length > 0 && this.anomalies.length > 0) {
-      this.sortedTracks = this.tracks.slice().sort((trackA, trackB) => {
-        const countA = this.getAnomaliesForTrack(trackA.id,this.selectedTrain, this.selectedDay || "").length;
-        const countB = this.getAnomaliesForTrack(trackB.id, this.selectedTrain, this.selectedDay || "").length;
-        return countB - countA;
-      });
+      if (this.tracks.length > 0 && this.anomalies.length > 0) {
+        this.sortedTracks = this.tracks
+          .filter(track => track.name.toLowerCase().includes(this.searchName.toLowerCase()))
+          .sort((trackA, trackB) => {
+            const countA = this.getAnomaliesForTrack(trackA.id, this.selectedTrain, this.selectedDay || "").length;
+            const countB = this.getAnomaliesForTrack(trackB.id, this.selectedTrain, this.selectedDay || "").length;
+    
+            if (countB !== countA) {
+              return countB - countA;
+            } else {
+              return trackA.name.localeCompare(trackB.name);
+            }
+          });
+      }
     }
-  }
 
 
   getAnomaliesForTrack(trackId: number, trainId: number, date: string): Anomaly[] {
    const filterDate = date ? new Date(date) : this.selectedDay;
 
    if (trainId === -1) {
-      return this.anomalies.filter(anomaly => anomaly.trainTrackId === trackId);
+      return this.anomalies.filter(anomaly => anomaly.trainTrackId === trackId && anomaly.isFixed === true);
    } else {
 
       if (date !== "") {
@@ -135,13 +117,15 @@ export class HistoryComponent implements OnInit {
             return (
                anomaly.trainTrackId === trackId &&
                anomaly.trainId == trainId &&
+               anomaly.isFixed === true &&
                this.isSameDay(anomalyDate, filterDate)
             );
          });
       } else {
          return this.anomalies.filter(anomaly =>
             anomaly.trainTrackId === trackId &&
-            anomaly.trainId === trainId
+            anomaly.trainId === trainId && 
+            anomaly.isFixed === true
          );
       }
    }
@@ -154,19 +138,37 @@ export class HistoryComponent implements OnInit {
          date1.getDate() === date2.getDate()
       );
    }
+  
+  ngOnInit(): void {
+    this.getData();
+  }
 
-//   ngOnInit(): void {
-//     this.service.getTrainTracks().subscribe(tracks => {
-//        this.tracks = tracks;
-//        this.sortTracksByAnomalyCount();
-//      });
-//      this.service.getAnomalies().subscribe(anomalies => {
-//        this.anomalies = anomalies;
-//        this.sortTracksByAnomalyCount();
-//      });
-//      this.service.getTrains().subscribe(trains => this.trains = trains);
-//      this.service.getCountries().subscribe(countries => this.countries = countries);
-//   }
+   getData(): void {
+      this.isLoading = true;
+         this.service.getTrainTracks().subscribe(tracks => {
+         this.tracks = tracks;
+         this.sortTracksByAnomalyCount();
+      });
+      this.service.getAnomalies().subscribe(anomalies => {
+         this.anomalies = anomalies;
+         this.sortTracksByAnomalyCount();
+      });
+      this.service.getTrains().subscribe(trains => {
+         this.trains = trains;
+         this.sortTracksByAnomalyCount();
+         this.isLoading = false;
+      });
+   }
+
+   onSearchNameChange(value: string) {
+      this.isLoading = true;
+      this.searchName = value;
+      this.sortTracksByAnomalyCount();
+      console.log("searchName: " + this.searchName);
+      // For search result -> 'No results found'
+      this.noFilteredAnomalies = !this.sortedTracks.some(track => this.getAnomaliesForTrack(track.id, this.selectedTrain, this.selectedDay).length > 0);
+      this.isLoading = false;
+    }
   
    changeMode() {
       this.router.navigate(['/history/map']);
@@ -222,10 +224,10 @@ export class HistoryComponent implements OnInit {
       return country?.id;
    }
 
-   getTrainById(trainId: number): Train {
-      const train = this.trains.find(t => t.id === trainId);
-      return train as Train;
-   }
+   // getTrainById(trainId: number): Train {
+   //    const train = this.trains.find(t => t.id === trainId);
+   //    return train as Train;
+   // }
 
    getAllAnomaliesByCountryAndDay(selectedTrainId: number, selectedCountry: string, selectedDay: string): Anomaly[] {
       const filteredAnomalies: Anomaly[] = [];

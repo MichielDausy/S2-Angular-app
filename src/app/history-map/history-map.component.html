@@ -28,7 +28,7 @@
                 Select railway asset
             </div>
             <div class="p-0  d-flex">
-                <ul class="overflow-auto h-[87vh] d-inline-block text-xl">
+                <ul class="overflow-auto customScrollBar h-[87vh] d-inline-block text-xl">
                     <div *ngFor="let train of trains; let i = index" style="cursor:pointer"
                         class="relative block px-3 py-3 w-full text-dark bg-white border border-gray-300"
                         id="{{ train.id }}" (click)="onTrainClick(train.id)"
@@ -45,7 +45,7 @@
             <div class="p-2">
                 <div class="mb-2">
                     <select
-                        class="appearance-none bg-white border border-gray-300 py-2 px-4 leading-tight text-sm rounded-md my-auto"
+                        class="appearance-none bg-white border border-gray-300 py-2 px-4 leading-tight text-sm rounded-md my-auto mx-auto w-full"
                         id="filter-select" [(ngModel)]="selectedFilter">
                         <option value="" disabled>Select Date</option>
                         <option value="thisWeek">This week</option>
@@ -66,7 +66,7 @@
                       </mat-form-field>
                 </div>
                 <hr>
-                <div id="day-list" class="list-group-scroll text-sm overflow-auto h-[69vh]">
+                <div id="day-list" class="list-group-scroll text-sm overflow-auto customScrollBar h-[69vh]">
                     <ng-container
                         *ngFor="let day of selectedFilter === 'thisWeek' ? getCurrentWeek() : selectedFilter === 'previousWeek' ? getPreviousWeek() : selectedFilter === 'customRange' ? getCustomRange() : []">
                         <div
@@ -87,9 +87,12 @@
 
     <div class="w-3/4">
         <div class="mx-auto" *ngIf="anomalies && anomalies.length > 0">
-            <div class="relative overflow-hidden">
-                <app-map class="" [anomalies]="getAnomaliesByCountry(selectedCountry, selectedTypes)" [height]="'92.1vh'"
+            <div class="relative overflow-hidden customScrollBar">
+                
+                <!-- Map -->
+                <app-map class="" [anomalies]="getAnomaliesForTrack(selectedTrain, selectedDay)" [height]="'92.1vh'"
                 [width]="'100%'" [center]="center" [isDetails]="false" [trainTracks]="tracks"/>
+
                 <div class="md:mt-4 absolute bottom-6 left-3 z-10 rounded p-1">
                     <img src="../../assets/RoT_icon_blue.png" alt="" class="h-12 w-auto">
                 </div>
