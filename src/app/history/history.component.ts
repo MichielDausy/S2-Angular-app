@@ -43,36 +43,6 @@ export class HistoryComponent implements OnInit {
    anomalyTypes: Anomalytype[] = [];
 
    constructor(private router: Router, private toastr: ToastrService, private service: Service) { }
-
-   ngOnInit(): void {
-
-      this.service.getTrains().subscribe(trains => {
-         this.trains = trains;
-         // Stel de standaard geselecteerde trein in op -1 om aan te geven dat er geen specifieke trein is geselecteerd
-         // this.selectedTrain = -1;
-      });
-
-      this.service.getTrainTracks().subscribe(tracks => {
-         this.tracks = tracks;
-         this.sortTracksByAnomalyCount();
-      });
-
-      this.service.getAnomalies().subscribe(anomalies => {
-         // Filter alleen de gefixte anomalieën
-         this.anomalies = anomalies.filter(anomaly => anomaly.isFixed === true);
-         this.sortTracksByAnomalyCount();
-      });
-
-      this.service.getCountries().subscribe(countries => {
-         this.countries = countries;
-      });
-
-      this.service.getAnomalyTypes().subscribe(anomalyTypes => {
-         this.anomalyTypes = anomalyTypes;
-      });
-
-      this.sortTracksByAnomalyCount();
-   }
    
    selectDay(day: string) {
       this.selectedDay = day;
@@ -125,7 +95,7 @@ export class HistoryComponent implements OnInit {
    const filterDate = date ? new Date(date) : this.selectedDay;
 
    if (trainId === -1) {
-      return this.anomalies.filter(anomaly => anomaly.trainTrackId === trackId);
+      return this.anomalies.filter(anomaly => anomaly.trainTrackId === trackId && anomaly.isFixed === true);
    } else {
 
       if (date !== "") {
@@ -135,13 +105,15 @@ export class HistoryComponent implements OnInit {
             return (
                anomaly.trainTrackId === trackId &&
                anomaly.trainId == trainId &&
+               anomaly.isFixed === true &&
                this.isSameDay(anomalyDate, filterDate)
             );
          });
       } else {
          return this.anomalies.filter(anomaly =>
             anomaly.trainTrackId === trackId &&
-            anomaly.trainId === trainId
+            anomaly.trainId === trainId && 
+            anomaly.isFixed === true
          );
       }
    }
