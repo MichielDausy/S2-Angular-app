@@ -123,18 +123,18 @@ export class AnomalypageComponent {
   getAnomaliesForTrack(trackId: number): Anomaly[] {
     if(this.selectedCountry !== "all") {
       if(this.selectedTypes !== "all") {
-        return this.anomalies.filter(anomaly => anomaly.trainTrackId === trackId && anomaly.countryId === this.getCountryId(this.selectedCountry) && anomaly.anomalyTypeId === this.getTypesId(this.selectedTypes));
+        return this.anomalies.filter(anomaly => anomaly.trainTrackId === trackId && anomaly.countryId === this.getCountryId(this.selectedCountry) && anomaly.anomalyTypeId === this.getTypesId(this.selectedTypes) && anomaly.isFixed === false);
       }
       else{
-        return this.anomalies.filter(anomaly => anomaly.trainTrackId === trackId && anomaly.countryId === this.getCountryId(this.selectedCountry));
+        return this.anomalies.filter(anomaly => anomaly.trainTrackId === trackId && anomaly.countryId === this.getCountryId(this.selectedCountry) && anomaly.isFixed === false);
       }
     }
     else{
       if(this.selectedTypes !== "all") {
-        return this.anomalies.filter(anomaly => anomaly.trainTrackId === trackId && anomaly.anomalyTypeId === this.getTypesId(this.selectedTypes));
+        return this.anomalies.filter(anomaly => anomaly.trainTrackId === trackId && anomaly.anomalyTypeId === this.getTypesId(this.selectedTypes) && anomaly.isFixed === false);
       }
       else{
-        return this.anomalies.filter(anomaly => anomaly.trainTrackId === trackId);
+        return this.anomalies.filter(anomaly => anomaly.trainTrackId === trackId && anomaly.isFixed === false);
       }
     }
   }
