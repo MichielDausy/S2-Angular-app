@@ -15,6 +15,7 @@ import { Sign } from '../Models/sign';
 import { Country } from '../Models/country';
 import { Anomalytype } from '../Models/anomalytype';
 
+
 @Component({
    selector: 'app-history',
    standalone: true,
@@ -27,10 +28,11 @@ export class HistoryComponent implements OnInit {
    selectedCountry: string = "all";
    selectedFilter: string = '';
    selectedTrain: number = -1;
-   selectedDay: string | null = null;
+   selectedDay: string = "";
    rangeDates: Date[] = [new Date(), new Date()];
    showModal: boolean = false;
    modalAnomaly: Anomaly = {} as Anomaly;
+  
    sortedTracks: Traintrack[] = [];
 
    signs: Sign[] = [];
@@ -77,7 +79,7 @@ export class HistoryComponent implements OnInit {
    }
 
    onTrainClick(trainIndex: number) {
-      this.selectedDay = null;
+      this.selectedDay = "";
       this.selectedFilter = '';
       this.rangeDates = [new Date(), new Date()];
 
@@ -109,20 +111,63 @@ export class HistoryComponent implements OnInit {
    }
 
    private sortTracksByAnomalyCount(): void {
-      if (this.tracks.length > 0 && this.anomalies.length > 0) {
-         this.sortedTracks = this.tracks.slice().sort((trackA, trackB) => {
-            const countA = this.getAnomaliesForTrack(trackA.id).length;
-            const countB = this.getAnomaliesForTrack(trackB.id).length;
-            return countB - countA;
+    if (this.tracks.length > 0 && this.anomalies.length > 0) {
+      this.sortedTracks = this.tracks.slice().sort((trackA, trackB) => {
+        const countA = this.getAnomaliesForTrack(trackA.id,this.selectedTrain, this.selectedDay || "").length;
+        const countB = this.getAnomaliesForTrack(trackB.id, this.selectedTrain, this.selectedDay || "").length;
+        return countB - countA;
+      });
+    }
+  }
+
+
+  getAnomaliesForTrack(trackId: number, trainId: number, date: string): Anomaly[] {
+   const filterDate = date ? new Date(date) : this.selectedDay;
+
+   if (trainId === -1) {
+      return this.anomalies.filter(anomaly => anomaly.trainTrackId === trackId);
+   } else {
+
+      if (date !== "") {
+         const filterDate = new Date(date);
+         return this.anomalies.filter(anomaly => {
+            const anomalyDate = new Date(anomaly.timestamp);
+            return (
+               anomaly.trainTrackId === trackId &&
+               anomaly.trainId == trainId &&
+               this.isSameDay(anomalyDate, filterDate)
+            );
          });
+      } else {
+         return this.anomalies.filter(anomaly =>
+            anomaly.trainTrackId === trackId &&
+            anomaly.trainId === trainId
+         );
       }
    }
+}
 
-   getAnomaliesForTrack(trackId: number): Anomaly[] {
-      return this.anomalies.filter(anomaly => anomaly.trainTrackId === trackId);
+   private isSameDay(date1: Date, date2: Date): boolean {
+      return (
+         date1.getFullYear() === date2.getFullYear() &&
+         date1.getMonth() === date2.getMonth() &&
+         date1.getDate() === date2.getDate()
+      );
    }
 
-
+  ngOnInit(): void {
+    this.service.getTrainTracks().subscribe(tracks => {
+       this.tracks = tracks;
+       this.sortTracksByAnomalyCount();
+     });
+     this.service.getAnomalies().subscribe(anomalies => {
+       this.anomalies = anomalies;
+       this.sortTracksByAnomalyCount();
+     });
+     this.service.getTrains().subscribe(trains => this.trains = trains);
+     this.service.getCountries().subscribe(countries => this.countries = countries);
+  }
+  
    changeMode() {
       this.router.navigate(['/history/map']);
    }
