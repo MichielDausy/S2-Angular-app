@@ -133,8 +133,6 @@ export class HistoryComponent implements OnInit{
      });
      this.service.getTrains().subscribe(trains => this.trains = trains);
      this.service.getCountries().subscribe(countries => this.countries = countries);
-
-
   }
 
    changeMode() {

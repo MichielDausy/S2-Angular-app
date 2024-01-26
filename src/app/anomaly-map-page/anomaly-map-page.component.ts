@@ -13,13 +13,15 @@ import { Train } from '../Models/train';
 import { Traintrack } from '../Models/traintrack';
 import { Country } from '../Models/country';
 import { Anomalytype } from '../Models/anomalytype';
+import { PageLoaderComponent } from "../page-loader/page-loader.component";
+import { forkJoin } from 'rxjs';
 
 @Component({
-  selector: 'app-anomaly-map-page',
-  standalone: true,
-  imports: [CommonModule, AnomalyItemComponent, FormsModule, MapComponent, RouterLink],
-  templateUrl: './anomaly-map-page.component.html',
-  styleUrl: './anomaly-map-page.component.css'
+    selector: 'app-anomaly-map-page',
+    standalone: true,
+    templateUrl: './anomaly-map-page.component.html',
+    styleUrls: ['./anomaly-map-page.component.css'],
+    imports: [CommonModule, AnomalyItemComponent, FormsModule, MapComponent, RouterLink, PageLoaderComponent]
 })
 export class AnomalyMapPageComponent implements OnInit{
   signs: Sign[] = [];
@@ -28,6 +30,7 @@ export class AnomalyMapPageComponent implements OnInit{
   anomalies: Anomaly[] = [];
   countries: Country[] = [];
   anomalyTypes: Anomalytype[] = [];
+  isLoading: boolean = false;
 
   constructor(private router: Router, private service: Service) { }
 
@@ -43,22 +46,7 @@ export class AnomalyMapPageComponent implements OnInit{
     // this.service.getSigns().subscribe(signs => {
     //   this.signs = signs;
     // });
-    this.service.getTrains().subscribe(trains => {
-      this.trains = trains;
-    });
-    this.service.getTrainTracks().subscribe(tracks => {
-      this.tracks = tracks;
-    });
-    this.service.getAnomalies().subscribe(anomalies => {
-      this.anomalies = anomalies;
-    });
-    this.service.getCountries().subscribe(countries => {
-      this.countries = countries;
-    });
-    this.service.getAnomalyTypes().subscribe(anomalyTypes => {
-      this.anomalyTypes = anomalyTypes;
-    });
-
+    this.getData();
     // this.signs = data.signs;
     // this.trains = data.trains;
     // this.tracks = data.tracks;
@@ -67,7 +55,37 @@ export class AnomalyMapPageComponent implements OnInit{
     // this.anomalyTypes = data.anomalyTypes;
   }
 
+  getData(): void {
+    this.isLoading = true;
+    console.log(this.isLoading);
+    // Combine multiple observables using forkJoin
+  forkJoin([
+    this.service.getTrains(),
+    this.service.getTrainTracks(),
+    this.service.getAnomalies(),
+    this.service.getCountries(),
+    this.service.getAnomalyTypes()
+  ]).subscribe(
+    ([trains, tracks, anomalies, countries, anomalyTypes]) => {
+      // Assign data to respective properties
+      this.trains = trains;
+      this.tracks = tracks;
+      this.anomalies = anomalies;
+      this.countries = countries;
+      this.anomalyTypes = anomalyTypes;
 
+      // Set isLoading to false as all subscriptions are complete
+      this.isLoading = false;
+      console.log(this.isLoading);
+    },
+    (error) => {
+      console.error('Error loading data:', error);
+      // Handle errors if needed
+      this.isLoading = false; // Ensure isLoading is set to false even on error
+    }
+  );
+  }
+ 
   changeMode() {
      this.router.navigate(['/anomaly/list']);
   }

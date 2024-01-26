@@ -107,9 +107,18 @@
 
                 </div>
                 <div *ngIf="selectedFilter === 'customRange'" class="h-20 w-45 ">
+                    <mat-form-field>
+                        <mat-label>Enter a date range</mat-label>
+                        <mat-datepicker-toggle matIconSuffix [for]="picker"></mat-datepicker-toggle>
+                        <mat-date-range-input [rangePicker]="picker">
+                          <input matStartDate placeholder="Start date" [(ngModel)]="rangeDates[0]">
+                          <input matEndDate placeholder="End date" [(ngModel)]="rangeDates[1]">
+                        </mat-date-range-input>
+                        <mat-date-range-picker #picker></mat-date-range-picker>
+                      </mat-form-field>
                 </div>
                 <hr>
-                <div id="day-list" class="list-group-scroll text-sm">
+                <div id="day-list" class="list-group-scroll text-sm overflow-auto h-[69vh]">
                     <ng-container
                         *ngFor="let day of selectedFilter === 'thisWeek' ? getCurrentWeek() : selectedFilter === 'previousWeek' ? getPreviousWeek() : selectedFilter === 'customRange' ? getCustomRange() : []">
                         <div
