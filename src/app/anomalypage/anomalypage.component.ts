@@ -13,6 +13,7 @@ import { Traintrack } from '../Models/traintrack';
 import { Country } from '../Models/country';
 import { Anomalytype } from '../Models/anomalytype';
 import { PageLoaderComponent } from "../page-loader/page-loader.component";
+import { forkJoin } from 'rxjs';
 
 @Component({
   selector: 'app-anomalypage',
@@ -44,22 +45,32 @@ export class AnomalypageComponent {
   constructor(private router: Router, private service: Service) { }
 
   ngOnInit(): void {
-    this.service.getTrainTracks().subscribe(tracks => {
-      this.tracks = tracks;
-      this.sortTracksByAnomalyCount();
-    });
-    this.service.getAnomalies().subscribe(anomalies => {
-      this.anomalies = anomalies.filter(anomaly => anomaly.isFixed === false);
-      this.sortTracksByAnomalyCount();
-    });
-    this.service.getCountries().subscribe(countries => {
-      this.countries = countries;
-   });
+    this.isLoading = true;
+    forkJoin([
+      this.service.getTrainTracks(),
+      this.service.getAnomalies(),
+      this.service.getCountries(),
+      this.service.getAnomalyTypes()
+    ]).subscribe(
+      ([tracks, anomalies, countries, anomalyTypes]) => {
+        // Assign data to respective properties
+        this.tracks = tracks;
+        this.anomalies = anomalies;
+        this.countries = countries;
+        this.anomalyTypes = anomalyTypes;
 
-   this.service.getAnomalyTypes().subscribe(anomalyTypes => {
-      this.anomalyTypes = anomalyTypes;
-   });
-
+        this.sortTracksByAnomalyCount();
+  
+        // Set isLoading to false as all subscriptions are complete
+        this.isLoading = false;
+        console.log(this.isLoading);
+      },
+      (error) => {
+        console.error('Error loading data:', error);
+        // Handle errors if needed
+        this.isLoading = false; // Ensure isLoading is set to false even on error
+      }
+    );
   }
 
   changeMode() {
@@ -74,7 +85,6 @@ export class AnomalypageComponent {
     this.service.getAnomalies().subscribe(anomalies => {
       this.anomalies = anomalies;
       this.sortTracksByAnomalyCount();
-      this.isLoading = false;
     });
   }
 
