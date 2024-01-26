@@ -5,7 +5,6 @@ import { AnomalyItemComponent } from '../anomaly-item/anomaly-item.component';
 import { FormsModule } from '@angular/forms';
 import { MapComponent } from '../map/map.component';
 import { Router } from '@angular/router';
-import { data } from '../Models/mockdata';
 import { RouterLink } from '@angular/router';
 import { Service } from '../Service/service';
 import { Sign } from '../Models/sign';
@@ -34,7 +33,6 @@ export class AnomalyMapPageComponent implements OnInit{
 
   displayList = false;
   center = [50.85045,4.34878] as L.LatLngExpression;
-
 
   
   ngOnInit(): void {

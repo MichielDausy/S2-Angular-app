@@ -3,9 +3,8 @@ import { CommonModule } from '@angular/common';
 import { Anomaly } from '../Models/anomaly';
 import * as L from 'leaflet';
 import { Router } from '@angular/router';
-import { AnomalypageComponent } from '../anomalypage/anomalypage.component';
 import { Traintrack } from '../Models/traintrack';
-import { GeoJsonObject, GeoJsonProperties, LineString, FeatureCollection } from 'geojson';
+import {  GeoJsonProperties, LineString, FeatureCollection } from 'geojson';
 
 @Component({
   selector: 'app-map',

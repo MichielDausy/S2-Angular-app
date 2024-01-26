@@ -5,10 +5,8 @@ import { Anomaly } from '../Models/anomaly';
 import { FormsModule } from '@angular/forms';
 import { MapComponent } from '../map/map.component';
 import { Router } from '@angular/router';
-import { data } from '../Models/mockdata';
 import { RouterLink } from '@angular/router';
 import { Service } from '../Service/service';
-import { count } from 'rxjs';
 import { Sign } from '../Models/sign';
 import { Train } from '../Models/train';
 import { Traintrack } from '../Models/traintrack';
@@ -30,6 +28,9 @@ export class AnomalypageComponent {
   searchName: string = '';
   selectedCountry: string = "all";
   selectedTypes: string = "all";
+  displayList = false;
+  noFilteredAnomalies: boolean = false;
+
   signs: Sign[] = [];
   trains: Train[] = [];
   tracks: Traintrack[] = [];
@@ -39,27 +40,20 @@ export class AnomalypageComponent {
 
   constructor(private router: Router, private service: Service) { }
 
-  displayList = false;
+  ngOnInit(): void {
+    this.service.getTrainTracks().subscribe(tracks => {
+      this.tracks = tracks;
+      this.sortTracksByAnomalyCount();
+    });
+    this.service.getAnomalies().subscribe(anomalies => {
+      this.anomalies = anomalies.filter(anomaly => anomaly.isFixed === false);
+      this.sortTracksByAnomalyCount();
+    });
+  }
 
   changeMode() {
     this.router.navigate(['/anomaly/map']);
   }
-
-  countryAnomalies = [{
-    id: 1,
-    timestamp: new Date(),
-    longitude: 0,
-    latitude: 0,
-    photo: "photo1",
-    isFixed: false,
-    isFalse: false,
-    trainId: 1,
-    trainTrackId: 1,
-    countryId: 1,
-    anomalyTypeId: 1,
-    signId: 1,
-    count: 1
-  }] as Anomaly[];
 
   sortedTracks: Traintrack[] = [];
 
@@ -97,7 +91,6 @@ export class AnomalypageComponent {
     }
   }
 
-
   //   getCountryId(countryName: string): number | undefined {
   //     const country = this.countries.find(c => c.name.toLowerCase() === countryName.toLowerCase());
   //     console.log(country);
@@ -122,18 +115,7 @@ export class AnomalypageComponent {
   //     );
   //   }
   // }
-  ngOnInit(): void {
 
-
-    this.service.getTrainTracks().subscribe(tracks => {
-      this.tracks = tracks;
-      this.sortTracksByAnomalyCount();
-    });
-    this.service.getAnomalies().subscribe(anomalies => {
-      this.anomalies = anomalies.filter(anomaly => anomaly.isFixed === false);
-      this.sortTracksByAnomalyCount();
-    });
-  }
 
   ngOnChanges(changes: SimpleChanges): void {
     console.log('ngOnChanges called', changes);
@@ -184,12 +166,11 @@ export class AnomalypageComponent {
 
   //    return filteredAnomalies;
   //  }
-  noFilteredAnomalies: boolean = false; // Voeg deze regel toe aan de variabele sectie van je component
 
   onSearchNameChange(value: string) {
     this.searchName = value;
     this.sortedTracks = this.tracks.filter(track => track.name.toLowerCase().includes(this.searchName.toLowerCase()));
-    
+
     // For search result -> 'No results found'
     this.noFilteredAnomalies = !this.sortedTracks.some(track => this.getAnomaliesForTrack(track.id).length > 0);
 

@@ -7,7 +7,6 @@ import { RouterLink } from '@angular/router';
 import {CheckboxModule} from 'primeng/checkbox';
 import { Train } from '../Models/train';
 import { Country } from '../Models/country';
-import { data } from '../Models/mockdata';
 import { MapComponent } from '../map/map.component';
 import { Anomalytype } from '../Models/anomalytype';
 import { Traintrack } from '../Models/traintrack';

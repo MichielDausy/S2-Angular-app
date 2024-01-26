@@ -4,11 +4,13 @@ import { AnomalyItemComponent } from '../anomaly-item/anomaly-item.component';
 import { Anomaly } from '../Models/anomaly';
 import { FormsModule } from '@angular/forms';
 import { Router, RouterLink } from '@angular/router';
-import { data } from '../Models/mockdata';
 import { CalendarModule } from 'primeng/calendar';
 import { MapComponent } from '../map/map.component';
 import { Traintrack } from '../Models/traintrack';
 import { Service } from '../Service/service';
+import { Train } from '../Models/train';
+import { Country } from '../Models/country';
+import { Anomalytype } from '../Models/anomalytype';
 
 @Component({
    selector: 'app-history-map',
@@ -30,8 +32,14 @@ export class HistoryMapComponent {
    selectedDay: string | null = null;
    rangeDates: Date[] = [new Date(), new Date()];
 
-   selectedCountry : string = "all";
+   selectedCountry: string = "all";
    selectedTypes: string = "all";
+
+   trains: Train[] = [];
+   tracks: Traintrack[] = [];
+   anomalies: Anomaly[] = [];
+   countries: Country[] = [];
+   anomalyTypes: Anomalytype[] = [];
 
    displayList = false;
    center = [50.85045, 4.34878] as L.LatLngExpression;
@@ -39,59 +47,43 @@ export class HistoryMapComponent {
    ngOnInit(): void {
       this.service.getTrains().subscribe(trains => {
          this.trains = trains;
-       });
-       this.service.getTrainTracks().subscribe(tracks => {
+      });
+      this.service.getTrainTracks().subscribe(tracks => {
          this.tracks = tracks;
-       });
-       this.service.getAnomalies().subscribe(anomalies => {
+      });
+      this.service.getAnomalies().subscribe(anomalies => {
          this.anomalies = anomalies.filter(anomaly => anomaly.isFixed === true);
       });
-       this.service.getCountries().subscribe(countries => {
+      this.service.getCountries().subscribe(countries => {
          this.countries = countries;
-       });
-       this.service.getAnomalyTypes().subscribe(anomalyTypes => {
+      });
+      this.service.getAnomalyTypes().subscribe(anomalyTypes => {
          this.anomalyTypes = anomalyTypes;
-       });
+      });
    }
-
-   countryAnomalies = [{
-      id: 1,
-      timestamp: new Date(),
-      longitude: 0,
-      latitude: 0,
-      photo: "photo1",
-      isFixed: false,
-      isFalse: false,
-      trainId: 1,
-      trainTrackId: 1,
-      countryId: 1,
-      anomalyTypeId: 1,
-      signId: 1
-   }] as Anomaly[];
-   
 
    getCountryId(countryName: string): number | undefined {
       const country = this.countries.find(c => c.name.toLowerCase() === countryName.toLowerCase());
       return country?.id;
    }
    getTypesId(typeName: string): number | undefined {
-     const country = this.anomalyTypes.find(c => c.name.toLowerCase() === typeName.toLowerCase());
-     return country?.id;
-  }
+      const country = this.anomalyTypes.find(c => c.name.toLowerCase() === typeName.toLowerCase());
+      return country?.id;
+   }
 
    getAnomaliesByCountry(countryName: string, typeName: string): Anomaly[] {
-      if (countryName === "all" && typeName=== "all") {
-        return this.anomalies;
+      if (countryName === "all" && typeName === "all") {
+         return this.anomalies;
       }
-      else{
-        const countryId = this.getCountryId(countryName);
-        const typeId = this.getTypesId(typeName);
-        return this.anomalies.filter(a => 
-          (countryName === "all" || a.countryId === countryId) &&
-          (typeName === "all" || a.anomalyTypeId === typeId)
-        );
+      else {
+         const countryId = this.getCountryId(countryName);
+         const typeId = this.getTypesId(typeName);
+         return this.anomalies.filter(a =>
+            (countryName === "all" || a.countryId === countryId) &&
+            (typeName === "all" || a.anomalyTypeId === typeId)
+         );
       }
-    }
+   }
 
    changeMode() {
       this.router.navigate(['/history']);
@@ -127,7 +119,7 @@ export class HistoryMapComponent {
          console.log('filteredAnomalies voor geselecteerde trein:', this.filteredAnomalies);
       }
       // Controleer of er een geselecteerde datum is
-      if (selectedDay) { 
+      if (selectedDay) {
          const anomalies = this.getAllAnomaliesByTrainAndDay(selectedTrainId, selectedDay);
 
          // Controleer of er resultaten zijn voordat je filteredAnomalies toewijst
@@ -154,10 +146,10 @@ export class HistoryMapComponent {
       this.selectedDay = day;
       this.onTrainDayChange(this.selectedTrain, this.selectedDay);
    }
-   
+
    getCurrentWeek(): string[] {
       const currentDate = new Date();
-      const startOfWeek = currentDate.getDate() - ((currentDate.getDay() + 6) % 7 -1);
+      const startOfWeek = currentDate.getDate() - ((currentDate.getDay() + 6) % 7 - 1);
       //const startOfWeek = currentDate.getDate() - ((currentDate.getDay() + 6) % 7);
       const endOfWeek = startOfWeek + 6;
 
@@ -189,7 +181,7 @@ export class HistoryMapComponent {
       const end = this.rangeDates[1];
       const dates = [];
 
-      for (let i = start.getDate()+1; i <= end.getDate() + 1; i++) {
+      for (let i = start.getDate() + 1; i <= end.getDate() + 1; i++) {
          const date = new Date(start.getFullYear(), start.getMonth(), i);
          dates.push(date.toISOString().split('T')[0]);
       }
@@ -197,7 +189,6 @@ export class HistoryMapComponent {
       return dates;
    }
 
- 
 
 
    getAllAnomaliesByTrainAndDay(selectedTrainId: number, selectedDay: string): Anomaly[] {
@@ -220,10 +211,4 @@ export class HistoryMapComponent {
       return result;
    }
 
-   signs = data.signs;
-   trains = data.trains;
-   tracks = data.trainTracks;
-   anomalies = data.anomalies;
-   countries = data.countries;
-   anomalyTypes = data.anomalyTypes;
 }
