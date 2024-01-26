@@ -54,16 +54,16 @@
                     </select>
 
                 </div>
-                <div *ngIf="selectedFilter === 'customRange'">
-                    <mat-form-field class="h-20 w-full">
+                <div *ngIf="selectedFilter === 'customRange'" class="h-20 w-45">
+                    <mat-form-field class="datepicker">
                         <mat-label>Enter a date range</mat-label>
                         <mat-datepicker-toggle matIconSuffix [for]="picker"></mat-datepicker-toggle>
-                        <mat-date-range-input  [rangePicker]="picker">
-                            <input class="smalltext" matStartDate placeholder="Start date" [(ngModel)]="rangeDates[0]">
-                            <input class="smalltext" matEndDate placeholder="End date" [(ngModel)]="rangeDates[1]">
+                        <mat-date-range-input [rangePicker]="picker">
+                          <input matStartDate placeholder="Start date" [(ngModel)]="rangeDates[0]">
+                          <input matEndDate placeholder="End date" [(ngModel)]="rangeDates[1]">
                         </mat-date-range-input>
                         <mat-date-range-picker #picker></mat-date-range-picker>
-                    </mat-form-field>
+                      </mat-form-field>
                 </div>
                 <hr>
                 <div id="day-list" class="list-group-scroll text-sm overflow-auto customScrollBar h-[69vh]">

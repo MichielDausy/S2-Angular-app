@@ -1,5 +1,6 @@
 .card-header {
     padding: .75rem 1.25rem;
+}
 
 }
 
@@ -17,4 +18,6 @@ background-color: #cdd4e0;
     font-size: 12px !important;
 }
 
-  
+.datepicker {
+    width: 100%;
+}

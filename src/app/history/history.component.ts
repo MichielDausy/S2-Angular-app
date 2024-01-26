@@ -138,7 +138,7 @@ export class HistoryComponent implements OnInit {
          date1.getDate() === date2.getDate()
       );
    }
-
+  
   ngOnInit(): void {
     this.getData();
   }

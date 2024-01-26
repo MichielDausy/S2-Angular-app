@@ -106,8 +106,8 @@
                     </select>
 
                 </div>
-                <div *ngIf="selectedFilter === 'customRange'">
-                    <mat-form-field class="h-20 w-full">
+                <div *ngIf="selectedFilter === 'customRange'" class="h-20 w-45">
+                    <mat-form-field class="datepicker">
                         <mat-label>Enter a date range</mat-label>
                         <mat-datepicker-toggle matIconSuffix [for]="picker"></mat-datepicker-toggle>
                         <mat-date-range-input  [rangePicker]="picker">
