@@ -80,7 +80,7 @@
                 Select railway asset
             </div>
             <div class="p-0  d-flex">
-                <ul class="overflow-auto h-[87vh] d-inline-block text-xl">
+                <ul class="overflow-auto customScrollBar h-[87vh] d-inline-block text-xl">
                     <div *ngFor="let train of trains; let i = index" style="cursor:pointer"
                         class="relative block px-3 py-3 w-full text-dark bg-white border border-gray-300"
                         id="{{ train.id }}" (click)="onTrainClick(train.id)"
@@ -97,7 +97,7 @@
             <div class="p-2">
                 <div class="mb-2">
                     <select
-                        class="appearance-none bg-white border border-gray-300 py-2 px-4 leading-tight text-sm rounded-md my-auto"
+                        class="appearance-none bg-white border border-gray-300 py-2 px-4 leading-tight text-sm rounded-md my-auto mx-auto w-full"
                         id="filter-select" [(ngModel)]="selectedFilter">
                         <option value="" disabled>Select Date</option>
                         <option value="thisWeek">This week</option>
@@ -106,19 +106,19 @@
                     </select>
 
                 </div>
-                <div *ngIf="selectedFilter === 'customRange'" class="h-20 w-45 ">
-                    <mat-form-field>
+                <div *ngIf="selectedFilter === 'customRange'">
+                    <mat-form-field class="h-20 w-full">
                         <mat-label>Enter a date range</mat-label>
                         <mat-datepicker-toggle matIconSuffix [for]="picker"></mat-datepicker-toggle>
-                        <mat-date-range-input [rangePicker]="picker">
-                          <input matStartDate placeholder="Start date" [(ngModel)]="rangeDates[0]">
-                          <input matEndDate placeholder="End date" [(ngModel)]="rangeDates[1]">
+                        <mat-date-range-input  [rangePicker]="picker">
+                            <input class="smalltext" matStartDate placeholder="Start date" [(ngModel)]="rangeDates[0]">
+                            <input class="smalltext" matEndDate placeholder="End date" [(ngModel)]="rangeDates[1]">
                         </mat-date-range-input>
                         <mat-date-range-picker #picker></mat-date-range-picker>
-                      </mat-form-field>
+                    </mat-form-field>
                 </div>
                 <hr>
-                <div id="day-list" class="list-group-scroll text-sm overflow-auto h-[69vh]">
+                <div id="day-list" class="list-group-scroll text-sm overflow-auto customScrollBar h-[69vh]">
                     <ng-container
                         *ngFor="let day of selectedFilter === 'thisWeek' ? getCurrentWeek() : selectedFilter === 'previousWeek' ? getPreviousWeek() : selectedFilter === 'customRange' ? getCustomRange() : []">
                         <div
@@ -135,7 +135,36 @@
             </div>
         </div>
     </aside>
-    <div class="w-3/4">
+
+    <div class="w-3/4 h-[90.1vh] overflow-y-auto customScrollBar">
+        <div class="relative md:flex md:items-center px-7 mt-3">
+          <input [(ngModel)]="searchName" name="searchName" type="text" id="searchName"
+            class="mb-3 rounded-lg border block flex-1 mx-auto w-1/2 md:mx-0 text-sm p-2.5 bg-gray-100 border-gray-600 placeholder-gray-700 focus:outline-none"
+            placeholder="Filter By Track Name" (ngModelChange)="onSearchNameChange($event)" />
+          @if (searchName) {
+          <p class="hidden md:block text-md text-custom-grey-text cursor-pointer absolute end-0 pr-3 mb-4 p-2"
+            (click)="onSearchNameChange('')">
+            x
+          </p>
+          }
+        </div>
+        @if (isLoading) {
+            <div class="flex items-center justify-center h-full">
+                <app-page-loader></app-page-loader>
+              </div>
+        }
+        <div class="px-7">
+          <div *ngFor="let track of sortedTracks">
+            <ng-container *ngIf="getAnomaliesForTrack(track.id, selectedTrain, selectedDay).length > 0">
+              <app-anomaly-item [track]="track" [anomalies]="getAnomaliesForTrack(track.id, selectedTrain, selectedDay)"></app-anomaly-item>
+            </ng-container>
+          </div>
+          <div class="text-base" *ngIf="noFilteredAnomalies">
+            No results found
+          </div>
+        </div>
+      </div>
+    <!-- <div class="w-3/4 h-[90.1vh] overflow-y-auto customScrollBar">
         <div class="px-7">
             <div *ngFor="let track of sortedTracks">
                 <ng-container *ngIf="getAnomaliesForTrack(track.id, selectedTrain, selectedDay).length > 0">
@@ -145,5 +174,5 @@
                 </ng-container>
             </div>
         </div>
-    </div>
+    </div> -->
 </div>
