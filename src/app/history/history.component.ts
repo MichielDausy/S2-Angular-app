@@ -155,18 +155,18 @@ export class HistoryComponent implements OnInit {
       );
    }
 
-  ngOnInit(): void {
-    this.service.getTrainTracks().subscribe(tracks => {
-       this.tracks = tracks;
-       this.sortTracksByAnomalyCount();
-     });
-     this.service.getAnomalies().subscribe(anomalies => {
-       this.anomalies = anomalies;
-       this.sortTracksByAnomalyCount();
-     });
-     this.service.getTrains().subscribe(trains => this.trains = trains);
-     this.service.getCountries().subscribe(countries => this.countries = countries);
-  }
+//   ngOnInit(): void {
+//     this.service.getTrainTracks().subscribe(tracks => {
+//        this.tracks = tracks;
+//        this.sortTracksByAnomalyCount();
+//      });
+//      this.service.getAnomalies().subscribe(anomalies => {
+//        this.anomalies = anomalies;
+//        this.sortTracksByAnomalyCount();
+//      });
+//      this.service.getTrains().subscribe(trains => this.trains = trains);
+//      this.service.getCountries().subscribe(countries => this.countries = countries);
+//   }
   
    changeMode() {
       this.router.navigate(['/history/map']);

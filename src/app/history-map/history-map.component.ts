@@ -11,11 +11,14 @@ import { Service } from '../Service/service';
 import { Train } from '../Models/train';
 import { Country } from '../Models/country';
 import { Anomalytype } from '../Models/anomalytype';
+import { MatDatepickerModule } from '@angular/material/datepicker';
+import { MatNativeDateModule } from '@angular/material/core';
+import { MatFormFieldModule } from '@angular/material/form-field';
 
 @Component({
    selector: 'app-history-map',
    standalone: true,
-   imports: [CommonModule, AnomalyItemComponent, FormsModule, MapComponent, RouterLink, CalendarModule],
+   imports: [CommonModule, AnomalyItemComponent, FormsModule, MapComponent, RouterLink, CalendarModule, MatDatepickerModule, MatFormFieldModule, MatNativeDateModule],
    templateUrl: './history-map.component.html',
    styleUrl: './history-map.component.css'
 })
