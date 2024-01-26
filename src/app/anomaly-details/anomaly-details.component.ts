@@ -8,7 +8,6 @@ import { Sign } from '../Models/sign';
 import {CheckboxModule} from 'primeng/checkbox';
 import { Train } from '../Models/train';
 import { Country } from '../Models/country';
-import { data } from '../Models/mockdata';
 import { Service } from '../Service/service';
 import { FormsModule } from '@angular/forms';
 import { MapComponent } from '../map/map.component';
@@ -48,22 +47,17 @@ export class AnomalyDetailsComponent implements OnInit{
   isFalse: boolean = false;
 
   ngOnInit(): void {
-    this.service.currentAnomaly.subscribe((anomaly) => {
-      if (anomaly != null) {
-        this.anomaly = anomaly;
-      }
-    });
+    this.anomalyId = this.router.snapshot.params['id'];
     //API CODE DON'T REMOVE PLEASE
-    // this.service.getAnomalyById(this.anomalyId).subscribe(anomaly => {
-    //   this.anomaly = anomaly;
-    //   this.center = [this.anomaly.latitude, this.anomaly.longitude] as L.LatLngExpression;
-    //   this.isFalse = this.anomaly.isFalse;
-    //   this.isFixed = this.anomaly.isFixed;
-      // console.log("anomaly loaded: " + (this.anomaly as Anomaly));
-      // console.log("fixed: " + this.isFixed);
-      // console.log("false: " + this.isFalse);
-    //});
-    
+    this.service.getAnomalyById(this.anomalyId).subscribe(anomaly => {
+      this.anomaly = anomaly;
+      this.center = [this.anomaly.latitude, this.anomaly.longitude] as L.LatLngExpression;
+      this.isFalse = this.anomaly.isFalse;
+      this.isFixed = this.anomaly.isFixed;
+      console.log("anomaly loaded: " + (this.anomaly as Anomaly));
+      console.log("fixed: " + this.isFixed);
+      console.log("false: " + this.isFalse);
+    });
     // this.anomaly = data.anomalies.find(a => a.id == this.anomalyId) || {} as Anomaly;
     // this.center = [this.anomaly.latitude, this.anomaly.longitude] as L.LatLngExpression;
     // this.isFalse = this.anomaly.isFalse;
