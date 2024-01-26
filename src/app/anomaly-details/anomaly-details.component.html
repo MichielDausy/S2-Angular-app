@@ -18,6 +18,18 @@
         </div>
     </header>
 
+    <div *ngIf="showModal" class="absolute top-0 left-0 w-full h-full flex items-center justify-center z-10" (keydown.escape)="closeModal(false,0)">
+        <div class="mx-auto bg-gray-200 w-96 p-4 px-8 rounded-lg border-black border border-1">
+            
+            <p class="text-lg">Are you sure you want to save changes?</p>
+            <div class="flex flex-nowrap mt-2 justify-center">
+                <button class="text-base mr-2 px-2 py-1 bg-[#6684be] text-white rounded-md hover:bg-[#4f74ac] float-right my-auto" (click)="closeModal(true,anomalyId)">Submit</button>
+                <button class="text-base mx-2 px-2 py-1 bg-[#6684be] text-white rounded-md hover:bg-[#4f74ac] float-right my-auto" (click)="closeModal(false,0)">Cancel</button>
+            </div>
+        </div>
+    </div>
+    
+
     <div class="container mx-auto" style="max-width: 1200px;">
         <h1 class="font-semibold my-16 text-2xl">Anomaly {{anomaly.id}}</h1>
 
@@ -59,7 +71,7 @@
                         </div>
                     </div>
                 </div>
-                <button (click)="submitChanges(anomaly.id)"
+                <button (click)="openModal()"
                     class="px-4 py-2 mt-8 bg-[#6684be] text-white text-sm rounded-md hover:bg-[#4f74ac]">
                     Submit
                 </button>
