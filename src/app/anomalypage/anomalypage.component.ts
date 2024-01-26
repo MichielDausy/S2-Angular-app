@@ -41,7 +41,6 @@ export class AnomalypageComponent {
   anomalyTypes: Anomalytype[] = [];
   sortedTracks: Traintrack[] = [];
 
-
   constructor(private router: Router, private service: Service) { }
 
   ngOnInit(): void {
@@ -57,28 +56,6 @@ export class AnomalypageComponent {
 
   changeMode() {
     this.router.navigate(['/anomaly/map']);
-  }
-
-
-  countryAnomalies = [{
-    id: 1,
-    timestamp: new Date(),
-    longitude: 0,
-    latitude: 0,
-    photo: "photo1",
-    isFixed: false,
-    isFalse: false,
-    trainId: 1,
-    trainTrackId: 1,
-    countryId: 1,
-    anomalyTypeId: 1,
-    signId: 1,
-    count: 1
-  }] as Anomaly[];
-
-
-   ngOnInit(): void {
-    this.getData();
   }
 
   getData(): void {
@@ -192,7 +169,6 @@ export class AnomalypageComponent {
   }
   // ngOnChanges(changes: SimpleChanges): void {
   //    console.log('ngOnChanges called', changes);
-noFilteredAnomalies: boolean = false; // Voeg deze regel toe aan de variabele sectie van je component
 
 
   //    const countryChange = changes['selectedCountry'];
