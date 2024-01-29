@@ -101,8 +101,17 @@ export class AnomalyDetailsComponent implements OnInit{
     return `${lonDegrees}°${lonMinutes}'${lonSeconds.toFixed(2)}"${lonDirection}`;
   }
 
+  onCheckboxChange(): void {
+    if (this.isFalse) {
+       this.isFixed = true;
+    }
+   }
+   
   submitChanges(id: number): void {
+  
     this.service.changeAnomalyStatusById(id,this.isFixed, this.isFalse).subscribe(anomaly => {
+      console.log(this.isFalse);
+      console.log(this.isFixed);
       this.anomaly = anomaly;
       this.toastr.success('Saved changes!', 'Success',{positionClass: 'toast-bottom-right'});
       this.ngOnInit();        
@@ -111,5 +120,8 @@ export class AnomalyDetailsComponent implements OnInit{
       this.toastr.error('An error occured, changes have not been saved', 'Error',{positionClass: 'toast-bottom-right'});
       this.ngOnInit();
     });
+    if (this.isFalse) {
+      this.isFixed = true; // Als isFalse true is, zet isFixed ook op true
+    }
   }
 }

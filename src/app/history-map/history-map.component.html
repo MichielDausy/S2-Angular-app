@@ -6,6 +6,8 @@
         <h3 class="text-white m-0 ml-2 text-xl px-5">CodiTrack</h3>
     </div>
     <div class="col-span-6 bg-gray-100 pl-3 py-3 flex flex-nowrap my-auto">
+
+
         <div class="bg-gray-100 bg-opacity-75 w-32 h-12 rounded p-4 my-auto mr-3">
             <div class="flex items-center h-full ">
               <select class="appearance-none bg-white border border-gray-300 py-2 px-4 leading-tight text-sm rounded-md"
@@ -28,6 +30,17 @@
               </select>
             </div>
           </div>
+          <div class="bg-gray-100 bg-opacity-75 w-32 h-12 rounded p-1 my-auto">
+            <div class="flex items-center h-full">
+            <select
+                    class="appearance-none bg-white border border-gray-300 py-2 px-4 leading-tight text-sm rounded-md"
+                    name="falseAnomaly" id="" [(ngModel)]="isFalseAnomaly">
+                    <option class="text-base" value="all">All anomalies</option>
+                    <option class="text-base" value="fixed anomaly">Correct anomalies</option>
+                    <option class="text-base" value="false anomaly">False anomalies</option>
+                </select>
+            </div>
+        </div>
           <button class="px-3 py-1 my-2 bg-[#6684be] text-white text-sm rounded w-32" (click)="resetFilters()">
               Clear filters
           </button>

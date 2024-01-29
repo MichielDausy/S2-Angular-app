@@ -34,6 +34,7 @@ export class HistoryMapComponent {
    selectedTrain: number = -1;
    selectedDay: string ="";
    rangeDates: Date[] = [new Date(), new Date()];
+   isFalseAnomaly: string = 'all';
 
    selectedCountry: string = "all";
    selectedTypes: string = "all";
@@ -169,33 +170,48 @@ export class HistoryMapComponent {
       return dates;
    }
 
+   filterByIsFalse(anomalies: Anomaly[]): Anomaly[] {
+      if (this.isFalseAnomaly === 'all' || this.isFalseAnomaly === 'right anomaly') {
+         return anomalies;
+      }
+      if(this.isFalseAnomaly === 'fixed anomaly'){
+         return anomalies.filter(anomaly => anomaly.isFalse === false);
+      }
+      if (this.isFalseAnomaly === 'false anomaly') {
+         return anomalies.filter(anomaly => anomaly.isFalse === true);
+      }
+      return [];
+   }
 
 
-   // getAnomaliesForTrack(trainId: number, date: string): Anomaly[] {
-   //    const filterDate = date ? new Date(date) : this.selectedDay;
-   
-   //    if (trainId === -1) {
-   //       return this.anomalies.filter(anomaly => anomaly.isFixed === true);
-   //    } else {
-   
-   //       if (date !== "") {
-   //          const filterDate = new Date(date);
-   //          return this.anomalies.filter(anomaly => {
-   //             const anomalyDate = new Date(anomaly.timestamp);
-   //             return (
-   //                anomaly.trainId == trainId &&
-   //                anomaly.isFixed === true &&
-   //                this.isSameDay(anomalyDate, filterDate)
-   //             );
-   //          });
-   //       } else {
-   //          return this.anomalies.filter(anomaly =>
-   //             anomaly.trainId === trainId && 
-   //             anomaly.isFixed === true
-   //          );
-   //       }
-   //    }
-   // }
+   getAnomaliesForTrack(trainId: number, date: string): Anomaly[] {
+      const filterDate = date ? new Date(date) : this.selectedDay;
+
+      let anomalies;
+     
+      if (trainId === -1) {
+         anomalies = this.anomalies.filter(anomaly => anomaly.isFixed === true);
+      } else {
+         if (date !== "") {
+           const filterDate = new Date(date);
+           anomalies = this.anomalies.filter(anomaly => {
+             const anomalyDate = new Date(anomaly.timestamp);
+             return (
+               anomaly.trainId == trainId &&
+               anomaly.isFixed === true &&
+               this.isSameDay(anomalyDate, filterDate)
+             );
+           });
+         } else {
+           anomalies = this.anomalies.filter(anomaly =>
+             anomaly.trainId === trainId && 
+             anomaly.isFixed === true
+           );
+         }
+      }
+     
+      return this.filterByIsFalse(anomalies);
+   }
 
    getAnomaliesForTrack(trainId: number, date: string): Anomaly[] {
       const filterFn = (anomaly: Anomaly) => 
