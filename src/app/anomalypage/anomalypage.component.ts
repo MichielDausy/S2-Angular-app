@@ -41,6 +41,7 @@ export class AnomalypageComponent {
   countries: Country[] = [];
   anomalyTypes: Anomalytype[] = [];
   sortedTracks: Traintrack[] = [];
+  noResultsFound: boolean = false;
 
   constructor(private router: Router, private service: Service) { }
 
@@ -137,6 +138,7 @@ export class AnomalypageComponent {
         return this.anomalies.filter(anomaly => anomaly.trainTrackId === trackId);
       }
     }
+    
   }
 
   onSearchNameChange(value: string) {
@@ -145,6 +147,7 @@ export class AnomalypageComponent {
     this.sortTracksByAnomalyCount(this.tracks.filter(track => track.name.toLowerCase().includes(this.searchName.toLowerCase())));
     // For search result -> 'No results found'
     this.noFilteredAnomalies = !this.sortedTracks.some(track => this.getAnomaliesForTrack(track.id).length > 0);
+
     this.isLoading = false;
   }
 }
