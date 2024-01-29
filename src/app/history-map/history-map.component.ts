@@ -48,6 +48,10 @@ export class HistoryMapComponent {
    center = [50.85045, 4.34878] as L.LatLngExpression;
 
    ngOnInit(): void {
+      this.getData();
+   }
+
+   getData(): void {
       this.service.getTrains().subscribe(trains => {
          this.trains = trains;
       });
@@ -91,6 +95,7 @@ export class HistoryMapComponent {
    resetFilters(): void {
       this.selectedCountry = "all";
       this.selectedTypes = "all";
+      this.getData();
    }
 
    changeMode() {
