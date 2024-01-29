@@ -14,11 +14,12 @@ import { Anomalytype } from '../Models/anomalytype';
 import { MatDatepickerModule } from '@angular/material/datepicker';
 import { MatNativeDateModule } from '@angular/material/core';
 import { MatFormFieldModule } from '@angular/material/form-field';
+import { AppComponent } from '../new-map/new-map.component';
 
 @Component({
    selector: 'app-history-map',
    standalone: true,
-   imports: [CommonModule, AnomalyItemComponent, FormsModule, MapComponent, RouterLink, CalendarModule, MatDatepickerModule, MatNativeDateModule, MatFormFieldModule],
+   imports: [CommonModule, AnomalyItemComponent, FormsModule, MapComponent, RouterLink, CalendarModule, MatDatepickerModule, MatNativeDateModule, MatFormFieldModule, AppComponent],
    templateUrl: './history-map.component.html',
    styleUrl: './history-map.component.css'
 })
