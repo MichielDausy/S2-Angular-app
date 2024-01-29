@@ -103,65 +103,66 @@ export class HistoryComponent implements OnInit {
    }
 
 
-   getAnomaliesForTrack(trackId: number, trainId: number, date: string): Anomaly[] {
-      const filterDate = date ? new Date(date) : this.selectedDay;
-     
-      let anomalies;
-     
-      if (trainId === -1) {
-         anomalies = this.anomalies.filter(anomaly => anomaly.trainTrackId === trackId && anomaly.isFixed === true);
-      } else {
-         if (date !== "") {
-           const filterDate = new Date(date);
-           anomalies = this.anomalies.filter(anomaly => {
-             const anomalyDate = new Date(anomaly.timestamp);
-             return (
-               anomaly.trainTrackId === trackId &&
-               anomaly.trainId == trainId &&
-               anomaly.isFixed === true &&
-               this.isSameDay(anomalyDate, filterDate)
-             );
-           });
-         } else {
-           anomalies = this.anomalies.filter(anomaly =>
-             anomaly.trainTrackId === trackId &&
-             anomaly.trainId === trainId &&
-             anomaly.isFixed === true
-           );
-         }
-      }
-     
-      return this.filterByIsFalse(anomalies);
-     }
-     
-    }
+   //  getAnomaliesForTrack(trackId: number, trainId: number, date: string): Anomaly[] {
+   //     const filterDate = date ? new Date(date) : this.selectedDay;
+   
+   //     let anomalies;
+   
+   //     if (trainId === -1) {
+   //        anomalies = this.anomalies.filter(anomaly => anomaly.trainTrackId === trackId && anomaly.isFixed === true);
+   //     } else 
+   //     {
+   //        if (date !== "") {
+   //          const filterDate = new Date(date);
+   //          anomalies = this.anomalies.filter(anomaly => {
+   //            const anomalyDate = new Date(anomaly.timestamp);
+   //            return (
+   //              anomaly.trainTrackId === trackId &&
+   //              anomaly.trainId == trainId &&
+   //              anomaly.isFixed === true &&
+   //              this.isSameDay(anomalyDate, filterDate));
+   //          });
+   //        } else {
+   //          anomalies = this.anomalies.filter(anomaly =>
+   //            anomaly.trainTrackId === trackId &&
+   //            anomaly.trainId === trainId &&
+   //            anomaly.isFixed === true
+   //          );
+   //        }
+   //       }
+    
+   
+   //     return this.filterByIsFalse(anomalies);
+   // }
 
     resetFilters(){
       this.selectedCountry = "all";
       this.selectedTypes = 'all';
       this.searchName = '';
+      this.isFalseAnomaly = "all";
       this.getData();
     }
 
-   getAnomaliesForTrack(trackId: number, trainId: number, date: string): Anomaly[] {
-      const filterFn = (anomaly: Anomaly) => 
-        anomaly.trainTrackId === trackId &&
-        (trainId === -1 || (anomaly.trainId === trainId && anomaly.isFixed === true));
-    
-      const countryFilter = (anomaly: Anomaly) => this.selectedCountry === "all" || anomaly.countryId === this.getCountryId(this.selectedCountry);
-      const typeFilter = (anomaly: Anomaly) => this.selectedTypes === "all" || anomaly.anomalyTypeId === this.getTypesId(this.selectedTypes);
-    
-      if (date !== "") {
-        const filterDate = new Date(date);
-        return this.anomalies.filter(anomaly =>
-          filterFn(anomaly) && this.isSameDay(new Date(anomaly.timestamp), filterDate) && countryFilter(anomaly) && typeFilter(anomaly)
-        );
-      }
-    
-      return this.anomalies.filter(anomaly => 
-        filterFn(anomaly) && countryFilter(anomaly) && typeFilter(anomaly) && (anomaly.isFixed === true || anomaly.isFalse === true)
-      );
-    }
+    getAnomaliesForTrack(trackId: number, trainId: number, date: string): Anomaly[] {
+       const filterFn = (anomaly: Anomaly) => 
+         anomaly.trainTrackId === trackId &&
+         (trainId === -1 || (anomaly.trainId === trainId && anomaly.isFixed === true));
+   
+       const countryFilter = (anomaly: Anomaly) => this.selectedCountry === "all" || anomaly.countryId === this.getCountryId(this.selectedCountry);
+       const typeFilter = (anomaly: Anomaly) => this.selectedTypes === "all" || anomaly.anomalyTypeId === this.getTypesId(this.selectedTypes);
+       const isFixedFilter = (anomaly: Anomaly) => this.isFalseAnomaly === "all" || (this.isFalseAnomaly === "fixed anomaly" && anomaly.isFixed === true) || (this.isFalseAnomaly === "false anomaly" && anomaly.isFalse === true);
+   
+       if (date !== "") {
+         const filterDate = new Date(date);
+         return this.anomalies.filter(anomaly =>
+           filterFn(anomaly) && this.isSameDay(new Date(anomaly.timestamp), filterDate) && countryFilter(anomaly) && typeFilter(anomaly) && isFixedFilter(anomaly)
+         );
+       }
+   
+       return this.anomalies.filter(anomaly => 
+         filterFn(anomaly) && countryFilter(anomaly) && typeFilter(anomaly) && (anomaly.isFixed === true || anomaly.isFalse === true) && isFixedFilter(anomaly)
+       );
+     }
     
    
    
@@ -292,33 +293,33 @@ export class HistoryComponent implements OnInit {
 
 
 
-   getAllAnomaliesByCountryAndDay(selectedTrainId: number, selectedCountry: string, selectedDay: string): Anomaly[] {
-      const filteredAnomalies: Anomaly[] = [];
+   // getAllAnomaliesByCountryAndDay(selectedTrainId: number, selectedCountry: string, selectedDay: string): Anomaly[] {
+   //    const filteredAnomalies: Anomaly[] = [];
 
 
-   //    const trainAnomalies = this.anomalies.filter(anomaly => anomaly.trainId === selectedTrainId);
+   //     const trainAnomalies = this.anomalies.filter(anomaly => anomaly.trainId === selectedTrainId);
 
-   //    const countryId = selectedCountry === 'all' ? undefined : this.getCountryId(selectedCountry);
-   //    const countryAnomalies = trainAnomalies.filter(anomaly => {
-   //       return countryId === undefined || anomaly.countryId === countryId;
-   //    });
+   //     const countryId = selectedCountry === 'all' ? undefined : this.getCountryId(selectedCountry);
+   //     const countryAnomalies = trainAnomalies.filter(anomaly => {
+   //        return countryId === undefined || anomaly.countryId === countryId;
+   //     });
 
-   //    if (selectedDay) {
-   //       const selectedDate = new Date(selectedDay);
-   //       const filteredAnomaliesByDay = countryAnomalies.filter(anomaly => {
-   //          const anomalyDate = new Date(anomaly.timestamp);
-   //          return anomalyDate.toISOString().split('T')[0] === selectedDate.toISOString().split('T')[0];
-   //       });
-   //       filteredAnomalies.push(...filteredAnomaliesByDay);
-   //    } else {
-   //       filteredAnomalies.push(...countryAnomalies);
-   //    }
+   //     if (selectedDay) {
+   //        const selectedDate = new Date(selectedDay);
+   //        const filteredAnomaliesByDay = countryAnomalies.filter(anomaly => {
+   //           const anomalyDate = new Date(anomaly.timestamp);
+   //           return anomalyDate.toISOString().split('T')[0] === selectedDate.toISOString().split('T')[0];
+   //        });
+   //        filteredAnomalies.push(...filteredAnomaliesByDay);
+   //     } else {
+   //        filteredAnomalies.push(...countryAnomalies);
+   //     }
 
-      const fixedAnomalies = filteredAnomalies.filter(anomaly => anomaly.isFixed);
-      const finalAnomalies = this.filterByIsFalse(fixedAnomalies);
+   //    const fixedAnomalies = filteredAnomalies.filter(anomaly => anomaly.isFixed);
+   //    const finalAnomalies = this.filterByIsFalse(fixedAnomalies);
 
-      console.log("train: " + selectedTrainId + ", country: " + selectedCountry + ", day: " + selectedDay);
-      return finalAnomalies;
+   //    console.log("train: " + selectedTrainId + ", country: " + selectedCountry + ", day: " + selectedDay);
+   //    return finalAnomalies;
 
-   }
+   // }
 }
