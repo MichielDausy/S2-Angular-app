@@ -103,6 +103,11 @@ export class HistoryComponent implements OnInit {
       }
     }
 
+    resetFilters(){
+      this.selectedCountry = "all";
+      this.selectedTypes = 'all';
+    }
+
    getAnomaliesForTrack(trackId: number, trainId: number, date: string): Anomaly[] {
       const filterFn = (anomaly: Anomaly) => 
         anomaly.trainTrackId === trackId &&
