@@ -74,8 +74,8 @@ export class HistoryMapComponent {
       return country?.id;
    }
    getTypesId(typeName: string): number | undefined {
-      const country = this.anomalyTypes.find(c => c.name.toLowerCase() === typeName.toLowerCase());
-      return country?.id;
+      const type = this.anomalyTypes.find(c => c.name.toLowerCase() === typeName.toLowerCase());
+      return type?.id;
    }
 
    getAnomaliesByCountry(countryName: string, typeName: string): Anomaly[] {
