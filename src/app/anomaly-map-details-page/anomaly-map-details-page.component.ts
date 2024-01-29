@@ -5,11 +5,7 @@ import { OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { RouterLink } from '@angular/router';
 import {CheckboxModule} from 'primeng/checkbox';
-import { Train } from '../Models/train';
-import { Country } from '../Models/country';
 import { MapComponent } from '../map/map.component';
-import { Anomalytype } from '../Models/anomalytype';
-import { Traintrack } from '../Models/traintrack';
 import { Service } from '../Service/service';
 import { FormsModule } from '@angular/forms';
 import { ToastrService } from 'ngx-toastr';
@@ -60,12 +56,6 @@ export class AnomalyMapDetailsPageComponent implements OnInit{
       console.log("fixed: " + this.isFixed);
       console.log("false: " + this.isFalse);
     });
-    
-    // this.anomaly = data.anomalies.find(a => a.id == this.anomalyId) || {} as Anomaly;
-    // this.center = [this.anomaly.latitude, this.anomaly.longitude] as L.LatLngExpression;
-    // this.isFalse = this.anomaly.isFalse;
-    // this.isFixed = this.anomaly.isFixed;
-
   }
 
   openModal(): void {

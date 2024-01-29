@@ -1,4 +1,4 @@
-import { AfterViewInit, Component, Input, OnChanges, OnInit, SimpleChanges } from '@angular/core';
+import { AfterViewInit, Component, Input, OnChanges, SimpleChanges } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Anomaly } from '../Models/anomaly';
 import * as L from 'leaflet';
@@ -200,7 +200,7 @@ export class MapComponent implements AfterViewInit, OnChanges {
       html: iconElement.innerHTML,
       iconSize: [25, 41],
       iconAnchor: [25 / 2, 41],
-      className: 'leaflet-marker-icon', // Add your CSS class here if needed
+      className: 'leaflet-marker-icon',
     });
   }
 

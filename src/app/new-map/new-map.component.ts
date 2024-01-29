@@ -1,4 +1,4 @@
-import { AfterViewInit, Component, Input, OnInit, SimpleChanges } from '@angular/core';
+import { AfterViewInit, Component, Input, SimpleChanges } from '@angular/core';
 import 'heatmap.js';
 import { Router } from '@angular/router';
 import { Anomaly } from '../Models/anomaly';

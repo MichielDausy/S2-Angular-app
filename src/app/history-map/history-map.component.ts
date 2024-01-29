@@ -106,7 +106,6 @@ export class HistoryMapComponent {
 
    getAllFixedAnomalies(): Anomaly[] {
       const fixedAnomalies = this.anomalies.filter(anomaly => anomaly.isFixed);
-      // console.log('Fixed Anomalies:', fixedAnomalies);
       return fixedAnomalies;
    }
    getAllFixedAnomaliesByTrain(trainId: number): Anomaly[] {
@@ -133,7 +132,6 @@ export class HistoryMapComponent {
    getCurrentWeek(): string[] {
       const currentDate = new Date();
       const startOfWeek = currentDate.getDate() - ((currentDate.getDay() + 6) % 7 - 1);
-      //const startOfWeek = currentDate.getDate() - ((currentDate.getDay() + 6) % 7);
       const endOfWeek = startOfWeek + 6;
 
       const dates = [];
@@ -184,35 +182,6 @@ export class HistoryMapComponent {
       return [];
    }
 
-
-   // getAnomaliesForTrack(trainId: number, date: string): Anomaly[] {
-   //    const filterDate = date ? new Date(date) : this.selectedDay;
-
-   //    let anomalies;
-     
-   //    if (trainId === -1) {
-   //       anomalies = this.anomalies.filter(anomaly => anomaly.isFixed === true);
-   //    } else {
-   //       if (date !== "") {
-   //         const filterDate = new Date(date);
-   //         anomalies = this.anomalies.filter(anomaly => {
-   //           const anomalyDate = new Date(anomaly.timestamp);
-   //           return (
-   //             anomaly.trainId == trainId &&
-   //             anomaly.isFixed === true &&
-   //             this.isSameDay(anomalyDate, filterDate)
-   //           );
-   //         });
-   //       } else {
-   //         anomalies = this.anomalies.filter(anomaly =>
-   //           anomaly.trainId === trainId && 
-   //           anomaly.isFixed === true
-   //         );
-   //       }
-   //    }
-     
-   //    return this.filterByIsFalse(anomalies);
-   // }
 
     getAnomaliesForTrack(trainId: number, date: string): Anomaly[] {
        const filterFn = (anomaly: Anomaly) => 

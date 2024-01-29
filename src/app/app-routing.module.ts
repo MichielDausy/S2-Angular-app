@@ -18,8 +18,6 @@ const routes: Routes = [
   {path:'history', component: HistoryComponent},
   {path:'menu', component: MenuComponent},
   {path:'history/map', component: HistoryMapComponent}
-
-
 ];
 
 @NgModule({

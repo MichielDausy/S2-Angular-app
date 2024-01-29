@@ -41,17 +41,11 @@ export class AnomalyMapPageComponent implements OnInit{
   
   ngOnInit(): void {
 
-    //API CODE DON'T REMOVE PLEASE
+    //API CODE
     // this.service.getSigns().subscribe(signs => {
     //   this.signs = signs;
     // });
     this.getData();
-    // this.signs = data.signs;
-    // this.trains = data.trains;
-    // this.tracks = data.tracks;
-    // this.anomalies = data.anomalies;
-    // this.countries = data.countries;
-    // this.anomalyTypes = data.anomalyTypes;
   }
 
   getData(): void {
@@ -91,21 +85,6 @@ export class AnomalyMapPageComponent implements OnInit{
 
   selectedCountry : string = "all";
   selectedTypes: string = "all";
-
-  countryAnomalies= [{
-    id: 1,
-    timestamp: new Date(),
-    longitude: 0,
-    latitude: 0,
-    photo: "photo1",
-    isFixed: false,
-    isFalse: false,
-    trainId: 1,
-    trainTrackId: 1,
-    countryId: 1,
-    anomalyTypeId: 1,
-    signId: 1
-  }] as Anomaly[];
 
   getCountryId(countryName: string): number | undefined {
      const country = this.countries.find(c => c.name.toLowerCase() === countryName.toLowerCase());
