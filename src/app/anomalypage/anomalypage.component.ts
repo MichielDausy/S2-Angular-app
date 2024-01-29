@@ -125,13 +125,12 @@ export class AnomalypageComponent {
     const typeFilter = (anomaly: Anomaly) => this.selectedTypes === "all" || anomaly.anomalyTypeId === this.getTypesId(this.selectedTypes);
 
     const output = this.anomalies.filter(anomaly => 
-        anomaly.trainTrackId === trackId && countryFilter(anomaly) && typeFilter(anomaly)
+        anomaly.trainTrackId === trackId && countryFilter(anomaly) && typeFilter(anomaly) && !anomaly.isFixed && !anomaly.isFalse
     );
 
     this.noFilteredAnomalies = output.length === 0;
     return output;
 }
-
 
   onSearchNameChange(value: string) {
     this.isLoading = true;

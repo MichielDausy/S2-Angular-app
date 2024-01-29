@@ -118,14 +118,15 @@ export class AnomalyMapPageComponent implements OnInit{
 
   getAnomaliesByCountry(countryName: string, typeName: string): Anomaly[] {
     if (countryName === "all" && typeName=== "all") {
-      return this.anomalies;
+      return this.anomalies.filter(a => a.isFixed === false);
     }
     else{
       const countryId = this.getCountryId(countryName);
       const typeId = this.getTypesId(typeName);
       return this.anomalies.filter(a => 
         (countryName === "all" || a.countryId === countryId) &&
-        (typeName === "all" || a.anomalyTypeId === typeId)
+        (typeName === "all" || a.anomalyTypeId === typeId) &&
+        (a.isFixed === false)
       );
     }
   }

@@ -45,6 +45,7 @@ export class AnomalyDetailsComponent implements OnInit{
   anomalyId: number = 0;
   isFixed: boolean = false;
   isFalse: boolean = false;
+  showModal: boolean = false;
 
   ngOnInit(): void {
     this.anomalyId = this.router.snapshot.params['id'];
@@ -64,6 +65,18 @@ export class AnomalyDetailsComponent implements OnInit{
     // this.isFixed = this.anomaly.isFixed;
 
 
+  }
+
+  openModal(): void {
+    this.showModal = true;
+  }
+
+  closeModal(save: boolean, id: number): void {
+    if(save) {
+      this.submitChanges(this.anomalyId);
+    }
+    this.showModal = false;
+    this.ngOnInit();
   }
 
   goBack(): void {
@@ -89,16 +102,14 @@ export class AnomalyDetailsComponent implements OnInit{
   }
 
   submitChanges(id: number): void {
-    if(confirm("Are you sure you want to submit changes?")) {
-      this.service.changeAnomalyStatusById(id,this.isFixed, this.isFalse).subscribe(anomaly => {
-        this.anomaly = anomaly;
-        this.toastr.success('Saved changes!', 'Success');
-        this.ngOnInit();        
-      },
-      error=>{
-        this.toastr.error('An error occured, changes have not been saved', 'Error');
-        this.ngOnInit();
-      });
-    }
+    this.service.changeAnomalyStatusById(id,this.isFixed, this.isFalse).subscribe(anomaly => {
+      this.anomaly = anomaly;
+      this.toastr.success('Saved changes!', 'Success',{positionClass: 'toast-bottom-right'});
+      this.ngOnInit();        
+    },
+    error=>{
+      this.toastr.error('An error occured, changes have not been saved', 'Error',{positionClass: 'toast-bottom-right'});
+      this.ngOnInit();
+    });
   }
 }
