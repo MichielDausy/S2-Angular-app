@@ -134,7 +134,7 @@ export class AppComponent implements AfterViewInit {
   
       marker.on('click', () => {
         console.log("click");
-        this.router.navigate(['/anomaly/map/details', anomaly.id]);
+        this.router.navigate(['/anomaly/details', anomaly.id]);
       });
   
       this.markers.addLayer(marker);
