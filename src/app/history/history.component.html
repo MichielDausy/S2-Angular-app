@@ -8,17 +8,15 @@
     </div>
     <div class="col-span-6 bg-gray-100 pl-3 py-3 flex flex-nowrap my-auto">
         <div class="bg-gray-100 bg-opacity-75 w-32 h-12 rounded p-1 my-auto">
-            <!-- <div class="flex items-center h-full"> -->
-            <!-- <select
+            <div class="flex items-center h-full">
+            <select
                     class="appearance-none bg-white border border-gray-300 py-2 px-4 leading-tight text-sm rounded-md"
-                    name="country" id="" [(ngModel)]="selectedCountry">
-                    <option class="text-base" value="all">All locations</option>
-                    <option class="text-base" value="belgium">Belgium</option>
-                    <option class="text-base" value="Luxembourg">Luxembourg</option>
-                    <option class="text-base" value="france">France</option>
-                    <option class="text-base" value="netherlands">Netherlands</option>
-                </select> -->
-            <!-- </div> -->
+                    name="falseAnomaly" id="" [(ngModel)]="isFalseAnomaly">
+                    <option class="text-base" value="all">All anomalies</option>
+                    <option class="text-base" value="fixed anomaly">Correct anomalies</option>
+                    <option class="text-base" value="false anomaly">False anomalies</option>
+                </select>
+            </div>
         </div>
         <div class="my-auto absolute right-3 top-3 flex flex-nowrap">
             <div (click)="changeMode()" class="my-auto mx-8">
