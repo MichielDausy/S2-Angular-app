@@ -59,8 +59,8 @@
                 <div>
                     <div class="grid grid-cols-2 gap-2">
                         <div class="my-auto flex flex-nowrap">
-                            <input type="checkbox" id="markfalse" name="markfalse" class="h-5 w-5 my-auto"
-                                [(ngModel)]="isFalse">
+                            <input type="checkbox" id="markfalse" name="markfixed" class="h-5 w-5 my-auto"
+                            [(ngModel)]="isFalse" (change)="onFalseChanged($event)">
                             <label for="markfalse" class="text-base my-auto mx-2">False Anomaly</label>
                         </div>
                         <div class="my-auto flex flex-nowrap">
