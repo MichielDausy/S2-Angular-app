@@ -15,6 +15,7 @@ import { Sign } from '../Models/sign';
 export class Service {
 
   private _url: string = "http://localhost:8081/api/";
+  
   private anomalySource = new BehaviorSubject<Anomaly | null>(null);
   currentAnomaly = this.anomalySource.asObservable();
 
