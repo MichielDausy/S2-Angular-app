@@ -22,7 +22,7 @@ export class AppComponent {
   }
 
   private shouldShowNavbar(url: string): boolean {
-    return url.includes('/history') || url.includes('/anomaly/map') || url.includes('/anomaly/list') ;
+    return url.includes('/history') || url.includes('/anomaly/map') || url.includes('/anomaly/list') || url.includes('/anomaly/details');
   }
   private shouldShowFooter(url: string): boolean {
     return url.includes('/anomaly/map') || url.includes('/anomaly/list') || url.includes('/history') || url.includes('/history/map');
