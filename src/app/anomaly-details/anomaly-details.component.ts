@@ -5,7 +5,7 @@ import { OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { RouterLink } from '@angular/router';
 import { Sign } from '../Models/sign';
-import {CheckboxModule} from 'primeng/checkbox';
+import { CheckboxModule } from 'primeng/checkbox';
 import { Train } from '../Models/train';
 import { Country } from '../Models/country';
 import { Service } from '../Service/service';
@@ -21,12 +21,12 @@ import { Location } from '@angular/common';
   templateUrl: './anomaly-details.component.html',
   styleUrls: ['./anomaly-details.component.css']
 })
-export class AnomalyDetailsComponent implements OnInit{
+export class AnomalyDetailsComponent implements OnInit {
 
-  constructor(private router: ActivatedRoute, private service: Service, private toastr: ToastrService, private location: Location){   }
+  constructor(private router: ActivatedRoute, private service: Service, private toastr: ToastrService, private location: Location) { }
 
-  center = [0,0] as L.LatLngExpression;
-  anomaly : Anomaly = {
+  center = [0, 0] as L.LatLngExpression;
+  anomaly: Anomaly = {
     id: 0,
     timestamp: new Date(),
     latitude: 0,
@@ -72,7 +72,7 @@ export class AnomalyDetailsComponent implements OnInit{
   }
 
   closeModal(save: boolean, id: number): void {
-    if(save) {
+    if (save) {
       this.submitChanges(this.anomalyId);
     }
     this.showModal = false;
@@ -81,8 +81,8 @@ export class AnomalyDetailsComponent implements OnInit{
 
   goBack(): void {
     this.location.back();
- }
- 
+  }
+
   convertLatitudeToDegreesMinutesSeconds(latitude: number): string {
     const latDirection = latitude >= 0 ? 'N' : 'S';
     const latDegrees = Math.floor(Math.abs(latitude));
@@ -101,27 +101,27 @@ export class AnomalyDetailsComponent implements OnInit{
     return `${lonDegrees}°${lonMinutes}'${lonSeconds.toFixed(2)}"${lonDirection}`;
   }
 
-  onCheckboxChange(): void {
-    if (this.isFalse) {
-       this.isFixed = true;
+  onFalseChanged(event: any): void {
+    if (event.target.checked) {
+      this.isFixed = true;
     }
-   }
-   
+  }
+
   submitChanges(id: number): void {
-  
-    this.service.changeAnomalyStatusById(id,this.isFixed, this.isFalse).subscribe(anomaly => {
-      console.log(this.isFalse);
-      console.log(this.isFixed);
-      this.anomaly = anomaly;
-      this.toastr.success('Saved changes!', 'Success',{positionClass: 'toast-bottom-right'});
-      this.ngOnInit();        
-    },
-    error=>{
-      this.toastr.error('An error occured, changes have not been saved', 'Error',{positionClass: 'toast-bottom-right'});
-      this.ngOnInit();
-    });
-    if (this.isFalse) {
-      this.isFixed = true; // Als isFalse true is, zet isFixed ook op true
+    if (this.isFalse == true) {
+      this.isFixed = true;
     }
+
+    this.service.changeAnomalyStatusById(id, this.isFixed, this.isFalse).subscribe(anomaly => {
+      this.anomaly = anomaly;
+      this.toastr.success('Saved changes!', 'Success', { positionClass: 'toast-bottom-right' });
+      this.ngOnInit();
+    },
+      error => {
+        this.toastr.error('An error occured, changes have not been saved', 'Error', { positionClass: 'toast-bottom-right' });
+        this.ngOnInit();
+      });
+    });
+   
   }
 }

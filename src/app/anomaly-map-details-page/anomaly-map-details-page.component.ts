@@ -102,7 +102,17 @@ export class AnomalyMapDetailsPageComponent implements OnInit{
     return `${lonDegrees}°${lonMinutes}'${lonSeconds.toFixed(2)}"${lonDirection}`;
   }
 
+  onFalseChanged(event: any): void {
+    if (event.target.checked) {
+        this.isFixed = true;
+    }
+}
+
   submitChanges(id: number): void {
+    if (this.isFalse == true) {
+      this.isFixed = true;
+    }
+    
     this.service.changeAnomalyStatusById(id,this.isFixed, this.isFalse).subscribe(anomaly => {
       this.anomaly = anomaly;
       this.toastr.success('Saved changes!', 'Success',{positionClass: 'toast-bottom-right'});
