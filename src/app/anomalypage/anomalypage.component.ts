@@ -41,7 +41,6 @@ export class AnomalypageComponent {
   countries: Country[] = [];
   anomalyTypes: Anomalytype[] = [];
   sortedTracks: Traintrack[] = [];
-  noResultsFound: boolean = false;
 
   constructor(private router: Router, private service: Service) { }
 
@@ -122,24 +121,17 @@ export class AnomalypageComponent {
 
   
   getAnomaliesForTrack(trackId: number): Anomaly[] {
-    if(this.selectedCountry !== "all") {
-      if(this.selectedTypes !== "all") {
-        return this.anomalies.filter(anomaly => anomaly.trainTrackId === trackId && anomaly.countryId === this.getCountryId(this.selectedCountry) && anomaly.anomalyTypeId === this.getTypesId(this.selectedTypes));
-      }
-      else{
-        return this.anomalies.filter(anomaly => anomaly.trainTrackId === trackId && anomaly.countryId === this.getCountryId(this.selectedCountry));
-      }
-    }
-    else{
-      if(this.selectedTypes !== "all") {
-        return this.anomalies.filter(anomaly => anomaly.trainTrackId === trackId && anomaly.anomalyTypeId === this.getTypesId(this.selectedTypes));
-      }
-      else{
-        return this.anomalies.filter(anomaly => anomaly.trainTrackId === trackId);
-      }
-    }
-    
-  }
+    const countryFilter = (anomaly: Anomaly) => this.selectedCountry === "all" || anomaly.countryId === this.getCountryId(this.selectedCountry);
+    const typeFilter = (anomaly: Anomaly) => this.selectedTypes === "all" || anomaly.anomalyTypeId === this.getTypesId(this.selectedTypes);
+
+    const output = this.anomalies.filter(anomaly => 
+        anomaly.trainTrackId === trackId && countryFilter(anomaly) && typeFilter(anomaly)
+    );
+
+    this.noFilteredAnomalies = output.length === 0;
+    return output;
+}
+
 
   onSearchNameChange(value: string) {
     this.isLoading = true;
