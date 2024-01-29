@@ -187,7 +187,7 @@
               <app-anomaly-item [track]="track" [anomalies]="getAnomaliesForTrack(track.id, selectedTrain, selectedDay)"></app-anomaly-item>
             </ng-container>
           </div>
-          <div class="text-base" *ngIf="noFilteredAnomalies">
+          <div class="text-base" *ngIf="sortedTracks.length === 0 && !isLoading">
             No results found
           </div>
         </div>
