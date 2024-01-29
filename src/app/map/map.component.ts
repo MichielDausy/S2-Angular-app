@@ -5,6 +5,9 @@ import * as L from 'leaflet';
 import { Router } from '@angular/router';
 import { Traintrack } from '../Models/traintrack';
 import {  GeoJsonProperties, LineString, FeatureCollection } from 'geojson';
+import 'leaflet.heat/dist/leaflet-heat.js'
+
+declare const HeatmapOverlay: any;
 
 @Component({
   selector: 'app-map',
@@ -95,8 +98,37 @@ export class MapComponent implements AfterViewInit, OnChanges {
 
     tiles.addTo(this.map);
 
-    //console.log("center: " + this.center)
+    // Setting up heat layer config
+    const heatLayerConfig = {
+      "radius": 5,
+      "maxOpacity": .8,
+      "scaleRadius": true,
+      // property below is responsible for colorization of heat layer
+      "useLocalExtrema": true,
+      // here we need to assign property value which represent lat in our data
+      latField: 'lat',
+      // here we need to assign property value which represent lng in our data
+      lngField: 'lng',
+      // here we need to assign property value which represent valueField in our data
+      valueField: 'count'
+    };
+
+    // Initialising heat layer and passing config
+    const heatmapLayer = new HeatmapOverlay(heatLayerConfig);
+
+    //Passing data to a layer
+    heatmapLayer.setData(this.getLocations());
+
+    //Adding heat layer to a map
+    heatmapLayer.addTo(this.map);
   
+  }
+
+  getLocations(): any[] {
+    return this.anomalies.map(anomaly => ({
+      lat: anomaly.latitude,
+      lng: anomaly.longitude,
+    }));
   }
 
   updateMarkers(): void {
@@ -107,7 +139,7 @@ export class MapComponent implements AfterViewInit, OnChanges {
       const marker = L.marker([anomaly.latitude, anomaly.longitude], {
         icon: this.getMarkerIcon(anomaly.anomalyTypeId, anomaly.count),
       }).bindPopup("<b>Anomaly </b>" + anomaly.id + "<br><b>Location </b>" + this.convertLatitudeToDegreesMinutesSeconds(anomaly.latitude) + " " + this.convertLongitudeToDegreesMinutesSeconds(anomaly.longitude), { offset: [0, -35] });
-  
+
       marker.on('mouseover', (e) => {
         marker.openPopup();
       });

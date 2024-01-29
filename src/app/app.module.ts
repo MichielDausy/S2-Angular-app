@@ -10,6 +10,7 @@ import { MatTooltipModule } from '@angular/material/tooltip';
 import { MapComponent } from './map/map.component';
 import { HttpClientModule } from '@angular/common/http';
 import { ToastrModule } from 'ngx-toastr';
+import { LeafletModule } from "@asymmetrik/ngx-leaflet";
 
 
 
@@ -25,7 +26,8 @@ import { ToastrModule } from 'ngx-toastr';
     BrowserAnimationsModule,
     MatTooltipModule,
     HttpClientModule,
-    ToastrModule.forRoot()
+    ToastrModule.forRoot(),
+    LeafletModule
   ],
   providers: [],
   bootstrap: [AppComponent]

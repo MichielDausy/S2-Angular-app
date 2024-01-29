@@ -14,13 +14,14 @@ import { Country } from '../Models/country';
 import { Anomalytype } from '../Models/anomalytype';
 import { PageLoaderComponent } from "../page-loader/page-loader.component";
 import { forkJoin } from 'rxjs';
+import { AppComponent } from "../new-map/new-map.component";
 
 @Component({
     selector: 'app-anomaly-map-page',
     standalone: true,
     templateUrl: './anomaly-map-page.component.html',
     styleUrls: ['./anomaly-map-page.component.css'],
-    imports: [CommonModule, AnomalyItemComponent, FormsModule, MapComponent, RouterLink, PageLoaderComponent]
+    imports: [CommonModule, AnomalyItemComponent, FormsModule, MapComponent, RouterLink, PageLoaderComponent, AppComponent]
 })
 export class AnomalyMapPageComponent implements OnInit{
   signs: Sign[] = [];

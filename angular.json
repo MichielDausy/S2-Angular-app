@@ -30,12 +30,19 @@
               }
             ],
             "styles": [
+              "./node_modules/leaflet/dist/leaflet.css",
               "src/my-theme.scss",
               "src/styles.css",
-              "node_modules/leaflet/dist/leaflet.css",
-              "node_modules/ngx-toastr/toastr.css"
+              "node_modules/ngx-toastr/toastr.css",
+              "node_modules/leaflet.markercluster/dist/MarkerCluster.css",
+              "node_modules/leaflet.markercluster/dist/MarkerCluster.Default.css"
             ],
-            "scripts": []
+            "scripts": [
+              "./node_modules/leaflet/dist/leaflet.js",
+              "./node_modules/heatmap.js/build/heatmap.js",
+              "./node_modules/heatmap.js/plugins/leaflet-heatmap/leaflet-heatmap.js",
+              "node_modules/leaflet.markercluster/dist/leaflet.markercluster.js"
+            ]
           },
           "configurations": {
             "production": {
