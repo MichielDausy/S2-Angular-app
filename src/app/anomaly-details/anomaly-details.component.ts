@@ -114,7 +114,6 @@ export class AnomalyDetailsComponent implements OnInit {
 
     this.service.changeAnomalyStatusById(id, this.isFixed, this.isFalse).subscribe(anomaly => {
       this.anomaly = anomaly;
-
       this.toastr.success('Saved changes!', 'Success', { positionClass: 'toast-bottom-right' });
       this.ngOnInit();
     },
@@ -122,5 +121,7 @@ export class AnomalyDetailsComponent implements OnInit {
         this.toastr.error('An error occured, changes have not been saved', 'Error', { positionClass: 'toast-bottom-right' });
         this.ngOnInit();
       });
+    });
+   
   }
 }
