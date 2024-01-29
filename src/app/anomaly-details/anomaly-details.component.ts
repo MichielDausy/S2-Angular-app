@@ -121,7 +121,5 @@ export class AnomalyDetailsComponent implements OnInit {
         this.toastr.error('An error occured, changes have not been saved', 'Error', { positionClass: 'toast-bottom-right' });
         this.ngOnInit();
       });
-    });
-   
-  }
+    }
 }
