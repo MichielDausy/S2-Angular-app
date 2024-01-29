@@ -115,7 +115,6 @@ export class AnomalypageComponent {
   getTypesId(typeName: string): number | undefined {
     const country = this.anomalyTypes.find(c => c.name.toLowerCase() === typeName.toLowerCase());
     console.log("Types of getTypesid", country);
-
     return country?.id;
   }
 
