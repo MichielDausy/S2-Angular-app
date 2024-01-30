@@ -33,7 +33,7 @@ export class HistoryMapComponent {
 
    selectedFilter: string = '';
    selectedTrain: number = -1;
-   selectedDay: string ="";
+   selectedDay: string = "";
    rangeDates: Date[] = [new Date(), new Date()];
    isFalseAnomaly: string = 'all';
 
@@ -107,7 +107,6 @@ export class HistoryMapComponent {
 
    getAllFixedAnomalies(): Anomaly[] {
       const fixedAnomalies = this.anomalies.filter(anomaly => anomaly.isFixed);
-      // console.log('Fixed Anomalies:', fixedAnomalies);
       return fixedAnomalies;
    }
    getAllFixedAnomaliesByTrain(trainId: number): Anomaly[] {
@@ -134,7 +133,6 @@ export class HistoryMapComponent {
    getCurrentWeek(): string[] {
       const currentDate = new Date();
       const startOfWeek = currentDate.getDate() - ((currentDate.getDay() + 6) % 7 - 1);
-      //const startOfWeek = currentDate.getDate() - ((currentDate.getDay() + 6) % 7);
       const endOfWeek = startOfWeek + 6;
 
       const dates = [];
@@ -176,7 +174,7 @@ export class HistoryMapComponent {
       if (this.isFalseAnomaly === 'all' || this.isFalseAnomaly === 'right anomaly') {
          return anomalies;
       }
-      if(this.isFalseAnomaly === 'fixed anomaly'){
+      if (this.isFalseAnomaly === 'fixed anomaly') {
          return anomalies.filter(anomaly => anomaly.isFalse === false);
       }
       if (this.isFalseAnomaly === 'false anomaly') {
@@ -185,62 +183,32 @@ export class HistoryMapComponent {
       return [];
    }
 
-
-   // getAnomaliesForTrack(trainId: number, date: string): Anomaly[] {
-   //    const filterDate = date ? new Date(date) : this.selectedDay;
-
-   //    let anomalies;
-     
-   //    if (trainId === -1) {
-   //       anomalies = this.anomalies.filter(anomaly => anomaly.isFixed === true);
-   //    } else {
-   //       if (date !== "") {
-   //         const filterDate = new Date(date);
-   //         anomalies = this.anomalies.filter(anomaly => {
-   //           const anomalyDate = new Date(anomaly.timestamp);
-   //           return (
-   //             anomaly.trainId == trainId &&
-   //             anomaly.isFixed === true &&
-   //             this.isSameDay(anomalyDate, filterDate)
-   //           );
-   //         });
-   //       } else {
-   //         anomalies = this.anomalies.filter(anomaly =>
-   //           anomaly.trainId === trainId && 
-   //           anomaly.isFixed === true
-   //         );
-   //       }
-   //    }
-     
-   //    return this.filterByIsFalse(anomalies);
-   // }
-
-    getAnomaliesForTrack(trainId: number, date: string): Anomaly[] {
-       const filterFn = (anomaly: Anomaly) => 
+   getAnomaliesForTrack(trainId: number, date: string): Anomaly[] {
+      const filterFn = (anomaly: Anomaly) =>
          (trainId === -1 || (anomaly.trainId === trainId && anomaly.isFixed === true));
-   
-       const countryFilter = (anomaly: Anomaly) => this.selectedCountry === "all" || anomaly.countryId === this.getCountryId(this.selectedCountry);
-       const typeFilter = (anomaly: Anomaly) => this.selectedTypes === "all" || anomaly.anomalyTypeId === this.getTypesId(this.selectedTypes);
-       const isFixedFilter = (anomaly: Anomaly) => this.isFalseAnomaly === "all" || (this.isFalseAnomaly === "fixed anomaly" && anomaly.isFixed === true) || (this.isFalseAnomaly === "false anomaly" && anomaly.isFalse === true);
-   
-       if (date !== "") {
+
+      const countryFilter = (anomaly: Anomaly) => this.selectedCountry === "all" || anomaly.countryId === this.getCountryId(this.selectedCountry);
+      const typeFilter = (anomaly: Anomaly) => this.selectedTypes === "all" || anomaly.anomalyTypeId === this.getTypesId(this.selectedTypes);
+      const isFixedFilter = (anomaly: Anomaly) => this.isFalseAnomaly === "all" || (this.isFalseAnomaly === "fixed anomaly" && anomaly.isFixed === true) || (this.isFalseAnomaly === "false anomaly" && anomaly.isFalse === true);
+
+      if (date !== "") {
          const filterDate = new Date(date);
          return this.anomalies.filter(anomaly =>
-           filterFn(anomaly) && this.isSameDay(new Date(anomaly.timestamp), filterDate) && countryFilter(anomaly) && typeFilter(anomaly) && isFixedFilter(anomaly)
-         );
-       }
-   
-       return this.anomalies.filter(anomaly => 
-         filterFn(anomaly) && countryFilter(anomaly) && typeFilter(anomaly) && (anomaly.isFixed === true || anomaly.isFalse === true)  && isFixedFilter(anomaly)
-       );
-     }
-   
-      private isSameDay(date1: Date, date2: Date): boolean {
-         return (
-            date1.getFullYear() === date2.getFullYear() &&
-            date1.getMonth() === date2.getMonth() &&
-            date1.getDate() === date2.getDate()
+            filterFn(anomaly) && this.isSameDay(new Date(anomaly.timestamp), filterDate) && countryFilter(anomaly) && typeFilter(anomaly) && isFixedFilter(anomaly)
          );
       }
+
+      return this.anomalies.filter(anomaly =>
+         filterFn(anomaly) && countryFilter(anomaly) && typeFilter(anomaly) && (anomaly.isFixed === true || anomaly.isFalse === true) && isFixedFilter(anomaly)
+      );
+   }
+
+   private isSameDay(date1: Date, date2: Date): boolean {
+      return (
+         date1.getFullYear() === date2.getFullYear() &&
+         date1.getMonth() === date2.getMonth() &&
+         date1.getDate() === date2.getDate()
+      );
+   }
 
 }

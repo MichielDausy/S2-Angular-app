@@ -1,13 +1,10 @@
-import { Component, Input } from '@angular/core';
+import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Anomaly } from '../Models/anomaly';
 import { OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { RouterLink } from '@angular/router';
-import { Sign } from '../Models/sign';
 import { CheckboxModule } from 'primeng/checkbox';
-import { Train } from '../Models/train';
-import { Country } from '../Models/country';
 import { Service } from '../Service/service';
 import { FormsModule } from '@angular/forms';
 import { MapComponent } from '../map/map.component';
@@ -49,7 +46,7 @@ export class AnomalyDetailsComponent implements OnInit {
 
   ngOnInit(): void {
     this.anomalyId = this.router.snapshot.params['id'];
-    //API CODE DON'T REMOVE PLEASE
+    //API CODE
     this.service.getAnomalyById(this.anomalyId).subscribe(anomaly => {
       this.anomaly = anomaly;
       this.center = [this.anomaly.latitude, this.anomaly.longitude] as L.LatLngExpression;
@@ -59,12 +56,6 @@ export class AnomalyDetailsComponent implements OnInit {
       console.log("fixed: " + this.isFixed);
       console.log("false: " + this.isFalse);
     });
-    // this.anomaly = data.anomalies.find(a => a.id == this.anomalyId) || {} as Anomaly;
-    // this.center = [this.anomaly.latitude, this.anomaly.longitude] as L.LatLngExpression;
-    // this.isFalse = this.anomaly.isFalse;
-    // this.isFixed = this.anomaly.isFixed;
-
-
   }
 
   openModal(): void {
