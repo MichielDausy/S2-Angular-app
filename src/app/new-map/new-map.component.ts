@@ -1,4 +1,4 @@
-import { AfterViewInit, Component, Input, OnInit, SimpleChanges } from '@angular/core';
+import { AfterViewInit, Component, Input, SimpleChanges } from '@angular/core';
 import 'heatmap.js';
 import { Router } from '@angular/router';
 import { Anomaly } from '../Models/anomaly';
@@ -139,7 +139,7 @@ export class AppComponent implements AfterViewInit {
   
       marker.on('click', () => {
         console.log("click");
-        this.router.navigate(['/anomaly/map/details', anomaly.id]);
+        this.router.navigate(['/anomaly/details', anomaly.id]);
       });
   
       this.markers.addLayer(marker);

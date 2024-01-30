@@ -1,4 +1,4 @@
-import { AfterViewInit, Component, Input, OnChanges, OnInit, SimpleChanges } from '@angular/core';
+import { AfterViewInit, Component, Input, OnChanges, SimpleChanges } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Anomaly } from '../Models/anomaly';
 import * as L from 'leaflet';
@@ -66,7 +66,6 @@ export class MapComponent implements AfterViewInit, OnChanges {
     }
   
     if (previousAnomalies !== currentAnomalies) {
-      //console.log("Anomalies have changed");
       this.updateMarkers();
     }
   }
@@ -150,7 +149,7 @@ export class MapComponent implements AfterViewInit, OnChanges {
   
       marker.on('click', () => {
         console.log("click");
-        this.router.navigate(['/anomaly/map/details', anomaly.id]);
+        this.router.navigate(['/anomaly/details', anomaly.id]);
       });
   
       marker.addTo(this.markers);

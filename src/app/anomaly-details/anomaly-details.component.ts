@@ -1,13 +1,10 @@
-import { Component, Input } from '@angular/core';
+import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Anomaly } from '../Models/anomaly';
 import { OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { RouterLink } from '@angular/router';
-import { Sign } from '../Models/sign';
-import {CheckboxModule} from 'primeng/checkbox';
-import { Train } from '../Models/train';
-import { Country } from '../Models/country';
+import { CheckboxModule } from 'primeng/checkbox';
 import { Service } from '../Service/service';
 import { FormsModule } from '@angular/forms';
 import { MapComponent } from '../map/map.component';
@@ -21,12 +18,12 @@ import { Location } from '@angular/common';
   templateUrl: './anomaly-details.component.html',
   styleUrls: ['./anomaly-details.component.css']
 })
-export class AnomalyDetailsComponent implements OnInit{
+export class AnomalyDetailsComponent implements OnInit {
 
-  constructor(private router: ActivatedRoute, private service: Service, private toastr: ToastrService, private location: Location){   }
+  constructor(private router: ActivatedRoute, private service: Service, private toastr: ToastrService, private location: Location) { }
 
-  center = [0,0] as L.LatLngExpression;
-  anomaly : Anomaly = {
+  center = [0, 0] as L.LatLngExpression;
+  anomaly: Anomaly = {
     id: 0,
     timestamp: new Date(),
     latitude: 0,
@@ -45,10 +42,11 @@ export class AnomalyDetailsComponent implements OnInit{
   anomalyId: number = 0;
   isFixed: boolean = false;
   isFalse: boolean = false;
+  showModal: boolean = false;
 
   ngOnInit(): void {
     this.anomalyId = this.router.snapshot.params['id'];
-    //API CODE DON'T REMOVE PLEASE
+    //API CODE
     this.service.getAnomalyById(this.anomalyId).subscribe(anomaly => {
       this.anomaly = anomaly;
       this.center = [this.anomaly.latitude, this.anomaly.longitude] as L.LatLngExpression;
@@ -58,18 +56,24 @@ export class AnomalyDetailsComponent implements OnInit{
       console.log("fixed: " + this.isFixed);
       console.log("false: " + this.isFalse);
     });
-    // this.anomaly = data.anomalies.find(a => a.id == this.anomalyId) || {} as Anomaly;
-    // this.center = [this.anomaly.latitude, this.anomaly.longitude] as L.LatLngExpression;
-    // this.isFalse = this.anomaly.isFalse;
-    // this.isFixed = this.anomaly.isFixed;
+  }
 
+  openModal(): void {
+    this.showModal = true;
+  }
 
+  closeModal(save: boolean, id: number): void {
+    if (save) {
+      this.submitChanges(this.anomalyId);
+    }
+    this.showModal = false;
+    this.ngOnInit();
   }
 
   goBack(): void {
     this.location.back();
- }
- 
+  }
+
   convertLatitudeToDegreesMinutesSeconds(latitude: number): string {
     const latDirection = latitude >= 0 ? 'N' : 'S';
     const latDegrees = Math.floor(Math.abs(latitude));
@@ -88,17 +92,25 @@ export class AnomalyDetailsComponent implements OnInit{
     return `${lonDegrees}°${lonMinutes}'${lonSeconds.toFixed(2)}"${lonDirection}`;
   }
 
+  onFalseChanged(event: any): void {
+    if (event.target.checked) {
+      this.isFixed = true;
+    }
+  }
+
   submitChanges(id: number): void {
-    if(confirm("Are you sure you want to submit changes?")) {
-      this.service.changeAnomalyStatusById(id,this.isFixed, this.isFalse).subscribe(anomaly => {
-        this.anomaly = anomaly;
-        this.toastr.success('Saved changes!', 'Success');
-        this.ngOnInit();        
-      },
-      error=>{
-        this.toastr.error('An error occured, changes have not been saved', 'Error');
+    if (this.isFalse == true) {
+      this.isFixed = true;
+    }
+
+    this.service.changeAnomalyStatusById(id, this.isFixed, this.isFalse).subscribe(anomaly => {
+      this.anomaly = anomaly;
+      this.toastr.success('Saved changes!', 'Success', { positionClass: 'toast-bottom-right' });
+      this.ngOnInit();
+    },
+      error => {
+        this.toastr.error('An error occured, changes have not been saved', 'Error', { positionClass: 'toast-bottom-right' });
         this.ngOnInit();
       });
     }
-  }
 }

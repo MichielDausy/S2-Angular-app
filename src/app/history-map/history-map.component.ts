@@ -14,11 +14,12 @@ import { Anomalytype } from '../Models/anomalytype';
 import { MatDatepickerModule } from '@angular/material/datepicker';
 import { MatNativeDateModule } from '@angular/material/core';
 import { MatFormFieldModule } from '@angular/material/form-field';
+import { AppComponent } from '../new-map/new-map.component';
 
 @Component({
    selector: 'app-history-map',
    standalone: true,
-   imports: [CommonModule, AnomalyItemComponent, FormsModule, MapComponent, RouterLink, CalendarModule, MatDatepickerModule, MatNativeDateModule, MatFormFieldModule],
+   imports: [CommonModule, AnomalyItemComponent, FormsModule, MapComponent, RouterLink, CalendarModule, MatDatepickerModule, MatNativeDateModule, MatFormFieldModule, AppComponent],
    templateUrl: './history-map.component.html',
    styleUrl: './history-map.component.css'
 })
@@ -32,8 +33,9 @@ export class HistoryMapComponent {
 
    selectedFilter: string = '';
    selectedTrain: number = -1;
-   selectedDay: string ="";
+   selectedDay: string = "";
    rangeDates: Date[] = [new Date(), new Date()];
+   isFalseAnomaly: string = 'all';
 
    selectedCountry: string = "all";
    selectedTypes: string = "all";
@@ -48,6 +50,10 @@ export class HistoryMapComponent {
    center = [50.85045, 4.34878] as L.LatLngExpression;
 
    ngOnInit(): void {
+      this.getData();
+   }
+
+   getData(): void {
       this.service.getTrains().subscribe(trains => {
          this.trains = trains;
       });
@@ -70,8 +76,8 @@ export class HistoryMapComponent {
       return country?.id;
    }
    getTypesId(typeName: string): number | undefined {
-      const country = this.anomalyTypes.find(c => c.name.toLowerCase() === typeName.toLowerCase());
-      return country?.id;
+      const type = this.anomalyTypes.find(c => c.name.toLowerCase() === typeName.toLowerCase());
+      return type?.id;
    }
 
    getAnomaliesByCountry(countryName: string, typeName: string): Anomaly[] {
@@ -88,13 +94,19 @@ export class HistoryMapComponent {
       }
    }
 
+   resetFilters(): void {
+      this.selectedCountry = "all";
+      this.selectedTypes = "all";
+      this.isFalseAnomaly = "all";
+      this.getData();
+   }
+
    changeMode() {
       this.router.navigate(['/history']);
    }
 
    getAllFixedAnomalies(): Anomaly[] {
       const fixedAnomalies = this.anomalies.filter(anomaly => anomaly.isFixed);
-      // console.log('Fixed Anomalies:', fixedAnomalies);
       return fixedAnomalies;
    }
    getAllFixedAnomaliesByTrain(trainId: number): Anomaly[] {
@@ -121,7 +133,6 @@ export class HistoryMapComponent {
    getCurrentWeek(): string[] {
       const currentDate = new Date();
       const startOfWeek = currentDate.getDate() - ((currentDate.getDay() + 6) % 7 - 1);
-      //const startOfWeek = currentDate.getDate() - ((currentDate.getDay() + 6) % 7);
       const endOfWeek = startOfWeek + 6;
 
       const dates = [];
@@ -159,40 +170,45 @@ export class HistoryMapComponent {
       return dates;
    }
 
-
+   filterByIsFalse(anomalies: Anomaly[]): Anomaly[] {
+      if (this.isFalseAnomaly === 'all' || this.isFalseAnomaly === 'right anomaly') {
+         return anomalies;
+      }
+      if (this.isFalseAnomaly === 'fixed anomaly') {
+         return anomalies.filter(anomaly => anomaly.isFalse === false);
+      }
+      if (this.isFalseAnomaly === 'false anomaly') {
+         return anomalies.filter(anomaly => anomaly.isFalse === true);
+      }
+      return [];
+   }
 
    getAnomaliesForTrack(trainId: number, date: string): Anomaly[] {
-      const filterDate = date ? new Date(date) : this.selectedDay;
-   
-      if (trainId === -1) {
-         return this.anomalies.filter(anomaly => anomaly.isFixed === true);
-      } else {
-   
-         if (date !== "") {
-            const filterDate = new Date(date);
-            return this.anomalies.filter(anomaly => {
-               const anomalyDate = new Date(anomaly.timestamp);
-               return (
-                  anomaly.trainId == trainId &&
-                  anomaly.isFixed === true &&
-                  this.isSameDay(anomalyDate, filterDate)
-               );
-            });
-         } else {
-            return this.anomalies.filter(anomaly =>
-               anomaly.trainId === trainId && 
-               anomaly.isFixed === true
-            );
-         }
-      }
-   }
-   
-      private isSameDay(date1: Date, date2: Date): boolean {
-         return (
-            date1.getFullYear() === date2.getFullYear() &&
-            date1.getMonth() === date2.getMonth() &&
-            date1.getDate() === date2.getDate()
+      const filterFn = (anomaly: Anomaly) =>
+         (trainId === -1 || (anomaly.trainId === trainId && anomaly.isFixed === true));
+
+      const countryFilter = (anomaly: Anomaly) => this.selectedCountry === "all" || anomaly.countryId === this.getCountryId(this.selectedCountry);
+      const typeFilter = (anomaly: Anomaly) => this.selectedTypes === "all" || anomaly.anomalyTypeId === this.getTypesId(this.selectedTypes);
+      const isFixedFilter = (anomaly: Anomaly) => this.isFalseAnomaly === "all" || (this.isFalseAnomaly === "fixed anomaly" && anomaly.isFixed === true) || (this.isFalseAnomaly === "false anomaly" && anomaly.isFalse === true);
+
+      if (date !== "") {
+         const filterDate = new Date(date);
+         return this.anomalies.filter(anomaly =>
+            filterFn(anomaly) && this.isSameDay(new Date(anomaly.timestamp), filterDate) && countryFilter(anomaly) && typeFilter(anomaly) && isFixedFilter(anomaly)
          );
       }
+
+      return this.anomalies.filter(anomaly =>
+         filterFn(anomaly) && countryFilter(anomaly) && typeFilter(anomaly) && (anomaly.isFixed === true || anomaly.isFalse === true) && isFixedFilter(anomaly)
+      );
+   }
+
+   private isSameDay(date1: Date, date2: Date): boolean {
+      return (
+         date1.getFullYear() === date2.getFullYear() &&
+         date1.getMonth() === date2.getMonth() &&
+         date1.getDate() === date2.getDate()
+      );
+   }
 
 }
