@@ -1,4 +1,4 @@
-import { Component, OnInit, OnChanges, SimpleChanges } from '@angular/core';
+import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { AnomalyItemComponent } from '../anomaly-item/anomaly-item.component';
 import { Anomaly } from '../Models/anomaly';
