@@ -65,26 +65,6 @@ export class HistoryComponent implements OnInit {
       }
    }
 
-   openModal(item: Anomaly) {
-      this.showModal = true;
-      this.modalAnomaly = { ...item };
-   }
-
-   closeModal(save: boolean) {
-      if (save) {
-         this.service.changeAnomalyStatusById(this.modalAnomaly.id, this.modalAnomaly.isFixed, this.modalAnomaly.isFalse).subscribe(() => {
-            this.toastr.success('Saved changes!', 'Success');
-            this.showModal = false;
-            this.modalAnomaly = {} as Anomaly;
-         }, error => {
-            this.toastr.error('An error occured, changes have not been saved', 'Error');
-         });
-      } else {
-         this.showModal = false;
-         this.modalAnomaly = {} as Anomaly;
-      }
-   }
-
    private sortTracksByAnomalyCount(): void {
       if (this.tracks.length > 0 && this.anomalies.length > 0) {
          this.sortedTracks = this.tracks
@@ -229,26 +209,11 @@ export class HistoryComponent implements OnInit {
 
    getCountryId(countryName: string): number | undefined {
       const country = this.countries.find(c => c.name.toLowerCase() === countryName.toLowerCase());
-      console.log("Country of getcountryid", country);
       return country?.id;
    }
    getTypesId(typeName: string): number | undefined {
       const country = this.anomalyTypes.find(c => c.name.toLowerCase() === typeName.toLowerCase());
-      console.log("Types of getTypesid", country);
       return country?.id;
-   }
-
-   filterByIsFalse(anomalies: Anomaly[]): Anomaly[] {
-      if (this.isFalseAnomaly === 'all' || this.isFalseAnomaly === 'right anomaly') {
-         return anomalies;
-      }
-      if (this.isFalseAnomaly === 'fixed anomaly') {
-         return anomalies.filter(anomaly => anomaly.isFalse === false);
-      }
-      if (this.isFalseAnomaly === 'false anomaly') {
-         return anomalies.filter(anomaly => anomaly.isFalse === true);
-      }
-      return [];
    }
 
 }
