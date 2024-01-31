@@ -80,20 +80,6 @@ export class HistoryMapComponent {
       return type?.id;
    }
 
-   getAnomaliesByCountry(countryName: string, typeName: string): Anomaly[] {
-      if (countryName === "all" && typeName === "all") {
-         return this.anomalies;
-      }
-      else {
-         const countryId = this.getCountryId(countryName);
-         const typeId = this.getTypesId(typeName);
-         return this.anomalies.filter(a =>
-            (countryName === "all" || a.countryId === countryId) &&
-            (typeName === "all" || a.anomalyTypeId === typeId)
-         );
-      }
-   }
-
    resetFilters(): void {
       this.selectedCountry = "all";
       this.selectedTypes = "all";
@@ -103,14 +89,6 @@ export class HistoryMapComponent {
 
    changeMode() {
       this.router.navigate(['/history']);
-   }
-
-   getAllFixedAnomalies(): Anomaly[] {
-      const fixedAnomalies = this.anomalies.filter(anomaly => anomaly.isFixed);
-      return fixedAnomalies;
-   }
-   getAllFixedAnomaliesByTrain(trainId: number): Anomaly[] {
-      return this.anomalies.filter(anomaly => anomaly.trainId === trainId && anomaly.isFixed);
    }
 
 
@@ -168,19 +146,6 @@ export class HistoryMapComponent {
          dates.push(date.toISOString().split('T')[0]);
       }
       return dates;
-   }
-
-   filterByIsFalse(anomalies: Anomaly[]): Anomaly[] {
-      if (this.isFalseAnomaly === 'all' || this.isFalseAnomaly === 'right anomaly') {
-         return anomalies;
-      }
-      if (this.isFalseAnomaly === 'fixed anomaly') {
-         return anomalies.filter(anomaly => anomaly.isFalse === false);
-      }
-      if (this.isFalseAnomaly === 'false anomaly') {
-         return anomalies.filter(anomaly => anomaly.isFalse === true);
-      }
-      return [];
    }
 
    getAnomaliesForTrack(trainId: number, date: string): Anomaly[] {

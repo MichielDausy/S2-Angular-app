@@ -1,4 +1,3 @@
-<!-- All anomalies that are fixed are shown here -->
 <header class="flex items-center w-full sticky-top disable-touch-scroll space-x-4"
     style="background-color: #f0f3f9; width: 100%;">
     <div class="flex items-center max-w-17rem w-25vw relative p-2 h-full"
@@ -21,41 +20,43 @@
               </div>
             </div>
             <div class="bg-gray-100 bg-opacity-75 w-32 h-12 rounded p-1 my-auto">
-              <div class="flex items-center h-full">
-                <select class="appearance-none bg-white border border-gray-300 py-2 px-4 leading-tight text-sm rounded-md"
+                <div class="flex items-center h-full">
+                    <select
+                        class="appearance-none bg-white border border-gray-300 py-2 px-4 leading-tight text-sm rounded-md"
                         name="types" id="" [(ngModel)]="selectedTypes">
-                  <option class="text-base" value="all">All types</option>
-                  <option class="text-base" value="vegetation">Vegetation</option>
-                  <option class="text-base" value="sign">Signs</option>
-                </select>
-              </div>
+                        <option class="text-base" value="all">All types</option>
+                        <option class="text-base" value="vegetation">Vegetation</option>
+                        <option class="text-base" value="sign">Signs</option>
+                    </select>
+                </div>
             </div>
-        <div class="bg-gray-100 bg-opacity-75 w-44 h-12 rounded p-1 my-auto mr-1">
-            <div class="flex items-center h-full">
-                <select class="appearance-none bg-white border border-gray-300 py-2 px-4 leading-tight text-sm rounded-md"
+            <div class="bg-gray-100 bg-opacity-75 w-44 h-12 rounded p-1 my-auto mr-1">
+                <div class="flex items-center h-full">
+                    <select
+                        class="appearance-none bg-white border border-gray-300 py-2 px-4 leading-tight text-sm rounded-md"
                         name="falseAnomaly" id="" [(ngModel)]="isFalseAnomaly">
                         <option class="text-base" value="all">All anomalies</option>
                         <option class="text-base" value="fixed anomaly">Correct anomalies</option>
                         <option class="text-base" value="false anomaly">False anomalies</option>
                     </select>
+                </div>
             </div>
-        </div>
             <button class="px-3 py-1 my-2 bg-[#6684be] text-white text-sm rounded w-32" (click)="resetFilters()">
                 Clear filters
             </button>
             <div class="my-auto absolute right-3 top-3 flex flex-nowrap">
-              <div (click)="changeMode()" class="my-auto mx-8">
-                <button class="px-4 py-2 bg-[#6684be] text-white text-sm rounded float-left w-1/2">
-                  List
+                <div (click)="changeMode()" class="my-auto mx-8">
+                    <button class="px-4 py-2 bg-[#6684be] text-white text-sm rounded float-left w-1/2">
+                        List
+                    </button>
+                    <button class="px-4 py-2 bg-gray-200 text-black text-sm rounded float-right w-1/2">
+                        Map
+                    </button>
+                </div>
+                <button class="px-3 py-2 bg-[#6684be] text-white rounded-md hover:bg-[#4f74ac] float-right my-auto"
+                    routerLink="/menu">
+                    <div class="ml-auto text-xl"><i class="fas fa-backward fa-xl"></i></div>
                 </button>
-                <button class="px-4 py-2 bg-gray-200 text-black text-sm rounded float-right w-1/2">
-                  Map
-                </button>
-              </div>
-              <button class="px-3 py-2 bg-[#6684be] text-white rounded-md hover:bg-[#4f74ac] float-right my-auto"
-                routerLink="/menu">
-                <div class="ml-auto text-xl"><i class="fas fa-backward fa-xl"></i></div>
-              </button>
             </div>
         </div>
         <div class="my-auto absolute right-3 top-3 flex flex-nowrap">
@@ -71,45 +72,6 @@
         </div>
     </div>
 </header>
-
-
-<div *ngIf="showModal" class="absolute top-0 left-0 w-full h-full flex items-center justify-center z-10" (keydown.escape)="closeModal(false)">
-    <div class="mx-auto bg-gray-200 w-96 p-4 px-8 rounded-lg border-black border border-1">
-        <p>Id: {{modalAnomaly.id}}</p>
-        <div class="mb-2">
-            <img *ngIf="modalAnomaly.photo" src="https://upload.wikimedia.org/wikipedia/commons/thumb/4/4a/Railroad_Tracks_-_Merritt_Island%2C_Florida.jpg/1200px-Railroad_Tracks_-_Merritt_Island%2C_Florida.jpg?20121011174007" alt="Anomaly Preview" class="max-w-full h-auto rounded-lg">
-        </div>
-        <p>Timestamp: {{modalAnomaly.timestamp.getDate()}} - {{(modalAnomaly.timestamp.getMonth()+1).toLocaleString('en-US', { minimumIntegerDigits: 2 })}} - {{modalAnomaly.timestamp.getFullYear()}}</p>
-
-        <div class="flex flex-nowrap justify-center">
-            <div class="flex flex-nowrap mr-5">
-                <p class="my-auto mr-2">Fixed: </p>
-                <div>
-                    <label class="relative inline-flex items-center cursor-pointer">
-                        <input type="checkbox" [(ngModel)]="modalAnomaly.isFixed" class="sr-only peer">
-                        <div class="w-11 h-6 bg-gray-400 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-blue-300 dark:peer-focus:ring-blue-800 rounded-full peer dark:bg-gray-700 peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:start-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all dark:border-gray-600 peer-checked:bg-blue-600"></div>
-                    </label>
-                </div>
-            </div>
-    
-            <div class="flex flex-nowrap">
-                <p class="my-auto mr-2">False: </p>
-                <div>
-                    <label class="relative inline-flex items-center cursor-pointer">
-                        <input type="checkbox" [(ngModel)]="modalAnomaly.isFalse" class="sr-only peer">
-                        <div class="w-11 h-6 bg-gray-400 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-blue-300 dark:peer-focus:ring-blue-800 rounded-full peer dark:bg-gray-700 peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:start-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all dark:border-gray-600 peer-checked:bg-blue-600"></div>
-                    </label>
-                </div>
-            </div>
-        </div>
-
-        <div class="flex flex-nowrap mt-2 justify-center">
-            <button class="text-base mr-2 px-2 py-1 bg-[#6684be] text-white rounded-md hover:bg-[#4f74ac] float-right my-auto" (click)="closeModal(true)">Save</button>
-            <button class="text-base mx-2 px-2 py-1 bg-[#6684be] text-white rounded-md hover:bg-[#4f74ac] float-right my-auto" (click)="closeModal(false)">Close</button>
-        </div>
-    </div>
-</div>
-
 <div class="flex m-0 p-0 mb-0 pb-0">
     <aside class="w-1/4 grid grid-cols-2">
         <div class="border border-solid border-gray-300">
@@ -148,7 +110,7 @@
                     <mat-form-field class="datepicker">
                         <mat-label>Enter a date range</mat-label>
                         <mat-datepicker-toggle matIconSuffix [for]="picker"></mat-datepicker-toggle>
-                        <mat-date-range-input  [rangePicker]="picker">
+                        <mat-date-range-input [rangePicker]="picker">
                             <input class="smalltext" matStartDate placeholder="Start date" [(ngModel)]="rangeDates[0]">
                             <input class="smalltext" matEndDate placeholder="End date" [(ngModel)]="rangeDates[1]">
                         </mat-date-range-input>
@@ -176,30 +138,31 @@
 
     <div class="w-3/4 h-[90.1vh] overflow-y-auto customScrollBar">
         <div class="relative md:flex md:items-center px-7 mt-3">
-          <input [(ngModel)]="searchName" name="searchName" type="text" id="searchName"
-            class="mb-3 rounded-lg border block flex-1 mx-auto w-1/2 md:mx-0 text-sm p-2.5 bg-gray-100 border-gray-600 placeholder-gray-700 focus:outline-none"
-            placeholder="Filter By Track Name" (ngModelChange)="onSearchNameChange($event)" />
-          @if (searchName) {
-          <p class="hidden md:block text-md text-custom-grey-text cursor-pointer absolute end-0 pr-3 mb-4 p-2"
-            (click)="onSearchNameChange('')">
-            x
-          </p>
-          }
+            <input [(ngModel)]="searchName" name="searchName" type="text" id="searchName"
+                class="mb-3 rounded-lg border block flex-1 mx-auto w-1/2 md:mx-0 text-sm p-2.5 bg-gray-100 border-gray-600 placeholder-gray-700 focus:outline-none"
+                placeholder="Filter By Track Name" (ngModelChange)="onSearchNameChange($event)" />
+            @if (searchName) {
+            <p class="hidden md:block text-md text-custom-grey-text cursor-pointer absolute end-0 pr-3 mb-4 p-2"
+                (click)="onSearchNameChange('')">
+                x
+            </p>
+            }
         </div>
         @if (isLoading) {
-            <div class="flex items-center justify-center h-full">
-                <app-page-loader></app-page-loader>
-              </div>
+        <div class="flex items-center justify-center h-full">
+            <app-page-loader></app-page-loader>
+        </div>
         }
         <div class="px-7">
-          <div *ngFor="let track of sortedTracks">
-            <ng-container *ngIf="getAnomaliesForTrack(track.id, selectedTrain, selectedDay).length > 0">
-              <app-anomaly-item [track]="track" [anomalies]="getAnomaliesForTrack(track.id, selectedTrain, selectedDay)"></app-anomaly-item>
-            </ng-container>
-          </div>
-          <div class="text-base" *ngIf="sortedTracks.length === 0 && !isLoading">
-            No results found
-          </div>
+            <div *ngFor="let track of sortedTracks">
+                <ng-container *ngIf="getAnomaliesForTrack(track.id, selectedTrain, selectedDay).length > 0">
+                    <app-anomaly-item [track]="track"
+                        [anomalies]="getAnomaliesForTrack(track.id, selectedTrain, selectedDay)"></app-anomaly-item>
+                </ng-container>
+            </div>
+            <div class="text-base" *ngIf="sortedTracks.length === 0 && !isLoading">
+                No results found
+            </div>
         </div>
-      </div>
+    </div>
 </div>

@@ -60,10 +60,9 @@ export class AnomalypageComponent{
         this.anomalyTypes = anomalyTypes;
 
         this.sortTracksByAnomalyCount();
-  
+
         // Set isLoading to false as all subscriptions are complete
         this.isLoading = false;
-        console.log(this.isLoading);
       },
       (error) => {
         console.error('Error loading data:', error);
@@ -106,29 +105,26 @@ export class AnomalypageComponent{
     }
   }
 
-
   getCountryId(countryName: string): number | undefined {
     const country = this.countries.find(c => c.name.toLowerCase() === countryName.toLowerCase());
-    console.log("Country of getcountryid", country);
     return country?.id;
   }
   getTypesId(typeName: string): number | undefined {
     const country = this.anomalyTypes.find(c => c.name.toLowerCase() === typeName.toLowerCase());
-    console.log("Types of getTypesid", country);
     return country?.id;
   }
 
-  
+
   getAnomaliesForTrack(trackId: number): Anomaly[] {
     const countryFilter = (anomaly: Anomaly) => this.selectedCountry === "all" || anomaly.countryId === this.getCountryId(this.selectedCountry);
     const typeFilter = (anomaly: Anomaly) => this.selectedTypes === "all" || anomaly.anomalyTypeId === this.getTypesId(this.selectedTypes);
 
-    const output = this.anomalies.filter(anomaly => 
-        anomaly.trainTrackId === trackId && countryFilter(anomaly) && typeFilter(anomaly) && !anomaly.isFixed && !anomaly.isFalse
+    const output = this.anomalies.filter(anomaly =>
+      anomaly.trainTrackId === trackId && countryFilter(anomaly) && typeFilter(anomaly) && !anomaly.isFixed && !anomaly.isFalse
     );
 
     return output;
-}
+  }
 
   onSearchNameChange(value: string) {
     this.isLoading = true;
@@ -138,7 +134,6 @@ export class AnomalypageComponent{
 
     // For search result -> 'No results found'
     this.noFilteredAnomalies = !this.sortedTracks.some(track => this.getAnomaliesForTrack(track.id).length > 0);
-
     this.isLoading = false;
   }
 }

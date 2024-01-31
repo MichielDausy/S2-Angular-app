@@ -45,14 +45,14 @@
         </div>
     </header>
     @if (isLoading) {
-        <div class="mt-10">
-            <app-page-loader></app-page-loader>
-        </div>
+    <div class="mt-10">
+        <app-page-loader></app-page-loader>
+    </div>
     }
     <div class="mx-auto" *ngIf="anomalies && anomalies.length > 0">
         <div class="relative overflow-hidden">
-                <app-new-map [anomalies]="getAnomaliesByCountry(selectedCountry, selectedTypes)" [height]="'92.5vh'"
-                [width]="'100%'" [center]="center" [isDetails]="false" [trainTracks]="tracks"/>
+            <app-new-map [anomalies]="getAnomaliesByCountry(selectedCountry, selectedTypes)" [height]="'92.5vh'"
+                [width]="'100%'" [center]="center" [isDetails]="false" [trainTracks]="tracks" />
             <div class="md:mt-4 absolute bottom-6 left-3 z-10 rounded p-1">
                 <img src="../../assets/RoT_icon_blue.png" alt="" class="h-12 w-auto">
 
