@@ -50,13 +50,6 @@ export class AppComponent implements AfterViewInit {
   markerClusterOptions = {
     animate: true,
     animateAddingMarkers: true,
-    // Add event listeners for cluster animation
-    onClusterAnimationStart: (event: any) => {
-      console.log('Cluster animation started', event);
-    },
-    onClusterAnimationEnd: (event: any) => {
-      console.log('Cluster animation ended', event);
-    },
   };
   
 
@@ -66,15 +59,13 @@ export class AppComponent implements AfterViewInit {
 
   private initMap(): void {
     if (this.anomalies.length > 1) {
-      // Initialising map with center point by using the coordinates
+    // Initialising map with center point by using the coordinates
     // Setting initial zoom to 9
     this.map = L.map('map', this.options)
     } else {
       this.map = L.map('map', this.options).setView([this.anomalies[0].latitude, this.anomalies[0].longitude] as L.LatLngExpression, this.zoom);
     }
-
-    //this.osm.addTo(this.map);
-
+    
     this.setLayers();
   }
 
@@ -138,7 +129,6 @@ export class AppComponent implements AfterViewInit {
       });
   
       marker.on('click', () => {
-        console.log("click");
         this.router.navigate(['/anomaly/details', anomaly.id]);
       });
   
