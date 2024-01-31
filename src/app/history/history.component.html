@@ -11,7 +11,7 @@
             <div class="bg-gray-100 bg-opacity-75 w-32 h-12 rounded p-1 my-auto mr-2">
               <div class="flex items-center h-full">
                 <select class="appearance-none bg-white border border-gray-300 py-2 px-4 leading-tight text-sm rounded-md"
-                  name="country" id="" [(ngModel)]="selectedCountry" >
+                  name="country" id="" [(ngModel)]="selectedCountry" (change)="updateSort()">
                   <option class="text-base" value="all">All locations</option>
                   <ng-container *ngFor="let country of countries">          
                     <option class="text-base" [value]="country.name">{{country.name}}</option>
@@ -23,7 +23,7 @@
                 <div class="flex items-center h-full">
                     <select
                         class="appearance-none bg-white border border-gray-300 py-2 px-4 leading-tight text-sm rounded-md"
-                        name="types" id="" [(ngModel)]="selectedTypes">
+                        name="types" id="" [(ngModel)]="selectedTypes" (change)="updateSort()">
                         <option class="text-base" value="all">All types</option>
                         <option class="text-base" value="vegetation">Vegetation</option>
                         <option class="text-base" value="sign">Signs</option>
@@ -34,7 +34,7 @@
                 <div class="flex items-center h-full">
                     <select
                         class="appearance-none bg-white border border-gray-300 py-2 px-4 leading-tight text-sm rounded-md"
-                        name="falseAnomaly" id="" [(ngModel)]="isFalseAnomaly">
+                        name="falseAnomaly" id="" [(ngModel)]="isFalseAnomaly" (change)="updateSort()">
                         <option class="text-base" value="all">All anomalies</option>
                         <option class="text-base" value="fixed anomaly">Correct anomalies</option>
                         <option class="text-base" value="false anomaly">False anomalies</option>
