@@ -65,10 +65,6 @@ export class HistoryComponent implements OnInit {
       }
    }
 
-   updateSort():void{
-      this.sortTracksByAnomalyCount();
-   }
-
    private sortTracksByAnomalyCount(): void {
       if (this.tracks.length > 0 && this.anomalies.length > 0) {
          this.sortedTracks = this.tracks
