@@ -175,6 +175,7 @@ export class HistoryComponent implements OnInit {
       this.sortTracksByAnomalyCount();
       // For search result -> 'No results found'
       this.noFilteredAnomalies = !this.sortedTracks.some(track => this.getAnomaliesForTrack(track.id, this.selectedTrain, this.selectedDay).length > 0);
+      this.sortedTracks = this.sortedTracks.filter(track => this.getAnomaliesForTrack(track.id,this.selectedTrain, this.selectedDay).length > 0);
       this.isLoading = false;
    }
 
