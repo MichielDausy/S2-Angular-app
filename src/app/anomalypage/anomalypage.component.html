@@ -16,10 +16,6 @@
         <select class="appearance-none bg-white border border-gray-300 py-2 px-4 leading-tight text-sm rounded-md"
           name="country" id="" [(ngModel)]="selectedCountry" >
           <option class="text-base" value="all">All locations</option>
-          <!-- <option class="text-base" value="belgium">Belgium</option>
-          <option class="text-base" value="luxembourg">Luxembourg</option>
-          <option class="text-base" value="france">France</option>
-          <option class="text-base" value="netherlands">Netherlands</option> -->
           <ng-container *ngFor="let country of countries">          
             <option class="text-base" [value]="country.name">{{country.name}}</option>
           </ng-container>
