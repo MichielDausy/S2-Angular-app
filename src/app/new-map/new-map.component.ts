@@ -8,7 +8,6 @@ import * as L from 'leaflet';
 import {  GeoJsonProperties, LineString, FeatureCollection } from 'geojson';
 import 'leaflet.markercluster';
 
-declare const HeatmapOverlay: any;
 
 @Component({
   selector: 'app-new-map',
@@ -42,23 +41,24 @@ export class AppComponent implements AfterViewInit {
       '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>',
   });
 
-  convertLatitudeToDegreesMinutesSeconds(latitude: number): string {
-    const latDirection = latitude >= 0 ? 'N' : 'S';
-    const latDegrees = Math.floor(Math.abs(latitude));
-    const latMinutes = Math.floor((Math.abs(latitude) - latDegrees) * 60);
-    const latSeconds = ((Math.abs(latitude) - latDegrees) * 60 - latMinutes) * 60;
-
-    return `${latDegrees}°${latMinutes}'${latSeconds.toFixed(2)}"${latDirection}`;
+  options = {
+    layers: [this.osm],
+    zoom: this.zoom,
+    center: this.centroid
   }
 
-  convertLongitudeToDegreesMinutesSeconds(longitude: number): string {
-    const lonDirection = longitude >= 0 ? 'E' : 'W';
-    const lonDegrees = Math.floor(Math.abs(longitude));
-    const lonMinutes = Math.floor((Math.abs(longitude) - lonDegrees) * 60);
-    const lonSeconds = ((Math.abs(longitude) - lonDegrees) * 60 - lonMinutes) * 60;
-
-    return `${lonDegrees}°${lonMinutes}'${lonSeconds.toFixed(2)}"${lonDirection}`;
-  }
+  markerClusterOptions = {
+    animate: true,
+    animateAddingMarkers: true,
+    // Add event listeners for cluster animation
+    onClusterAnimationStart: (event: any) => {
+      console.log('Cluster animation started', event);
+    },
+    onClusterAnimationEnd: (event: any) => {
+      console.log('Cluster animation ended', event);
+    },
+  };
+  
 
   ngAfterViewInit(): void {
     this.initMap();
@@ -68,12 +68,12 @@ export class AppComponent implements AfterViewInit {
     if (this.anomalies.length > 1) {
       // Initialising map with center point by using the coordinates
     // Setting initial zoom to 9
-    this.map = L.map('map').setView(this.centroid, this.zoom);
+    this.map = L.map('map', this.options)
     } else {
-      this.map = L.map('map').setView([this.anomalies[0].latitude, this.anomalies[0].longitude] as L.LatLngExpression, this.zoom);
+      this.map = L.map('map', this.options).setView([this.anomalies[0].latitude, this.anomalies[0].longitude] as L.LatLngExpression, this.zoom);
     }
 
-    this.osm.addTo(this.map);
+    //this.osm.addTo(this.map);
 
     this.setLayers();
   }
@@ -84,9 +84,14 @@ export class AppComponent implements AfterViewInit {
       [anomaly.latitude, anomaly.longitude, this.constantIntensity]
     ));
     
+    
     const heatLayer = (L as any).heatLayer(this.heatData, {
       radius: 18,
     });
+
+    if (!this.map) {
+      return;  // Add this null check to ensure this.map is defined
+    }
 
     this.map.on('zoomend', () => {
       const currentZoom = this.map.getZoom();
@@ -117,7 +122,7 @@ export class AppComponent implements AfterViewInit {
   }
 
   initMarkers(): void {
-    this.markers = new L.MarkerClusterGroup();
+    this.markers = new L.MarkerClusterGroup(this.markerClusterOptions);
 
     this.anomalies.forEach(anomaly => {
       const marker = L.marker([anomaly.latitude, anomaly.longitude], {
@@ -232,5 +237,23 @@ export class AppComponent implements AfterViewInit {
     if (previousAnomalies !== currentAnomalies) {
       this.setLayers();
     }
+  }
+
+  convertLatitudeToDegreesMinutesSeconds(latitude: number): string {
+    const latDirection = latitude >= 0 ? 'N' : 'S';
+    const latDegrees = Math.floor(Math.abs(latitude));
+    const latMinutes = Math.floor((Math.abs(latitude) - latDegrees) * 60);
+    const latSeconds = ((Math.abs(latitude) - latDegrees) * 60 - latMinutes) * 60;
+
+    return `${latDegrees}°${latMinutes}'${latSeconds.toFixed(2)}"${latDirection}`;
+  }
+
+  convertLongitudeToDegreesMinutesSeconds(longitude: number): string {
+    const lonDirection = longitude >= 0 ? 'E' : 'W';
+    const lonDegrees = Math.floor(Math.abs(longitude));
+    const lonMinutes = Math.floor((Math.abs(longitude) - lonDegrees) * 60);
+    const lonSeconds = ((Math.abs(longitude) - lonDegrees) * 60 - lonMinutes) * 60;
+
+    return `${lonDegrees}°${lonMinutes}'${lonSeconds.toFixed(2)}"${lonDirection}`;
   }
 }

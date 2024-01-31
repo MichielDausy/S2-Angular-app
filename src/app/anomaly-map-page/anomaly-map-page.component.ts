@@ -48,7 +48,6 @@ export class AnomalyMapPageComponent implements OnInit {
 
   getData(): void {
     this.isLoading = true;
-    console.log(this.isLoading);
     // Combine multiple observables using forkJoin
     forkJoin([
       this.service.getTrains(),
@@ -65,16 +64,15 @@ export class AnomalyMapPageComponent implements OnInit {
         this.countries = countries;
         this.anomalyTypes = anomalyTypes;
 
-        // Set isLoading to false as all subscriptions are complete
-        this.isLoading = false;
-        console.log(this.isLoading);
-      },
-      (error) => {
-        console.error('Error loading data:', error);
-        // Handle errors if needed
-        this.isLoading = false; // Ensure isLoading is set to false even on error
-      }
-    );
+      // Set isLoading to false as all subscriptions are complete
+      this.isLoading = false;
+    },
+    (error) => {
+      console.error('Error loading data:', error);
+      // Handle errors if needed
+      this.isLoading = false; // Ensure isLoading is set to false even on error
+    }
+  );
   }
 
   changeMode() {
