@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { AfterViewInit, ChangeDetectorRef, Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { AnomalyItemComponent } from '../anomaly-item/anomaly-item.component';
 import { Anomaly } from '../Models/anomaly';
@@ -24,7 +24,7 @@ import { forkJoin } from 'rxjs';
 })
 
 
-export class AnomalypageComponent {
+export class AnomalypageComponent{
   filteredAnomalies: Anomaly[] = [];
 
   searchName: string = '';
@@ -123,7 +123,6 @@ export class AnomalypageComponent {
       anomaly.trainTrackId === trackId && countryFilter(anomaly) && typeFilter(anomaly) && !anomaly.isFixed && !anomaly.isFalse
     );
 
-    this.noFilteredAnomalies = output.length === 0;
     return output;
   }
 
@@ -131,6 +130,8 @@ export class AnomalypageComponent {
     this.isLoading = true;
     this.searchName = value;
     this.sortTracksByAnomalyCount(this.tracks.filter(track => track.name.toLowerCase().includes(this.searchName.toLowerCase())));
+    this.sortedTracks = this.sortedTracks.filter(track => this.getAnomaliesForTrack(track.id).length > 0);
+
     // For search result -> 'No results found'
     this.noFilteredAnomalies = !this.sortedTracks.some(track => this.getAnomaliesForTrack(track.id).length > 0);
     this.isLoading = false;
