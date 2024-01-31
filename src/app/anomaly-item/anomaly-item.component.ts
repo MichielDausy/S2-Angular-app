@@ -2,7 +2,7 @@ import { Component, Input, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Train } from '../Models/train';
 import { Anomaly } from '../Models/anomaly';
-import {TooltipModule} from 'primeng/tooltip';
+import { TooltipModule } from 'primeng/tooltip';
 import { RouterLink } from '@angular/router';
 import { Traintrack } from '../Models/traintrack';
 import { Service } from '../Service/service';
@@ -16,15 +16,16 @@ import { Service } from '../Service/service';
 })
 
 
-export class AnomalyItemComponent implements OnInit{
-  constructor(private service: Service) {}
+export class AnomalyItemComponent implements OnInit {
+  constructor(private service: Service) { }
 
-  @Input() track : Traintrack = {id: 0, name: "", trackGeometry: []};
-  @Input() anomalies : Anomaly[] = [];
-  @Input() train: Train = {id: 0, name: ""};
+  @Input() track: Traintrack = { id: 0, name: "", trackGeometry: [] };
+  @Input() anomalies: Anomaly[] = [];
+  @Input() train: Train = { id: 0, name: "" };
   @Input() selectedDay: string = "";
 
-  
+  ngOnInit(): void {
+  }
 
   convertLatitudeToDegreesMinutesSeconds(latitude: number): string {
     const latDirection = latitude >= 0 ? 'N' : 'S';
@@ -42,9 +43,6 @@ export class AnomalyItemComponent implements OnInit{
     const lonSeconds = ((Math.abs(longitude) - lonDegrees) * 60 - lonMinutes) * 60;
 
     return `${lonDegrees}°${lonMinutes}'${lonSeconds.toFixed(2)}"${lonDirection}`;
-  }
-
-  ngOnInit(): void {
   }
 
   viewDetails(anomaly: Anomaly) {
