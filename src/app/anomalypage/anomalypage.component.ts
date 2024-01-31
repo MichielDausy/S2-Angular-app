@@ -72,10 +72,6 @@ export class AnomalypageComponent{
     );
   }
 
-  updateSort():void{
-    this.sortTracksByAnomalyCount();
-  }
-
   changeMode() {
     this.router.navigate(['/anomaly/map']);
   }
@@ -89,8 +85,6 @@ export class AnomalypageComponent{
       this.anomalies = anomalies;
       this.sortTracksByAnomalyCount();
     });
-
-    
   }
 
   private sortTracksByAnomalyCount(sortedTracks?: Traintrack[]): void {
