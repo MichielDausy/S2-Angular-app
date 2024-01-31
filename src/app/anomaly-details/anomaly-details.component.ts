@@ -52,9 +52,6 @@ export class AnomalyDetailsComponent implements OnInit {
       this.center = [this.anomaly.latitude, this.anomaly.longitude] as L.LatLngExpression;
       this.isFalse = this.anomaly.isFalse;
       this.isFixed = this.anomaly.isFixed;
-      console.log("anomaly loaded: " + (this.anomaly as Anomaly));
-      console.log("fixed: " + this.isFixed);
-      console.log("false: " + this.isFalse);
     });
   }
 
