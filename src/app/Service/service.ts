@@ -41,10 +41,6 @@ export class Service {
     return this.http.get<Train[]>(this._url+"trains/all");
   }
 
-  /*getSigns(): Observable<Sign[]> { won't use this anymore because we will not specify which sign it is
-    return this.http.get<Sign[]>(this._url+"signs");
-  }*/
-
   getAnomalyTypes(): Observable<Anomalytype[]> {
     return this.http.get<Anomalytype[]>(this._url+"types/all");
   }

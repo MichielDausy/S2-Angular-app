@@ -61,7 +61,6 @@ export class MapComponent implements AfterViewInit, OnChanges {
 
       if(previousCentroid !== currentCentroid) {
         this.map.setView(this.center, this.zoom);
-        console.log("center: " + this.center);
       }
     }
   
@@ -148,7 +147,6 @@ export class MapComponent implements AfterViewInit, OnChanges {
       });
   
       marker.on('click', () => {
-        console.log("click");
         this.router.navigate(['/anomaly/details', anomaly.id]);
       });
   
@@ -199,7 +197,7 @@ export class MapComponent implements AfterViewInit, OnChanges {
       html: iconElement.innerHTML,
       iconSize: [25, 41],
       iconAnchor: [25 / 2, 41],
-      className: 'leaflet-marker-icon', // Add your CSS class here if needed
+      className: 'leaflet-marker-icon',
     });
   }
 
