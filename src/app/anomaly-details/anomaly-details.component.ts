@@ -10,17 +10,19 @@ import { FormsModule } from '@angular/forms';
 import { MapComponent } from '../map/map.component';
 import { ToastrService } from 'ngx-toastr';
 import { Location } from '@angular/common';
+import { Base64Pipe } from '../convertBase64';
 
 @Component({
   selector: 'app-anomaly-details',
   standalone: true,
-  imports: [CommonModule, RouterLink, CheckboxModule, FormsModule, MapComponent],
+  imports: [CommonModule, RouterLink, CheckboxModule, FormsModule, MapComponent, Base64Pipe],
   templateUrl: './anomaly-details.component.html',
   styleUrls: ['./anomaly-details.component.css']
 })
 export class AnomalyDetailsComponent implements OnInit {
 
   constructor(private router: ActivatedRoute, private service: Service, private toastr: ToastrService, private location: Location) { }
+  contentType = 'image/png';
 
   center = [0, 0] as L.LatLngExpression;
   anomaly: Anomaly = {

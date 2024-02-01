@@ -54,7 +54,7 @@
                     alt="" class="object-cover"></div>
             } @else {
                 <div class="h-[400px] w-[600px]"><img
-                    src="/src/assets/noImageFound.jpg"
+                    [src]="anomaly.photo | base64: contentType"
                     alt="" class="object-cover"></div>
             }
             <div *ngIf="anomaly && anomaly.id !== 0" class="relative">
