@@ -48,9 +48,15 @@
             </div>
         </div>
         <div class="grid grid-cols-2 gap-8 my-5 pl-4">
-            <div class="h-[400px] w-[600px]"><img
-                    src="https://upload.wikimedia.org/wikipedia/commons/thumb/4/4a/Railroad_Tracks_-_Merritt_Island%2C_Florida.jpg/1200px-Railroad_Tracks_-_Merritt_Island%2C_Florida.jpg?20121011174007"
+            @if (anomaly.photo === null) {
+                <div class="h-[400px] w-[600px]"><img
+                    src="/src/assets/noImageFound.jpg"
                     alt="" class="object-cover"></div>
+            } @else {
+                <div class="h-[400px] w-[600px]"><img
+                    src="/src/assets/noImageFound.jpg"
+                    alt="" class="object-cover"></div>
+            }
             <div *ngIf="anomaly && anomaly.id !== 0" class="relative">
                 <div class="absolute left-0 bottom-0 h-5 w-44 bg-gray-200 z-10 flex flex-nowrap">
                     <p class="text-sm mr-2">{{convertLatitudeToDegreesMinutesSeconds(anomaly.latitude)}}</p>
