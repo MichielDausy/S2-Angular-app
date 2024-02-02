@@ -48,14 +48,18 @@
             </div>
         </div>
         <div class="grid grid-cols-2 gap-8 my-5 pl-4">
-            @if (anomaly.photo === null) {
-                <div class="h-[400px] w-[600px]"><img
-                    src="/src/assets/noImageFound.jpg"
-                    alt="" class="object-cover"></div>
+            @if (anomaly.photo === null ) {
+                <div class="">
+                    <img
+                    src="../../assets/noImageFound.jpg"
+                    alt="" class="object-cover w-[600px] h-[400px]">
+                </div>
             } @else {
-                <div class="h-[400px] w-[600px]"><img
+                <div class="">
+                    <img
                     [src]="anomaly.photo | base64: contentType"
-                    alt="" class="object-cover"></div>
+                    alt="" class="object-cover w-[600px] h-[400px]">
+                </div>
             }
             <div *ngIf="anomaly && anomaly.id !== 0" class="relative">
                 <div class="absolute left-0 bottom-0 h-5 w-44 bg-gray-200 z-10 flex flex-nowrap">
